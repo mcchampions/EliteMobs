@@ -156,7 +156,7 @@ public abstract class MatchInstance {
             if (!player.isOnline()) removePlayer(player);
             if (!isInRegion(player.getLocation())) {
                 MatchInstanceEvents.teleportBypass = true;
-                player.teleport(startLocation);
+                player.teleportAsync(startLocation);
             }
         });
     }
@@ -166,7 +166,7 @@ public abstract class MatchInstance {
             if (!player.isOnline()) removeSpectator(player);
             if (!isInRegion(player.getLocation())) {
                 MatchInstanceEvents.teleportBypass = true;
-                player.teleport(startLocation);
+                player.teleportAsync(startLocation);
             }
         });
     }
@@ -179,11 +179,11 @@ public abstract class MatchInstance {
                     !player.hasPermission("elitemobs.*") &&
                     isInRegion(player.getLocation())) {
                 MatchInstanceEvents.teleportBypass = true;
-                if (exitLocation != null) player.teleport(exitLocation);
+                if (exitLocation != null) player.teleportAsync(exitLocation);
                 else if (PlayerData.getBackTeleportLocation(player) != null)
-                    player.teleport(PlayerData.getBackTeleportLocation(player));
+                    player.teleportAsync(PlayerData.getBackTeleportLocation(player));
                 else if (DefaultConfig.getDefaultSpawnLocation() != null && DefaultConfig.getDefaultSpawnLocation().getWorld() != null)
-                    player.teleport(DefaultConfig.getDefaultSpawnLocation());
+                    player.teleportAsync(DefaultConfig.getDefaultSpawnLocation());
             }
     }
 
@@ -241,7 +241,7 @@ public abstract class MatchInstance {
         state = InstancedRegionState.ONGOING;
         players.forEach(player -> {
             MatchInstanceEvents.teleportBypass = true;
-            player.teleport(startLocation);
+            player.teleportAsync(startLocation);
         });
         participants = (HashSet<Player>) players.clone();
     }

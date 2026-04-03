@@ -11,9 +11,8 @@ public class SpawnRadiusDifficultyIncrementer {
         double levelToIncrement = MobCombatSettingsConfig.getLevelToIncrement();
 
         Location spawnLocation = location.getWorld().getSpawnLocation();
-        Location entityLocation = location;
 
-        double distanceFromSpawn = spawnLocation.distance(entityLocation);
+        double distanceFromSpawn = spawnLocation.distance(location);
 
         return (int) (distanceFromSpawn / distanceUnit * levelToIncrement);
 

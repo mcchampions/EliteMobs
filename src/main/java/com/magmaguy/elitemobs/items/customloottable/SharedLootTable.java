@@ -32,7 +32,6 @@ public class SharedLootTable {
         sharedLootTables.clear();
     }
 
-    private final int durationInSeconds = 60;
     @Getter
     private final List<ItemStack> loot = new ArrayList<>();
     private final EliteEntity eliteEntity;
@@ -81,6 +80,7 @@ public class SharedLootTable {
             return;
         }
 
+        int durationInSeconds = 60;
         new BukkitRunnable() {
             @Override
             public void run() {

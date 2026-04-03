@@ -55,7 +55,7 @@ public class DungeonUtils {
                 if (defaultWorld == null)
                     return false;
                 else
-                    player.teleport(defaultWorld.getSpawnLocation());
+                    player.teleportAsync(defaultWorld.getSpawnLocation());
         Bukkit.unloadWorld(worldPackage.getWorld(), false);
         if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
             Bukkit.unloadWorld(((WorldDungeonPackage) worldPackage).getWormholeWorld(), false);

@@ -20,7 +20,7 @@ public class EliteFirstTimeSetupMenu {
 
     public static void createMenu(Player player) {
         new FirstTimeSetupMenu(
-                (JavaPlugin) MetadataHandler.PLUGIN,
+                MetadataHandler.PLUGIN,
                 player,
                 InitializeConfig.getMenuTitle(),
                 InitializeConfig.getMenuSubtitle(),

@@ -18,9 +18,11 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class QuestCheckCommand extends AdvancedCommand {
     private static final int QUEST_DIALOG_WIDTH = 300;
+    private static final Pattern PATTERN = Pattern.compile("\\s+");
 
     public QuestCheckCommand() {
         super(List.of("quest"));
@@ -46,9 +48,8 @@ public class QuestCheckCommand extends AdvancedCommand {
         String processedText = processText(text);
         if (processedText == null) return null;
 
-        return processedText
-                .replace('\n', ' ')
-                .replaceAll("\\s+", " ")
+        return PATTERN.matcher(processedText
+                        .replace('\n', ' ')).replaceAll(" ")
                 .trim();
     }
 

@@ -6,13 +6,12 @@ import com.magmaguy.elitemobs.commands.admin.UpdateContentCommand;
 import com.magmaguy.magmacore.command.CommandManager;
 
 public class CommandHandler {
-    private  static CommandManager emCommand;
-    private  static CommandManager adventurersGuildCommand;
+
     private CommandHandler() {
     }
 
     public static void registerCommands() {
-        emCommand = new CommandManager(MetadataHandler.PLUGIN, "elitemobs");
+        CommandManager emCommand = new CommandManager(MetadataHandler.PLUGIN, "elitemobs");
 
         //Admin commands
         emCommand.registerCommand(new SetupCommand());
@@ -120,7 +119,7 @@ public class CommandHandler {
         emCommand.registerCommand(new EliteMobsCommand());
         emCommand.registerCommand(new HelpCommand());
 
-        adventurersGuildCommand =new CommandManager(MetadataHandler.PLUGIN, "adventurersguild");
+        CommandManager adventurersGuildCommand = new CommandManager(MetadataHandler.PLUGIN, "adventurersguild");
         adventurersGuildCommand.registerCommand(new AdventurersGuildCommand());
     }
 }

@@ -247,7 +247,7 @@ public class ShieldWallSupport {
                         }
 
                         visualShieldsLeft++;
-                        armorStand.teleport(getRealLocation(direction, eliteEntity.getLivingEntity().getLocation(), i));
+                        armorStand.teleportAsync(getRealLocation(direction, eliteEntity.getLivingEntity().getLocation(), i));
                     }
                 }
                 if (visualShieldsLeft == 0) {

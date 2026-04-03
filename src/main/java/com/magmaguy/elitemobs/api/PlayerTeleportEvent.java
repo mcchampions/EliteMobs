@@ -64,7 +64,7 @@ public class PlayerTeleportEvent extends Event implements Cancellable {
             PlayerData.setBackTeleportLocation(player, originalLocation);
         WormholeManager.getInstance(false).addPlayerToCooldown(player, destination);
         if (!player.getPassengers().isEmpty()) player.getPassengers().forEach(player::removePassenger);
-        player.teleport(destination);
+        player.teleportAsync(destination);
     }
 
     public static class PlayerTeleportEventExecutor implements Listener {

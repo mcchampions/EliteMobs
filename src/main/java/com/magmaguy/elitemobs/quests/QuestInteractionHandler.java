@@ -42,7 +42,6 @@ public class QuestInteractionHandler {
                 for (CustomQuest customQuest : customQuestList)
                     if (customQuest.getCustomQuestsConfigFields().getFilename().equals(questString)) {
                         activeQuest = true;
-                        continue;
                     }
                 if (activeQuest) continue;
 

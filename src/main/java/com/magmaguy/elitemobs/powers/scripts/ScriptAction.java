@@ -321,7 +321,7 @@ public class ScriptAction {
         targets.forEach(target -> {
             try {
                 MatchInstance.MatchInstanceEvents.teleportBypass = true;
-                target.teleport(destination);
+                target.teleportAsync(destination);
             } catch (Exception e) {
                 Logger.warn("Failed to teleport entity '" + target.getName() + "' in script '" + blueprint.getScriptName() + "': " + e.getMessage());
             } finally {
@@ -1180,7 +1180,7 @@ public class ScriptAction {
         getTargets(scriptActionData).forEach(target -> {
             Location location = target.getLocation();
             location.setDirection(direction);
-            target.teleport(location);
+            target.teleportAsync(location);
         });
     }
 

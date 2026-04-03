@@ -92,10 +92,10 @@ public class InstancePlayerManager {
             MatchInstance.MatchInstanceEvents.teleportBypass = true;
             if (matchInstance instanceof DungeonInstance) {
                 Location location = matchInstance.previousPlayerLocations.get(player);
-                if (location != null) player.teleport(location);
-                else player.teleport(matchInstance.exitLocation);
+                if (location != null) player.teleportAsync(location);
+                else player.teleportAsync(matchInstance.exitLocation);
             } else
-                player.teleport(matchInstance.exitLocation);
+                player.teleportAsync(matchInstance.exitLocation);
         }
 
         //End the match if there are no players left because they all died
@@ -118,9 +118,9 @@ public class InstancePlayerManager {
             matchInstance.defeat();
             MatchInstance.MatchInstanceEvents.teleportBypass = true;
             if (matchInstance.previousPlayerLocations.get(player) != null)
-                player.teleport(matchInstance.previousPlayerLocations.get(player));
+                player.teleportAsync(matchInstance.previousPlayerLocations.get(player));
             else if (matchInstance.exitLocation != null)
-                player.teleport(matchInstance.exitLocation);
+                player.teleportAsync(matchInstance.exitLocation);
             PlayerData.setMatchInstance(player, null);
             matchInstance.participants.remove(player);
             return;
@@ -136,7 +136,7 @@ public class InstancePlayerManager {
         matchInstance.spectators.remove(player);
         player.setHealth(player.getMaxHealth());
         MatchInstance.MatchInstanceEvents.teleportBypass = true;
-        player.teleport(deathLocation.getRespawnLocation());
+        player.teleportAsync(deathLocation.getRespawnLocation());
         PlayerData.setMatchInstance(player, matchInstance);
     }
 
@@ -151,7 +151,7 @@ public class InstancePlayerManager {
         player.setGameMode(GameMode.SPECTATOR);
         if (!wasPlayer) {
             MatchInstance.MatchInstanceEvents.teleportBypass = true;
-            player.teleport(matchInstance.startLocation);
+            player.teleportAsync(matchInstance.startLocation);
         }
         PlayerData.setMatchInstance(player, matchInstance);
     }
@@ -166,10 +166,10 @@ public class InstancePlayerManager {
         MatchInstance.MatchInstanceEvents.teleportBypass = true;
         if (matchInstance instanceof DungeonInstance) {
             Location location = matchInstance.previousPlayerLocations.get(player);
-            if (location != null) player.teleport(location);
-            else player.teleport(matchInstance.exitLocation);
+            if (location != null) player.teleportAsync(location);
+            else player.teleportAsync(matchInstance.exitLocation);
         } else
-            player.teleport(matchInstance.exitLocation);
+            player.teleportAsync(matchInstance.exitLocation);
         PlayerData.setMatchInstance(player, null);
         matchInstance.playerLives.remove(player);
         if (matchInstance.getDeathLocationByPlayer(player) != null)

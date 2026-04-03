@@ -60,9 +60,8 @@ public class GenericRotationMatrixMath {
         double newZ = x * ((1 - cos(theta)) * c * a + (sin(theta)) * b) + y * ((1 - cos(theta)) * c * b - (sin(theta)) * a) + z * (cos(theta) + (1 - cos(theta)) * pow(c, 2));
 
         //adjust rotated point
-        Vector newVector = new Vector(newX, newY, newZ);
 
-        return newVector;
+        return new Vector(newX, newY, newZ);
 
     }
 

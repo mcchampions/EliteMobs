@@ -99,8 +99,7 @@ public class UnbindMenu extends EliteMenu {
                 ItemStack clonedConfirmButton = UnbinderMenuConfig.getConfirmButton().clone();
 
                 List<String> lore = new ArrayList<>();
-                for (String string : UnbinderMenuConfig.getConfirmButton().getItemMeta().getLore())
-                    lore.add(string);
+                lore.addAll(UnbinderMenuConfig.getConfirmButton().getItemMeta().getLore());
                 UnbinderMenuConfig.getConfirmButton().getItemMeta().setLore(lore);
                 ItemMeta clonedMeta = clonedConfirmButton.getItemMeta();
                 clonedMeta.setLore(lore);

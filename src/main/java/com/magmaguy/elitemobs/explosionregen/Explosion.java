@@ -268,7 +268,7 @@ public class Explosion {
 
         for (Entity entity : blockState.getWorld().getNearbyEntities(new BoundingBox(blockState.getX(), blockState.getY(), blockState.getZ(),
                 blockState.getX() + 1, blockState.getY() + 1, blockState.getZ() + 1)))
-            entity.teleport(entity.getLocation().clone().add(new Vector(0, 1, 0)));
+            entity.teleportAsync(entity.getLocation().clone().add(new Vector(0, 1, 0)));
 
         blockState.setBlockData(blockState.getBlockData());
 

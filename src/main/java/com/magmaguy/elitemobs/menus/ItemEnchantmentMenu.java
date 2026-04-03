@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 public class ItemEnchantmentMenu extends EliteMenu {
 
@@ -53,6 +54,7 @@ public class ItemEnchantmentMenu extends EliteMenu {
     private static final double LUCKY_TICKET_MULTIPLIER = SpecialItemSystemsConfig.getLuckyTicketMultiplier();
     private static final double CRITICAL_FAILURE_CHANCE = SpecialItemSystemsConfig.getCriticalFailureChance();
     private static final double CHALLENGE_CHANCE = SpecialItemSystemsConfig.getChallengeChance();
+    private static final Pattern ITEM_NAME = Pattern.compile("itemName");
 
     public ItemEnchantmentMenu(Player player) {
         String name = MENU_NAME;
@@ -148,7 +150,7 @@ public class ItemEnchantmentMenu extends EliteMenu {
                                 ChatColorConverter.convert(message.replace("$playerName", upgradingPlayer.getName()).replace("$player", upgradingPlayer.getDisplayName())))));
             else {
                 TextComponent itemName = ShareItem.hoverableItemTextComponent(upgradedItem);
-                String[] text = message.replace("$itemName", "itemName").split("itemName");
+                String[] text = ITEM_NAME.split(message.replace("$itemName", "itemName"));
                 BaseComponent[] baseComponent1 = TextComponent.fromLegacyText(ChatColorConverter.convert(text[0].replace("$playerName", upgradingPlayer.getName()).replace("$player", upgradingPlayer.getDisplayName())));
                 BaseComponent[] baseComponent2 = TextComponent.fromLegacyText(ChatColorConverter.convert(text[1].replace("$playerName", upgradingPlayer.getName()).replace("$player", upgradingPlayer.getDisplayName())));
 

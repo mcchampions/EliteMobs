@@ -40,7 +40,8 @@ public class ImpaleSkill extends SkillBonus implements ProcSkill {
 
     @Override
     public void onProc(Player player, Object context) {
-        if (!(context instanceof EliteMobDamagedByPlayerEvent event)) return;
+        if (!(context instanceof EliteMobDamagedByPlayerEvent event)) {
+        }
 
     }
 

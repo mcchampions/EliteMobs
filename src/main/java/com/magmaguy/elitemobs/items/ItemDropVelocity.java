@@ -13,13 +13,11 @@ public class ItemDropVelocity {
 
         Random random = new Random();
 
-        Double x = (random.nextDouble() - 0.5) / 3;
-        Double y = 0.5;
-        Double z = (random.nextDouble() - 0.5) / 3;
+        double x = (random.nextDouble() - 0.5) / 3;
+        double y = 0.5;
+        double z = (random.nextDouble() - 0.5) / 3;
 
-        Vector velocity = new org.bukkit.util.Vector(x, y, z);
-
-        return velocity;
+        return new Vector(x, y, z);
 
     }
 

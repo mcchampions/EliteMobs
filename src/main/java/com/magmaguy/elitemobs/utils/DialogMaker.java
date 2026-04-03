@@ -14,10 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class DialogMaker {
     private static final int questDialogWidth = 300;
+    private static final Pattern PATTERN = Pattern.compile("\\s+");
 
     private DialogMaker() {
     }
@@ -41,9 +43,8 @@ public class DialogMaker {
         String processedText = processText(text);
         if (processedText == null) return null;
 
-        return processedText
-                .replace('\n', ' ')
-                .replaceAll("\\s+", " ")
+        return PATTERN.matcher(processedText
+                        .replace('\n', ' ')).replaceAll(" ")
                 .trim();
     }
 

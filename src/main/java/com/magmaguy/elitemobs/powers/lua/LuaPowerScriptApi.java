@@ -317,7 +317,7 @@ final class LuaPowerScriptApi {
         for (LivingEntity target : targets) {
             Location location = target.getLocation();
             location.setDirection(direction);
-            target.teleport(location);
+            target.teleportAsync(location);
         }
     }
 
