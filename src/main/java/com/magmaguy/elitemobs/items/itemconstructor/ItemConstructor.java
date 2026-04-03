@@ -102,22 +102,6 @@ public class ItemConstructor {
         itemStack.setItemMeta(itemMeta);
 
         // Apply FMM scripted item data if configured and FMM is installed
-        if (scriptedItem != null && !scriptedItem.isEmpty()
-                && org.bukkit.Bukkit.getPluginManager().getPlugin("FreeMinecraftModels") != null) {
-            try {
-                Class<?> apiClass = Class.forName("com.magmaguy.freeminecraftmodels.api.ScriptedItemAPI");
-                java.lang.reflect.Method applyMethod = apiClass.getMethod("applyScriptedItemData",
-                        ItemStack.class, String.class);
-                boolean applied = (boolean) applyMethod.invoke(null, itemStack, scriptedItem);
-                if (!applied) {
-                    com.magmaguy.magmacore.util.Logger.warn("Scripted item '" + scriptedItem
-                            + "' not found in FreeMinecraftModels! Referenced by custom item: " + filename);
-                }
-            } catch (Exception e) {
-                com.magmaguy.magmacore.util.Logger.warn("Failed to apply scripted item data for '"
-                        + scriptedItem + "': " + e.getMessage());
-            }
-        }
 
         return commonFeatures(itemStack, eliteEntity, player, enchantments, customEnchantments, showItemWorth, soulbound);
     }

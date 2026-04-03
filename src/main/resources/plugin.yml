@@ -9,12 +9,10 @@ softdepend:
 - Vault
 - PlaceholderAPI
 - HolographicDisplays
-- ModelEngine
 - Geyser-Spigot
 - MythicMobs
 - LevelledMobs
 - InfernalMobs
-- FreeMinecraftModels
 
 commands:
   elitemobs:

@@ -68,7 +68,6 @@ repositories {
     maven { url = 'https://jitpack.io' }
     //DiscordSRV
     maven { url = 'https://m2.dv8tion.net/releases/' }
-    maven { url = 'https://nexus.scarsz.me/content/groups/public/' }
     //LibsDisguises
     maven { url = 'https://repo.md-5.net/content/groups/public/' }
     //PlaceholderAPI
@@ -105,11 +104,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     //Model Engine - legacy
-    compileOnly "com.ticxo.modelengine:api:R3.1.7"
-    //Free Minecraft Models
-    compileOnly (group: 'com.magmaguy', name: 'FreeMinecraftModels', version: '2.3.17'){
-        changing = true
-    }
     // Mythic Mobs integration - currently only for arenas
     compileOnly group: 'io.lumine', name: 'Mythic-Dist', version: '5.3.5'
 
