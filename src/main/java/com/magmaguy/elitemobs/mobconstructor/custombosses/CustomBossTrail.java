@@ -35,12 +35,12 @@ public class CustomBossTrail {
         for (String string : customBossEntity.customBossesConfigFields.getTrails()) {
             try {
                 Particle particle = Particle.valueOf(string);
-                if (particle.equals(Particle.BLOCK)) return;
+                if (particle == Particle.BLOCK) return;
                 doParticleTrail(particle);
             } catch (Exception ex) {
             }
             try {
-                if (string.equals("LAVA")) return;
+                if ("LAVA".equals(string)) return;
                 Material material = Material.valueOf(string);
                 doItemTrail(material);
             } catch (Exception ex) {

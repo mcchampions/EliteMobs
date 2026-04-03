@@ -14,7 +14,7 @@ public class LuaElitePower extends ElitePower {
 
     @Getter
     private final LuaPowerConfigFields luaPowerConfigFields;
-    private LuaPowerInstance instance = null;
+    private LuaPowerInstance instance;
 
     public LuaElitePower(LuaPowerConfigFields luaPowerConfigFields) {
         super(luaPowerConfigFields);

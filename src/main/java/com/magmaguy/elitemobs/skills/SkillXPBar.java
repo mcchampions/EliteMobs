@@ -173,15 +173,14 @@ public class SkillXPBar implements Listener {
         }
 
         private void animateLevelUp(double oldProgress, double newProgress, int newLevel, long xpGained) {
-            int oldLevel = newLevel - 1;
-            this.displayLevel = oldLevel;
+            this.displayLevel = newLevel - 1;
             this.currentDisplayProgress = oldProgress;
 
             // First animate to full, then level up effects, then animate from 0
             animationTask = new BukkitRunnable() {
-                int tick = 0;
-                boolean filledBar = false;
-                boolean showedLevelUp = false;
+                int tick;
+                boolean filledBar;
+                boolean showedLevelUp;
 
                 @Override
                 public void run() {
@@ -236,7 +235,7 @@ public class SkillXPBar implements Listener {
             final double endProgress = targetProgress;
 
             animationTask = new BukkitRunnable() {
-                int tick = 0;
+                int tick;
 
                 @Override
                 public void run() {
@@ -273,8 +272,8 @@ public class SkillXPBar implements Listener {
 
             // Spawn particles around player
             new BukkitRunnable() {
-                int tick = 0;
-                double angle = 0;
+                int tick;
+                double angle;
 
                 @Override
                 public void run() {
@@ -286,8 +285,8 @@ public class SkillXPBar implements Listener {
 
                     // Spiral particles going up
                     for (int i = 0; i < 3; i++) {
-                        double x = Math.cos(angle + i * 2.094) * 1.0;
-                        double z = Math.sin(angle + i * 2.094) * 1.0;
+                        double x = Math.cos(angle + i * 2.094);
+                        double z = Math.sin(angle + i * 2.094);
                         double y = tick * 0.1;
 
                         p.getWorld().spawnParticle(
@@ -346,12 +345,9 @@ public class SkillXPBar implements Listener {
 
         private static BarColor getBarColor(SkillType skillType) {
             return switch (skillType) {
-                case ARMOR -> BarColor.BLUE;
-                case SWORDS -> BarColor.RED;
-                case AXES -> BarColor.RED;
-                case BOWS -> BarColor.GREEN;
-                case CROSSBOWS -> BarColor.GREEN;
-                case TRIDENTS -> BarColor.BLUE;
+                case ARMOR, TRIDENTS -> BarColor.BLUE;
+                case SWORDS, AXES -> BarColor.RED;
+                case BOWS, CROSSBOWS -> BarColor.GREEN;
                 case HOES -> BarColor.PURPLE;
                 case MACES -> BarColor.YELLOW;
                 case SPEARS -> BarColor.WHITE;

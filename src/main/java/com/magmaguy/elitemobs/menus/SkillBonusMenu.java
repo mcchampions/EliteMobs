@@ -138,7 +138,6 @@ public class SkillBonusMenu {
 
         Material material = skillConfig.getDisplayMaterial();
         String name;
-        List<String> lore = new ArrayList<>();
 
         if (isActive) {
             name = SkillBonusMenuConfig.getActivePrefix() + skillConfig.getName();
@@ -150,7 +149,7 @@ public class SkillBonusMenu {
         }
 
         // Add skill description
-        lore.addAll(skillConfig.getDescription());
+        List<String> lore = new ArrayList<>(skillConfig.getDescription());
         lore.add("");
 
         // Add skill type and tier info

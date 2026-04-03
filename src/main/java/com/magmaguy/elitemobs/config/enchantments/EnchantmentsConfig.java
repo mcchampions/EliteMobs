@@ -12,7 +12,7 @@ import java.util.Locale;
 public class EnchantmentsConfig extends CustomConfig {
 
     @Getter
-    private static HashMap<String, EnchantmentsConfigFields> enchantments = new HashMap();
+    private static HashMap<String, EnchantmentsConfigFields> enchantments = new HashMap<>();
 
     public EnchantmentsConfig() {
         super("enchantments", "com.magmaguy.elitemobs.config.enchantments.premade", EnchantmentsConfigFields.class);

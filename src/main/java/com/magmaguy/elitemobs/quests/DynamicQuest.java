@@ -26,9 +26,9 @@ public class DynamicQuest extends Quest {
 
     public DynamicQuest(Player player, int targetMobLevel, QuestObjectives questObjectives) {
         super(player, questObjectives, DynamicQuestLevel.clamp(targetMobLevel));
-        DynamicKillObjective dynamicKillObjective = (DynamicKillObjective) questObjectives.getObjectives().get(0);
+        DynamicKillObjective dynamicKillObjective = (DynamicKillObjective) questObjectives.getObjectives().getFirst();
         super.questName = DynamicQuestMenuConfig.getQuestName()
-                .replace("$amount", questObjectives.getObjectives().get(0).getTargetAmount() + "")
+                .replace("$amount", questObjectives.getObjectives().getFirst().getTargetAmount() + "")
                 .replace("$name", ChatColor.stripColor(EliteMobProperties.getPluginData(dynamicKillObjective.getEntityType()).getName(dynamicKillObjective.getMinMobLevel())));
         questObjectives.setQuest(this);
     }
@@ -67,7 +67,7 @@ public class DynamicQuest extends Quest {
         if (questTemplates == null) return dynamicQuests;
 
         for (QuestObjectives questTemplate : questTemplates) {
-            DynamicKillObjective templateObjective = (DynamicKillObjective) questTemplate.getObjectives().get(0);
+            DynamicKillObjective templateObjective = (DynamicKillObjective) questTemplate.getObjectives().getFirst();
             QuestObjectives playerQuestObjectives = new QuestObjectives(
                     questTemplate.getUuid(),
                     List.of(new DynamicKillObjective(
@@ -137,7 +137,7 @@ public class DynamicQuest extends Quest {
 
         // Update quest name to reflect new level
         if (!getQuestObjectives().getObjectives().isEmpty() &&
-                getQuestObjectives().getObjectives().get(0) instanceof DynamicKillObjective dynamicKillObjective) {
+                getQuestObjectives().getObjectives().getFirst() instanceof DynamicKillObjective dynamicKillObjective) {
             this.questName = DynamicQuestMenuConfig.getQuestName()
                     .replace("$amount", dynamicKillObjective.getTargetAmount() + "")
                     .replace("$name", ChatColor.stripColor(

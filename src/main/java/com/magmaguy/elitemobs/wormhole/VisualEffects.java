@@ -88,7 +88,7 @@ public class VisualEffects {
             if (i + 1 < topPentagon.size() - 1)
                 trace(topPentagon.get(i + 1), bottomPentagon.get(i));
         }
-        trace(topPentagon.get(0), bottomPentagon.get(4));
+        trace(topPentagon.getFirst(), bottomPentagon.get(4));
         cacheRotations();
     }
 
@@ -101,7 +101,7 @@ public class VisualEffects {
             trace(centerPosition, rotatedVector);
             pentagonVectors.add(rotatedVector);
         }
-        trace(pentagonVectors.get(0), pentagonVectors.get(pentagonVectors.size() - 1));
+        trace(pentagonVectors.getFirst(), pentagonVectors.getLast());
         return pentagonVectors;
     }
 

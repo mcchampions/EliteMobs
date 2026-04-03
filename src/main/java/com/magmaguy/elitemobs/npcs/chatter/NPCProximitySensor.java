@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NPCProximitySensor implements Listener {
 
     private static final Set<UUID> nearbyPlayers = new HashSet<>();
-    private static BukkitTask proximityScanTask = null;
+    private static BukkitTask proximityScanTask;
 
     public NPCProximitySensor() {
         proximityScanTask = new BukkitRunnable() {
@@ -44,13 +44,13 @@ public class NPCProximitySensor implements Listener {
                     if (!npcEntity.isValid()) continue;
                     for (Entity entity : npcEntity.getVillager().getNearbyEntities(npcEntity.getNPCsConfigFields().getActivationRadius(),
                             npcEntity.getNPCsConfigFields().getActivationRadius(), npcEntity.getNPCsConfigFields().getActivationRadius())) {
-                        if (!entity.getType().equals(EntityType.PLAYER)) continue;
+                        if (entity.getType() != EntityType.PLAYER) continue;
                         Player player = (Player) entity;
                         UUID playerUUID = player.getUniqueId();
                         Location rotatedLocation = npcEntity.getVillager().getLocation().setDirection(entity.getLocation().subtract(npcEntity.getVillager().getLocation()).toVector());
                         npcEntity.getVillager().teleport(rotatedLocation);
                         if (unseenPlayerList.contains(playerUUID)) {
-                            if (!npcEntity.getNPCsConfigFields().getInteractionType().equals(NPCInteractions.NPCInteractionType.CHAT))
+                            if (npcEntity.getNPCsConfigFields().getInteractionType() != NPCInteractions.NPCInteractionType.CHAT)
                                 npcEntity.sayDialog(player);
                             unseenPlayerList.remove(playerUUID);
                         } else {
@@ -78,8 +78,8 @@ public class NPCProximitySensor implements Listener {
     }
 
     private void startQuestIndicator(NPCEntity npcEntity, Player player) {
-        if (!npcEntity.getNPCsConfigFields().getInteractionType().equals(NPCInteractions.NPCInteractionType.QUEST_GIVER) &&
-                !npcEntity.getNPCsConfigFields().getInteractionType().equals(NPCInteractions.NPCInteractionType.CUSTOM_QUEST_GIVER))
+        if (npcEntity.getNPCsConfigFields().getInteractionType() != NPCInteractions.NPCInteractionType.QUEST_GIVER &&
+            npcEntity.getNPCsConfigFields().getInteractionType() != NPCInteractions.NPCInteractionType.CUSTOM_QUEST_GIVER)
             return;
         findQuestState(npcEntity, player);
 
@@ -88,7 +88,7 @@ public class NPCProximitySensor implements Listener {
     private void findQuestState(NPCEntity npcEntity, Player player) {
         //Case for NPCs needed for quests but who are not themselves quest givers
         if (npcEntity.getNPCsConfigFields().getQuestFilenames() == null) return;
-        if (npcEntity.getNPCsConfigFields().getInteractionType().equals(NPCInteractions.NPCInteractionType.CUSTOM_QUEST_GIVER)) {
+        if (npcEntity.getNPCsConfigFields().getInteractionType() == NPCInteractions.NPCInteractionType.CUSTOM_QUEST_GIVER) {
             if (!PlayerData.getQuests(player.getUniqueId()).isEmpty()) {
                 for (String questString : npcEntity.getNPCsConfigFields().getQuestFilenames())
                     for (Quest quest : PlayerData.getQuests(player.getUniqueId()))
@@ -110,7 +110,7 @@ public class NPCProximitySensor implements Listener {
                                 return;
                             }
             }
-        } else if (npcEntity.getNPCsConfigFields().getInteractionType().equals(NPCInteractions.NPCInteractionType.QUEST_GIVER)) {
+        } else if (npcEntity.getNPCsConfigFields().getInteractionType() == NPCInteractions.NPCInteractionType.QUEST_GIVER) {
             for (Quest quest : PlayerData.getQuests(player.getUniqueId()))
                 if (quest instanceof DynamicQuest)
                     //Dynamic quest
@@ -186,7 +186,7 @@ public class NPCProximitySensor implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getView().getTitle().length() > 0)
+        if (!event.getView().getTitle().isEmpty())
             for (Entity entity : event.getPlayer().getNearbyEntities(5, 5, 5))
                 if (EntityTracker.isNPCEntity(entity))
                     EntityTracker.getNPCEntity(entity).sayFarewell((Player) event.getPlayer());

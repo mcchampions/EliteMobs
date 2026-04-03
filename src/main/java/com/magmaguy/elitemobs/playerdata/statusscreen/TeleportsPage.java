@@ -28,7 +28,7 @@ public class TeleportsPage {
         //Fills the non-dungeon lines
         int textLineCounter = 0;
         for (String string : PlayerStatusMenuConfig.getTeleportTextLines()) {
-            if (string == null || string.equals("null"))
+            if (string == null || "null".equals(string))
                 continue;
             TextComponent line = new TextComponent(string + "\n");
             if (PlayerStatusMenuConfig.getTeleportHoverLines()[textLineCounter] != null && !PlayerStatusMenuConfig.getTeleportHoverLines()[textLineCounter].isEmpty())

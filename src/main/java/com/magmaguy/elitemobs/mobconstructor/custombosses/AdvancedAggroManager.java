@@ -23,7 +23,7 @@ public class AdvancedAggroManager implements Listener {
 
         List<Player> nearbyPlayers = new ArrayList<>();
         for (Entity entity : event.getEliteMobEntity().getLivingEntity().getNearbyEntities(35, 35, 35))
-            if (entity.getType().equals(EntityType.PLAYER))
+            if (entity.getType() == EntityType.PLAYER)
                 nearbyPlayers.add((Player) entity);
 
         Player player = null;

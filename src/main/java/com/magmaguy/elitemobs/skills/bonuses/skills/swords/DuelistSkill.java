@@ -1,6 +1,7 @@
 package com.magmaguy.elitemobs.skills.bonuses.skills.swords;
 
 import com.magmaguy.elitemobs.api.EliteMobDamagedByPlayerEvent;
+import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.elitemobs.mobconstructor.EliteEntity;
 import com.magmaguy.elitemobs.skills.SkillType;
 import com.magmaguy.elitemobs.skills.bonuses.SkillBonus;
@@ -44,7 +45,7 @@ public class DuelistSkill extends SkillBonus implements ConditionalSkill {
         // Count elite mobs within detection radius
         long nearbyElites = target.getLivingEntity().getNearbyEntities(DETECTION_RADIUS, DETECTION_RADIUS, DETECTION_RADIUS)
                 .stream()
-                .filter(e -> com.magmaguy.elitemobs.entitytracker.EntityTracker.isEliteMob(e))
+                .filter(EntityTracker::isEliteMob)
                 .filter(e -> !e.getUniqueId().equals(target.getLivingEntity().getUniqueId()))
                 .count();
 
@@ -69,7 +70,7 @@ public class DuelistSkill extends SkillBonus implements ConditionalSkill {
         // Check condition
         long nearbyElites = target.getLivingEntity().getNearbyEntities(DETECTION_RADIUS, DETECTION_RADIUS, DETECTION_RADIUS)
                 .stream()
-                .filter(e -> com.magmaguy.elitemobs.entitytracker.EntityTracker.isEliteMob(e))
+                .filter(EntityTracker::isEliteMob)
                 .filter(e -> !e.getUniqueId().equals(target.getLivingEntity().getUniqueId()))
                 .count();
 

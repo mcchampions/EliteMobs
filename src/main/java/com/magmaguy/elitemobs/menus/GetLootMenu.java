@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by MagmaGuy on 04/05/2017.
@@ -39,8 +40,8 @@ public class GetLootMenu extends EliteMenu implements Listener {
     private final String shopName = GetLootMenuConfig.menuName;
     public int currentHeaderPage = 1;
     public int currentLootPage = 1;
-    public boolean filter = false;
-    public int filterRank = 0;
+    public boolean filter;
+    public int filterRank;
     public Inventory inventory;
 
     public GetLootMenu(Player player, GetLootMenu getLootMenu) {
@@ -90,7 +91,7 @@ public class GetLootMenu extends EliteMenu implements Listener {
                 ItemStack chest = new ItemStack(Material.CHEST, 1);
                 ItemMeta chestItemMeta = chest.getItemMeta();
                 chestItemMeta.setDisplayName(GetLootMenuConfig.tierTranslation + " " + keySet.get((counter - 1) + ((currentHeaderPage - 1) * 6)));
-                List<String> lore = new ArrayList();
+                List<String> lore = new ArrayList<>();
                 lore.add(GetLootMenuConfig.itemFilterTranslation);
                 chestItemMeta.setLore(lore);
                 chest.setItemMeta(chestItemMeta);
@@ -127,6 +128,8 @@ public class GetLootMenu extends EliteMenu implements Listener {
     }
 
     public static class GetLootMenuListener implements Listener {
+        private static final Pattern PATTERN = Pattern.compile("\\s");
+
         @EventHandler
         public void onClick(InventoryClickEvent event) {
 
@@ -196,7 +199,7 @@ public class GetLootMenu extends EliteMenu implements Listener {
                     event.getSlot() == 6 ||
                     event.getSlot() == 7) {
                 getLootMenu.filter = true;
-                getLootMenu.filterRank = Integer.parseInt(currentItem.getItemMeta().getDisplayName().split("\\s")[1]);
+                getLootMenu.filterRank = Integer.parseInt(PATTERN.split(currentItem.getItemMeta().getDisplayName())[1]);
                 getLootMenu.currentLootPage = 1;
                 new GetLootMenu(player, getLootMenu);
             }

@@ -38,9 +38,9 @@ public class DrillingEnchantment extends CustomEnchantment {
         public static void shutdown() {
             activePlayers.clear();
         }
-        private Material material = null;
-        private ItemStack itemStack = null;
-        private MiningDirection miningDirection = null;
+        private Material material;
+        private ItemStack itemStack;
+        private MiningDirection miningDirection;
         private Player player;
 
         @EventHandler(priority = EventPriority.HIGHEST)
@@ -133,7 +133,7 @@ public class DrillingEnchantment extends CustomEnchantment {
         private Block processBlock(Block originalBlock, Vector addedVector) {
             if (originalBlock == null) return null;
             Block finalBlock = originalBlock.getWorld().getBlockAt(originalBlock.getLocation().clone().add(addedVector));
-            if (!this.material.equals(finalBlock.getType())) return finalBlock;
+            if (this.material != finalBlock.getType()) return finalBlock;
 
             BlockBreakEvent blockBreakEvent = new BlockBreakEvent(finalBlock, player);
             new EventCaller(blockBreakEvent);
@@ -145,22 +145,15 @@ public class DrillingEnchantment extends CustomEnchantment {
 
         private Block drillLevel1(Block originalBlock) {
 
-            switch (miningDirection) {
-                case NORTH:
-                    return processBlock(originalBlock, new Vector(0, 0, 1));
-                case SOUTH:
-                    return processBlock(originalBlock, new Vector(0, 0, -1));
-                case EAST:
-                    return processBlock(originalBlock, new Vector(1, 0, 0));
-                case WEST:
-                    return processBlock(originalBlock, new Vector(-1, 0, 0));
-                case UP:
-                    return processBlock(originalBlock, new Vector(0, 1, 0));
-                case DOWN:
-                    return processBlock(originalBlock, new Vector(0, -1, 0));
-                default:
-                    return null;
-            }
+            return switch (miningDirection) {
+                case NORTH -> processBlock(originalBlock, new Vector(0, 0, 1));
+                case SOUTH -> processBlock(originalBlock, new Vector(0, 0, -1));
+                case EAST -> processBlock(originalBlock, new Vector(1, 0, 0));
+                case WEST -> processBlock(originalBlock, new Vector(-1, 0, 0));
+                case UP -> processBlock(originalBlock, new Vector(0, 1, 0));
+                case DOWN -> processBlock(originalBlock, new Vector(0, -1, 0));
+                default -> null;
+            };
 
         }
 

@@ -1,40 +1,13 @@
 package com.magmaguy.elitemobs.powers.lua;
 
-import com.magmaguy.elitemobs.api.*;
-import com.magmaguy.elitemobs.api.internal.RemovalReason;
-import com.magmaguy.elitemobs.collateralminecraftchanges.LightningSpawnBypass;
-import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.elitemobs.mobconstructor.EliteEntity;
-import com.magmaguy.elitemobs.mobconstructor.custombosses.CustomBossEntity;
-import com.magmaguy.elitemobs.pathfinding.Navigation;
-import com.magmaguy.elitemobs.playerdata.ElitePlayerInventory;
-import com.magmaguy.elitemobs.powers.meta.CustomSummonPower;
-import com.magmaguy.elitemobs.powers.scripts.ScriptAction;
 import com.magmaguy.elitemobs.utils.GameClock;
-import com.magmaguy.elitemobs.utils.shapes.RotatingRay;
-import com.magmaguy.elitemobs.utils.shapes.StaticRay;
-import com.magmaguy.elitemobs.utils.shapes.TranslatingRay;
 import com.magmaguy.magmacore.scripting.zones.*;
-import com.magmaguy.magmacore.util.AttributeManager;
-import com.magmaguy.magmacore.util.ChatColorConverter;
 import com.magmaguy.magmacore.util.Logger;
 import lombok.Getter;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.block.Block;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import com.magmaguy.shaded.luaj.vm2.*;
 import com.magmaguy.shaded.luaj.vm2.lib.VarArgFunction;
 
@@ -53,8 +26,8 @@ public class LuaPowerInstance {
     private final LuaPowerScriptApi scriptApi;
     private final Map<Integer, OwnedTask> ownedTasks = new LinkedHashMap<>();
     private final List<ZoneWatch> zoneWatches = new ArrayList<>();
-    private Integer clockTaskId = null;
-    private boolean closed = false;
+    private Integer clockTaskId;
+    private boolean closed;
 
     public LuaPowerInstance(LuaPowerDefinition definition, EliteEntity eliteEntity) {
         this.definition = definition;
@@ -133,7 +106,6 @@ public class LuaPowerInstance {
                 Logger.warn("[Lua] " + definition.getFileName() + " took " + elapsedMillis + "ms in '"
                         + hook.getKey() + "' (limit: 50ms) — power disabled to prevent lag.");
                 shutdown();
-                return;
             }
         }
     }
@@ -429,7 +401,7 @@ public class LuaPowerInstance {
         if (rawMessage.contains(fileName)) {
             int fileStart = rawMessage.indexOf(fileName);
             String afterFile = rawMessage.substring(fileStart + fileName.length());
-            if (afterFile.startsWith(":")) {
+            if (!afterFile.isEmpty() && afterFile.charAt(0) == ':') {
                 afterFile = afterFile.substring(1);
                 int spaceIndex = afterFile.indexOf(' ');
                 if (spaceIndex > 0) {
@@ -472,7 +444,6 @@ public class LuaPowerInstance {
 
     private static String extractNilCallTarget(String message) {
         // Try to extract useful context from the raw LuaJ error
-        if (message == null) return "";
         // Common pattern: the variable name sometimes appears before the error
         return "";
     }

@@ -23,10 +23,11 @@ public class AirshipMinidungeon extends ContentPackagesConfigFields {
                 "em_the_airship,-85.5,189.5,41.5,-144,0",
                 "em_the_airship,-95.5,188.0,43.5,-144,0",
                 0,
-                "Difficulty: &6Medium\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&6An awesome airship full of undead pirates\n" +
-                        "&6for experienced players!",
+                """
+                        Difficulty: &6Medium
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &6An awesome airship full of undead pirates
+                        &6for experienced players!""",
                 "&8[EM] &cEntering hostile air zone!",
                 "&8[EM] &cLeaving hostile air zone!",
                 List.of("filename=airship_tier_75_boss.yml"),

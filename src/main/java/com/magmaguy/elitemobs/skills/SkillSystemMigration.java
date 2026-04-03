@@ -31,7 +31,7 @@ public class SkillSystemMigration {
 
     private static final String MIGRATION_FLAG_FILE = "skill_system_migrated.flag";
     private static final Set<UUID> warnedPlayers = new HashSet<>();
-    private static boolean migrationComplete = false;
+    private static boolean migrationComplete;
 
     private SkillSystemMigration() {
         // Static utility class
@@ -169,7 +169,7 @@ public class SkillSystemMigration {
                         markPlayerWarned(player);
                     }
                 }
-            }.runTaskLater(MetadataHandler.PLUGIN, 20L * 2); // 2 second delay
+            }.runTaskLater(MetadataHandler.PLUGIN, 20L << 1); // 2 second delay
         }
     }
 }

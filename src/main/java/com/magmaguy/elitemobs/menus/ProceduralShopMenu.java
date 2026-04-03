@@ -156,7 +156,7 @@ public class ProceduralShopMenu {
         public void onClick(InventoryClickEvent event) {
 
             if (!EliteMenu.isEliteMenu(event, menus)) return;
-            if (event.getClickedInventory() == null || !event.getClickedInventory().getType().equals(InventoryType.CHEST)) {
+            if (event.getClickedInventory() == null || event.getClickedInventory().getType() != InventoryType.CHEST) {
                 event.setCancelled(true);
                 return;
             }
@@ -176,7 +176,7 @@ public class ProceduralShopMenu {
                     public void run() {
                         cooldownPlayers.remove(event.getWhoClicked().getUniqueId());
                     }
-                }.runTaskLater(MetadataHandler.PLUGIN, 20 * 2L);
+                }.runTaskLater(MetadataHandler.PLUGIN, 20 << 1);
 
                 populateShop(event.getInventory(), Bukkit.getPlayer(event.getWhoClicked().getUniqueId()));
                 event.setCancelled(true);

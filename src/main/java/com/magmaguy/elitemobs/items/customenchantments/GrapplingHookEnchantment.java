@@ -30,7 +30,7 @@ public class GrapplingHookEnchantment extends CustomEnchantment {
 
     public static void trackGrapplingHook(AbstractArrow arrow, Player player) {
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -53,7 +53,7 @@ public class GrapplingHookEnchantment extends CustomEnchantment {
     private static void zipline(Player player, Location location) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 10, 1));
         new BukkitRunnable() {
-            int timer = 0;
+            int timer;
 
             @Override
             public void run() {
@@ -88,15 +88,15 @@ public class GrapplingHookEnchantment extends CustomEnchantment {
     }
 
     private static boolean checkBlock(Location location) {
-        return location.getBlock().getType().equals(Material.TARGET);
+        return location.getBlock().getType() == Material.TARGET;
     }
 
     public static class GrapplingHookEnchantmentEvents implements Listener {
         @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
         public void onArrowFire(EntityShootBowEvent event) {
             if (!(event.getEntity() instanceof Player)) return;
-            if (!event.getProjectile().getType().equals(EntityType.ARROW) &&
-                    !event.getProjectile().getType().equals(EntityType.SPECTRAL_ARROW)) return;
+            if (event.getProjectile().getType() != EntityType.ARROW &&
+                event.getProjectile().getType() != EntityType.SPECTRAL_ARROW) return;
             if (event.getConsumable() == null || !isGrapplingHookProjectile(event.getConsumable().getItemMeta()))
                 return;
             ((AbstractArrow) event.getProjectile()).setBounce(false);

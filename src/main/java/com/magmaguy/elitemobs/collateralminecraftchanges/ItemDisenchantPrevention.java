@@ -11,8 +11,8 @@ import org.bukkit.event.inventory.InventoryType;
 public class ItemDisenchantPrevention implements Listener {
     @EventHandler
     public void onDisenchant(InventoryClickEvent event) {
-        if (!event.getSlotType().equals(InventoryType.SlotType.RESULT)) return;
-        if (!event.getInventory().getType().equals(InventoryType.GRINDSTONE)) return;
+        if (event.getSlotType() != InventoryType.SlotType.RESULT) return;
+        if (event.getInventory().getType() != InventoryType.GRINDSTONE) return;
         if (!EliteItemManager.isEliteMobsItem(event.getInventory().getItem(0)) &&
                 !EliteItemManager.isEliteMobsItem(event.getInventory().getItem(1))) return;
         event.setResult(Event.Result.DENY);

@@ -23,7 +23,11 @@ public class TheNetherBellSanctum extends ContentPackagesConfigFields {
                 "em_id_the_nether_bell,231.5,87,-219.5,44,0",
                 "em_id_the_nether_bell,184.5,69,-192.5,43,0",
                 0,
-                "&aDynamic Sanctum\n" + "$bossCount boss encounters\n" + "&cVenture into the deepest\n" + "&cpart of the Nether!",
+                """
+                        &aDynamic Sanctum
+                        $bossCount boss encounters
+                        &cVenture into the deepest
+                        &cpart of the Nether!""",
                 "&bNo being should be this deep in the Nether...",
                 "&bYou have left The Nether Bell!",
                 List.of("filename=em_id_the_nether_bell_boss_void_bell_p1.yml"),

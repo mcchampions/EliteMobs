@@ -27,7 +27,7 @@ public class CustomModel implements CustomModelInterface {
     private static ModelPlugin modelPlugin;
     private CustomModelMEG customModelMEG;
     private CustomModelFMM customModelFMM;
-    private boolean initialized = false;
+    private boolean initialized;
 
     private CustomModel(LivingEntity livingEntity, String modelName, String nametagName) {
         switch (modelPlugin) {
@@ -73,13 +73,11 @@ public class CustomModel implements CustomModelInterface {
     }
 
     public static boolean modelExists(String modelName) {
-        switch (modelPlugin) {
-            case FREE_MINECRAFT_MODELS:
-                return CustomModelFMM.modelExists(modelName);
-            case MODEL_ENGINE:
-                return CustomModelMEG.modelExists(modelName);
-        }
-        return false;
+        return switch (modelPlugin) {
+            case FREE_MINECRAFT_MODELS -> CustomModelFMM.modelExists(modelName);
+            case MODEL_ENGINE -> CustomModelMEG.modelExists(modelName);
+            default -> false;
+        };
     }
 
     public static CustomModel generateCustomModel(LivingEntity livingEntity, String modelName, String nametagName) {

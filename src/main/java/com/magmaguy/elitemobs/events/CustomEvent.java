@@ -96,7 +96,7 @@ public abstract class CustomEvent {
             Logger.warn("Event " + customEventsConfigFields.getFilename() + " has failed to start because the bosses failed to spawn correctly!" +
                     "This could be due to an issue with the configuration of the bosses in the event, with the configuration" +
                     " of the event or due to a protection in the target location!");
-            Logger.warn("Target location: " + getEventStartLocation().toString());
+            Logger.warn("Target location: " + eventStartLocation.toString());
         }
         if (this.startMessage != null)
             AnnouncementPriority.announce(this.startMessage, eventStartLocation.getWorld(), this.announcementPriority);

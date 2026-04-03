@@ -17,9 +17,10 @@ public class AdventurersGuildHub extends ContentPackagesConfigFields {
                 true,
                 "em_adventurers_guild,208.5,88,236.5,-80,0",
                 0,
-                "Difficulty: &cHard\n" +
-                        "$bossCount level $lowestTier Big Boss!\n" +
-                        "&6Face fierce beasts at their home turf!",
+                """
+                        Difficulty: &cHard
+                        $bossCount level $lowestTier Big Boss!
+                        &6Face fierce beasts at their home turf!""",
                 "&8[EM] &aYou have entered the Beast Sanctuary! Beware of what prowls here!",
                 "&8[EM] &aYou've left the Beast Sanctuary! Did you take trophies?",
                 "em_adventurers_guild",

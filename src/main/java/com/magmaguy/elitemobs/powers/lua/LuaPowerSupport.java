@@ -1,6 +1,5 @@
 package com.magmaguy.elitemobs.powers.lua;
 
-import com.magmaguy.elitemobs.api.internal.RemovalReason;
 import com.magmaguy.elitemobs.combatsystem.ScaledCombatRewardResolver;
 import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.magmacore.util.TemporaryBlockManager;
@@ -173,7 +172,7 @@ final class LuaPowerSupport {
             double y = table.get("y").optdouble(0);
             double z = table.get("z").optdouble(0);
             double speed = table.get("speed").optdouble(0);
-            if (particle.equals(Particle.DUST)) {
+            if (particle == Particle.DUST) {
                 location.getWorld().spawnParticle(particle, location, amount, x, y, z, speed,
                         new Particle.DustOptions(
                                 Color.fromRGB(
@@ -181,7 +180,7 @@ final class LuaPowerSupport {
                                         table.get("green").optint(255),
                                         table.get("blue").optint(255)),
                                 1));
-            } else if (particle.equals(Particle.DUST_COLOR_TRANSITION)) {
+            } else if (particle == Particle.DUST_COLOR_TRANSITION) {
                 location.getWorld().spawnParticle(particle, location, amount, x, y, z, speed,
                         new Particle.DustTransition(
                                 Color.fromRGB(

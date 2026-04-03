@@ -42,10 +42,10 @@ public class WormholeConfigFields extends CustomConfigFields {
     private double sizeMultiplier = 1D;
     @Getter
     @Setter
-    private String customModel1 = null;
+    private String customModel1;
     @Getter
     @Setter
-    private String customModel2 = null;
+    private String customModel2;
 
     public WormholeConfigFields(String filename,
                                 boolean isEnabled,

@@ -42,17 +42,17 @@ public class ScriptZone {
     private final boolean isValid;
 
     /** The final targets of this zone, if specified in the blueprint. */
-    private ScriptTargets finalTargets = null;
+    private ScriptTargets finalTargets;
 
     /** Secondary targets, if specified (used for rays and other shapes needing two targets). */
-    private ScriptTargets targets2 = null;
+    private ScriptTargets targets2;
 
     /** The final secondary targets, if specified. */
-    private ScriptTargets finalTargets2 = null;
+    private ScriptTargets finalTargets2;
 
     /** Whether this zone should listen for entities entering and leaving. */
     @Setter
-    private boolean zoneListener = false;
+    private boolean zoneListener;
 
     /** The entities currently within the zone, used to track enter and leave events. */
     private Set<LivingEntity> entitiesInZone;
@@ -82,7 +82,7 @@ public class ScriptZone {
         this.isValid = zoneBlueprint.getTarget() != null;
     }
 
-    private ZoneListenerTask zoneListenerTask = null;
+    private ZoneListenerTask zoneListenerTask;
 
     /**
      * Starts a zone listener that monitors entities entering or leaving the zone.
@@ -128,15 +128,16 @@ public class ScriptZone {
      */
     protected Collection<LivingEntity> getZoneEntities(ScriptActionData scriptActionData, ScriptTargetsBlueprint blueprintFromRequestingTarget) {
         try {
-            switch (blueprintFromRequestingTarget.getTargetType()) {
-                case ZONE_FULL, ZONE_BORDER:
-                    return getEntitiesInArea(generateShapes(scriptActionData, false), blueprintFromRequestingTarget.getTargetType());
-                case INHERIT_SCRIPT_ZONE_FULL, INHERIT_SCRIPT_ZONE_BORDER:
-                    return getEntitiesInArea(generateShapes(scriptActionData.getInheritedScriptActionData(), false), blueprintFromRequestingTarget.getTargetType());
-                default:
+            return switch (blueprintFromRequestingTarget.getTargetType()) {
+                case ZONE_FULL, ZONE_BORDER ->
+                        getEntitiesInArea(generateShapes(scriptActionData, false), blueprintFromRequestingTarget.getTargetType());
+                case INHERIT_SCRIPT_ZONE_FULL, INHERIT_SCRIPT_ZONE_BORDER ->
+                        getEntitiesInArea(generateShapes(scriptActionData.getInheritedScriptActionData(), false), blueprintFromRequestingTarget.getTargetType());
+                default -> {
                     Logger.warn("Couldn't parse target type '" + blueprintFromRequestingTarget.getTargetType() + "' in script zone.");
-                    return Collections.emptyList();
-            }
+                    yield Collections.emptyList();
+                }
+            };
         } catch (Exception e) {
             Logger.warn("Error retrieving zone entities: " + e.getMessage());
             return Collections.emptyList();
@@ -152,19 +153,20 @@ public class ScriptZone {
      */
     protected Collection<Location> getZoneLocations(ScriptActionData scriptActionData, ScriptTargets actionTarget) {
         try {
-            switch (actionTarget.getTargetBlueprint().getTargetType()) {
-                case ZONE_FULL:
-                    return consolidateLists(generateShapes(scriptActionData, false).stream().map(Shape::getLocations).collect(Collectors.toSet()));
-                case ZONE_BORDER:
-                    return consolidateLists(generateShapes(scriptActionData, false).stream().map(Shape::getEdgeLocations).collect(Collectors.toSet()));
-                case INHERIT_SCRIPT_ZONE_FULL:
-                    return consolidateLists(generateShapes(scriptActionData.getInheritedScriptActionData(), false).stream().map(Shape::getLocations).collect(Collectors.toSet()));
-                case INHERIT_SCRIPT_ZONE_BORDER:
-                    return consolidateLists(generateShapes(scriptActionData.getInheritedScriptActionData(), false).stream().map(Shape::getEdgeLocations).collect(Collectors.toSet()));
-                default:
+            return switch (actionTarget.getTargetBlueprint().getTargetType()) {
+                case ZONE_FULL ->
+                        consolidateLists(generateShapes(scriptActionData, false).stream().map(Shape::getLocations).collect(Collectors.toSet()));
+                case ZONE_BORDER ->
+                        consolidateLists(generateShapes(scriptActionData, false).stream().map(Shape::getEdgeLocations).collect(Collectors.toSet()));
+                case INHERIT_SCRIPT_ZONE_FULL ->
+                        consolidateLists(generateShapes(scriptActionData.getInheritedScriptActionData(), false).stream().map(Shape::getLocations).collect(Collectors.toSet()));
+                case INHERIT_SCRIPT_ZONE_BORDER ->
+                        consolidateLists(generateShapes(scriptActionData.getInheritedScriptActionData(), false).stream().map(Shape::getEdgeLocations).collect(Collectors.toSet()));
+                default -> {
                     Logger.warn("Couldn't parse target type '" + actionTarget.getTargetBlueprint().getTargetType() + "' in script zone.");
-                    return Collections.emptyList();
-            }
+                    yield Collections.emptyList();
+                }
+            };
         } catch (Exception e) {
             Logger.warn("Error retrieving zone locations: " + e.getMessage());
             return Collections.emptyList();
@@ -218,7 +220,7 @@ public class ScriptZone {
                             continue;
                         }
 
-                        Location secondPoint = target2Locations.get(0);
+                        Location secondPoint = target2Locations.getFirst();
                         shapes.add(new Cone(
                                 shapeTargetLocation,
                                 secondPoint,
@@ -268,14 +270,14 @@ public class ScriptZone {
                         if (finalTargets != null) {
                             List<Location> finalTargetsList = new ArrayList<>(finalTargets.getTargetLocations(scriptActionData));
                             if (!finalTargetsList.isEmpty()) {
-                                targetLocationEnd = finalTargetsList.get(0);
+                                targetLocationEnd = finalTargetsList.getFirst();
                             }
                         }
                         Location target2LocationEnd = null;
                         if (finalTargets2 != null) {
                             List<Location> finalTargetsList = new ArrayList<>(finalTargets2.getTargetLocations(scriptActionData));
                             if (!finalTargetsList.isEmpty()) {
-                                target2LocationEnd = finalTargetsList.get(0);
+                                target2LocationEnd = finalTargetsList.getFirst();
                             }
                         }
                         for (Location location : targets2.getTargetLocations(scriptActionData)) {
@@ -341,7 +343,7 @@ public class ScriptZone {
             } : filterByLiving(shape.getCenter());
 
             for (LivingEntity livingEntity : livingEntities) {
-                boolean contains = targetType.equals(TargetType.ZONE_FULL) ? shape.contains(livingEntity) : shape.borderContains(livingEntity);
+                boolean contains = targetType == TargetType.ZONE_FULL ? shape.contains(livingEntity) : shape.borderContains(livingEntity);
                 if (contains) {
                     validatedEntities.add(livingEntity);
                 }

@@ -14,10 +14,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CommandLootTable extends CustomLootEntry implements Serializable {
     @Getter
-    private String command = null;
+    private String command;
 
     public CommandLootTable(List<CustomLootEntry> entries, String rawString, String configFilename) {
-        super();
         parseNewFormat(rawString, configFilename);
         entries.add(this);
     }

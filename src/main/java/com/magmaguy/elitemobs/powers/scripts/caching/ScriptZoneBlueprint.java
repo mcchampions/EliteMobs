@@ -19,13 +19,13 @@ public class ScriptZoneBlueprint {
     private final String scriptName;
     private final String filename;
     @Getter
-    private ScriptTargetsBlueprint target = null;
+    private ScriptTargetsBlueprint target;
     @Getter
-    private ScriptTargetsBlueprint finalTarget = null;
+    private ScriptTargetsBlueprint finalTarget;
     @Getter
-    private ScriptTargetsBlueprint target2 = null;
+    private ScriptTargetsBlueprint target2;
     @Getter
-    private ScriptTargetsBlueprint finalTarget2 = null;
+    private ScriptTargetsBlueprint finalTarget2;
     @Getter
     private ShapeType shapeTypeEnum = ShapeType.CYLINDER;
     @Getter
@@ -105,9 +105,7 @@ public class ScriptZoneBlueprint {
             case "xborder" -> xBorder = parseScriptFloat(key, value, scriptName);
             case "yborder" -> yBorder = parseScriptFloat(key, value, scriptName);
             case "zborder" -> zBorder = parseScriptFloat(key, value, scriptName);
-            default -> {
-                Logger.warn("Failed to read key " + key + " for script " + scriptName + " in file " + filename);
-            }
+            default -> Logger.warn("Failed to read key " + key + " for script " + scriptName + " in file " + filename);
         }
     }
 

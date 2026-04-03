@@ -89,7 +89,7 @@ public class BossHealthDisplay implements Listener {
     private static final List<XpPopupData> activeXpPopups = Collections.synchronizedList(new ArrayList<>());
 
     // Master update task
-    private static BukkitTask masterUpdateTask = null;
+    private static BukkitTask masterUpdateTask;
 
     /**
      * Starts the master update task that handles all display updates
@@ -305,7 +305,7 @@ public class BossHealthDisplay implements Listener {
             EntityTracker.registerVisualEffects(armorStand);
 
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {
@@ -350,7 +350,7 @@ public class BossHealthDisplay implements Listener {
         if (fakeTexts[0] == null || fakeTexts[1] == null) return;
 
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -520,29 +520,15 @@ public class BossHealthDisplay implements Listener {
         if (location == null || location.getWorld() == null) return;
 
         // Determine background color based on type
-        Color backgroundColor;
-        switch (type) {
-            case DAMAGE:
-                backgroundColor = Color.fromARGB(100, 50, 0, 0);
-                break;
-            case CRITICAL:
-                backgroundColor = Color.fromARGB(120, 80, 0, 80);
-                break;
-            case HEAL:
-                backgroundColor = Color.fromARGB(100, 0, 50, 0);
-                break;
-            case WEAK:
-                backgroundColor = Color.fromARGB(100, 0, 0, 80);
-                break;
-            case RESIST:
-                backgroundColor = Color.fromARGB(100, 80, 0, 0);
-                break;
-            case XP:
-                backgroundColor = Color.fromARGB(120, 80, 60, 0);  // Warm golden background
-                break;
-            default:
-                backgroundColor = Color.fromARGB(80, 0, 0, 0);
-        }
+        Color backgroundColor = switch (type) {
+            case DAMAGE -> Color.fromARGB(100, 50, 0, 0);
+            case CRITICAL -> Color.fromARGB(120, 80, 0, 80);
+            case HEAL -> Color.fromARGB(100, 0, 50, 0);
+            case WEAK -> Color.fromARGB(100, 0, 0, 80);
+            case RESIST -> Color.fromARGB(100, 80, 0, 0);
+            case XP -> Color.fromARGB(120, 80, 60, 0);  // Warm golden background
+            default -> Color.fromARGB(80, 0, 0, 0);
+        };
 
         FakeText fakeText = VisualDisplay.createStyledFakeText(
                 location,
@@ -658,15 +644,12 @@ public class BossHealthDisplay implements Listener {
     private static class PopupData {
         private final FakeText display;
         private final Location startLocation;
-        private final PopupType type;
         private final float baseScale;
-        private final int maxTicks = POPUP_DURATION_TICKS;
-        private int ticksAlive = 0;
+        private int ticksAlive;
 
         public PopupData(FakeText display, Location startLocation, PopupType type, float baseScale) {
             this.display = display;
             this.startLocation = startLocation.clone();
-            this.type = type;
             this.baseScale = baseScale;
         }
 
@@ -676,6 +659,7 @@ public class BossHealthDisplay implements Listener {
         public boolean update() {
             ticksAlive++;
 
+            int maxTicks = POPUP_DURATION_TICKS;
             if (ticksAlive >= maxTicks || display == null) {
                 return false;
             }
@@ -737,7 +721,7 @@ public class BossHealthDisplay implements Listener {
         private final Location startLocation;
         private final String rawText;
         private final float baseScale;
-        private int ticksAlive = 0;
+        private int ticksAlive;
 
         public XpPopupData(FakeText display, Location startLocation, String rawText, float baseScale) {
             this.display = display;
@@ -848,7 +832,7 @@ public class BossHealthDisplay implements Listener {
         private final List<FakeText> healthBarDisplays = new ArrayList<>();
         private final Map<Player, BossBar> playerBossBars = new ConcurrentHashMap<>();
         private final double healthMultiplier;
-        private FakeText numericDisplay = null;
+        private FakeText numericDisplay;
         private long lastCombatTime;
 
         public HealthDisplayData(EliteEntity eliteEntity) {
@@ -1214,7 +1198,6 @@ public class BossHealthDisplay implements Listener {
         private BarColor getBarColor(double healthRatio) {
             if (healthRatio > 0.75) return BarColor.GREEN;
             if (healthRatio > 0.50) return BarColor.YELLOW;
-            if (healthRatio > 0.25) return BarColor.RED;
             return BarColor.RED;
         }
 

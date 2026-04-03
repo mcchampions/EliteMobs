@@ -26,7 +26,7 @@ public class RewardEntry implements Serializable {
     @Getter
     private String command;
     @Getter
-    private double currencyAmount = 0;
+    private double currencyAmount;
 
     public RewardEntry(ItemStack itemStack, double chance, int amount) {
         this.itemStack = itemStack;

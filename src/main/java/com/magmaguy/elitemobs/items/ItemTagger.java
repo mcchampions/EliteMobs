@@ -56,7 +56,6 @@ public class ItemTagger {
         itemMeta.getPersistentDataContainer().set(eliteMobsItemNamespacedKey, PersistentDataType.BYTE, (byte) 1);
         itemStack.setItemMeta(itemMeta);
         new EliteItemLore(itemStack, false);
-        return;
     }
 
 
@@ -87,7 +86,7 @@ public class ItemTagger {
         String rawLore = itemMeta.getPersistentDataContainer().get(customLore, PersistentDataType.STRING);
         if (rawLore == null)
             return new ArrayList<>();
-        ArrayList<String> parsedLore = new ArrayList();
+        ArrayList<String> parsedLore = new ArrayList<>();
         Collections.addAll(parsedLore, rawLore.split("\n"));
         return parsedLore;
     }
@@ -107,9 +106,9 @@ public class ItemTagger {
      * @param enchantmentMap
      */
     public static void registerEnchantments(ItemMeta itemMeta, HashMap<Enchantment, Integer> enchantmentMap) {
-        for (Enchantment enchantment : enchantmentMap.keySet())
-            if (EliteEnchantments.isPotentialEliteEnchantment(enchantment))
-                registerEnchantment(itemMeta, enchantment.getKey(), enchantmentMap.get(enchantment));
+        for (Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet())
+            if (EliteEnchantments.isPotentialEliteEnchantment(entry.getKey()))
+                registerEnchantment(itemMeta, entry.getKey().getKey(), entry.getValue());
     }
 
     /**
@@ -124,8 +123,8 @@ public class ItemTagger {
     }
 
     public static void registerCustomEnchantments(ItemMeta itemMeta, HashMap<String, Integer> customEnchantments) {
-        for (String subString : customEnchantments.keySet())
-            registerCustomEnchantment(itemMeta, subString, customEnchantments.get(subString));
+        for (Map.Entry<String, Integer> entry : customEnchantments.entrySet())
+            registerCustomEnchantment(itemMeta, entry.getKey(), entry.getValue());
     }
 
     /**
@@ -259,10 +258,10 @@ public class ItemTagger {
         if (ItemSettingsConfig.isUseEliteEnchantments())
             projectile.getPersistentDataContainer().set(ELITE_DAMAGE, PersistentDataType.DOUBLE, damageValue);
         else {
-            if (projectile.getType().equals(EntityType.ARROW)) {
+            if (projectile.getType() == EntityType.ARROW) {
                 Arrow arrow = (Arrow) projectile;
                 arrow.setDamage(arrow.getDamage() + damageValue);
-            } else if (projectile.getType().equals(EntityType.TRIDENT)) {
+            } else if (projectile.getType() == EntityType.TRIDENT) {
                 Trident trident = (Trident) projectile;
                 trident.setDamage(trident.getDamage() + damageValue);
             }

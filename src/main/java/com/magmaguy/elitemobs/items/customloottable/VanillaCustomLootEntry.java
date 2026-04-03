@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class VanillaCustomLootEntry extends CustomLootEntry implements Serializable {
     @Getter
-    private Material material = null;
+    private Material material;
 
     public VanillaCustomLootEntry(List<CustomLootEntry> entries, String rawString, String configFilename) {
         parseAllFormats(rawString, configFilename);

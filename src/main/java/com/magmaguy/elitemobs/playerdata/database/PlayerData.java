@@ -41,7 +41,7 @@ public class PlayerData {
     private static final String PLAYER_DATA_TABLE_NAME = "PlayerData";
     @Getter
     private static final HashMap<UUID, PlayerData> playerDataHashMap = new HashMap<>();
-    private static Connection connection = null;
+    private static Connection connection;
     @Getter
     @Setter
     private double currency;
@@ -65,7 +65,7 @@ public class PlayerData {
     private List<Quest> quests = new ArrayList<>();
     @Getter
     @Setter
-    private PlayerQuestCooldowns playerQuestCooldowns = null;
+    private PlayerQuestCooldowns playerQuestCooldowns;
     @Getter
     @Setter
     private Location backTeleportLocation;
@@ -77,42 +77,42 @@ public class PlayerData {
     private boolean dismissEMStatusScreenMessage;
     @Getter
     @Setter
-    private MatchInstance matchInstance = null;
+    private MatchInstance matchInstance;
     @Getter
     @Setter
-    private DungeonBossLockout dungeonBossLockout = null;
+    private DungeonBossLockout dungeonBossLockout;
     @Getter
     @Setter
-    private com.magmaguy.elitemobs.quests.QuestLockout questLockout = null;
+    private com.magmaguy.elitemobs.quests.QuestLockout questLockout;
 
     // Skill XP fields - each skill has independent progression
     @Getter
     @Setter
-    private long skillXP_ARMOR = 0;
+    private long skillXP_ARMOR;
     @Getter
     @Setter
-    private long skillXP_SWORDS = 0;
+    private long skillXP_SWORDS;
     @Getter
     @Setter
-    private long skillXP_AXES = 0;
+    private long skillXP_AXES;
     @Getter
     @Setter
-    private long skillXP_BOWS = 0;
+    private long skillXP_BOWS;
     @Getter
     @Setter
-    private long skillXP_CROSSBOWS = 0;
+    private long skillXP_CROSSBOWS;
     @Getter
     @Setter
-    private long skillXP_TRIDENTS = 0;
+    private long skillXP_TRIDENTS;
     @Getter
     @Setter
-    private long skillXP_HOES = 0;
+    private long skillXP_HOES;
     @Getter
     @Setter
-    private long skillXP_MACES = 0;
+    private long skillXP_MACES;
     @Getter
     @Setter
-    private long skillXP_SPEARS = 0;
+    private long skillXP_SPEARS;
 
     // Skill bonus selections - JSON string mapping skill types to selected skill IDs
     @Getter
@@ -122,7 +122,7 @@ public class PlayerData {
     // Gambling debt - tracks how much the player owes from gambling
     @Getter
     @Setter
-    private double gamblingDebt = 0;
+    private double gamblingDebt;
 
     public PlayerData(UUID uuid) {
         Player player = Bukkit.getPlayer(uuid);
@@ -409,9 +409,9 @@ public class PlayerData {
     }
 
     public static void incrementScore(UUID uuid, int levelToIncrement) {
-        setDatabaseValue(uuid, "Score", getScore(uuid) + levelToIncrement * 2);
+        setDatabaseValue(uuid, "Score", getScore(uuid) + (levelToIncrement << 1));
         if (playerDataHashMap.containsKey(uuid))
-            playerDataHashMap.get(uuid).score += (levelToIncrement * 2);
+            playerDataHashMap.get(uuid).score += (levelToIncrement << 1);
     }
 
     public static void decrementScore(UUID uuid) {

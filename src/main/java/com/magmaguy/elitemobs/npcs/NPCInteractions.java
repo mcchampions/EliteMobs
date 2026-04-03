@@ -246,7 +246,7 @@ public class NPCInteractions implements Listener {
         NPCEntity npcEntity = EntityTracker.getNPCEntity(event.getRightClicked());
         if (npcEntity == null) return;
         Player player = event.getPlayer();
-        if (player.getInventory().getItemInMainHand().getType().equals(Material.NAME_TAG)) {
+        if (player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG) {
             event.setCancelled(true);
             player.sendMessage(CommandMessagesConfig.getNpcCannotRenameMessage());
             return;
@@ -258,7 +258,7 @@ public class NPCInteractions implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
 
-        if (!event.getInventory().getType().equals(InventoryType.MERCHANT)) return;
+        if (event.getInventory().getType() != InventoryType.MERCHANT) return;
 
         for (NPCEntity npcEntity : EntityTracker.getNpcEntities().values())
             if (event.getView().getTitle().equals(npcEntity.getNPCsConfigFields().getName())) {

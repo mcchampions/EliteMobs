@@ -65,7 +65,7 @@ public class EntityTracker implements Listener {
         return PersistentTagger.getEliteEntity(entity);
     }
 
-    private static BukkitTask ManagedEntityTask = null;
+    private static BukkitTask ManagedEntityTask;
 
     public static void registerVisualEffects(Entity entity) {
         PersistentTagger.tagVisualEffect(entity);
@@ -110,7 +110,7 @@ public class EntityTracker implements Listener {
     //Temporary blocks - delegated to MagmaCore's TemporaryBlockManager
     public static void addTemporaryBlock(Block block, int ticks, Material replacementMaterial) {
         //Don't override death banners, this causes issues
-        if (TemporaryBlockManager.isTemporaryBlock(block) && block.getType().equals(Material.RED_BANNER)) return;
+        if (TemporaryBlockManager.isTemporaryBlock(block) && block.getType() == Material.RED_BANNER) return;
         TemporaryBlockManager.addTemporaryBlock(block, ticks, replacementMaterial);
     }
 
@@ -178,10 +178,10 @@ public class EntityTracker implements Listener {
             ManagedEntityTask.cancel();
         for (EliteEntity eliteEntity : ((HashMap<UUID, EliteEntity>) eliteMobEntities.clone()).values())
             eliteEntity.remove(RemovalReason.SHUTDOWN);
-        getEliteMobEntities().clear();
+        eliteMobEntities.clear();
         for (NPCEntity npcEntity : ((HashMap<UUID, NPCEntity>) npcEntities.clone()).values())
             npcEntity.remove(RemovalReason.SHUTDOWN);
-        getNpcEntities().clear();
+        npcEntities.clear();
         TemporaryBlockManager.shutdown();
         //Necessary for things such as visual effects which are not stored in memory, only tagged
         for (World world : Bukkit.getWorlds())
@@ -229,7 +229,7 @@ public class EntityTracker implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onRemove(EntityRemoveEvent event) {
-        if (event.getCause().equals(EntityRemoveEvent.Cause.UNLOAD))
+        if (event.getCause() == EntityRemoveEvent.Cause.UNLOAD)
             EntityTracker.unregister(event.getEntity(), RemovalReason.CHUNK_UNLOAD);
     }
 

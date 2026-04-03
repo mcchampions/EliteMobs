@@ -22,7 +22,7 @@ public class WorldDungeonPackage extends WorldPackage implements Dungeon {
     private int lowestLevel;
     private int highestLevel;
     @Getter
-    private World wormholeWorld = null;
+    private World wormholeWorld;
 
     public WorldDungeonPackage(ContentPackagesConfigFields contentPackagesConfigFields) {
         super(contentPackagesConfigFields);

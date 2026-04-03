@@ -21,8 +21,8 @@ public class MetadataHandler implements Listener {
     //plugin getter
     public static JavaPlugin PLUGIN;
     public static volatile PluginState pluginState = PluginState.UNINITIALIZED;
-    public static volatile boolean shutdownRequested = false;
-    public static volatile org.bukkit.command.CommandSender pendingReloadSender = null;
+    public static volatile boolean shutdownRequested;
+    public static volatile org.bukkit.command.CommandSender pendingReloadSender;
 
     public static int signatureID = 31173;
 

@@ -12,8 +12,8 @@ import java.util.Map;
 public final class GameClock {
 
     private static final Map<Integer, ScheduledEntry> scheduledEntries = new LinkedHashMap<>();
-    private static BukkitTask clockTask = null;
-    private static long currentTick = 0L;
+    private static BukkitTask clockTask;
+    private static long currentTick;
     private static int nextTaskId = 1;
 
     private GameClock() {

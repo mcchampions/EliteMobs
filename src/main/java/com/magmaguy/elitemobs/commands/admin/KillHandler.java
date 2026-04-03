@@ -29,7 +29,7 @@ public class KillHandler {
         if (EliteMobProperties.getValidMobTypes().contains(entityType)) {
             int counter = 0;
             for (EliteEntity eliteEntity : EntityTracker.getEliteMobEntities().values()) {
-                if (!eliteEntity.getLivingEntity().getType().equals(entityType)) continue;
+                if (eliteEntity.getLivingEntity().getType() != entityType) continue;
                 eliteEntity.remove(RemovalReason.OTHER);
                 counter++;
             }
@@ -53,7 +53,7 @@ public class KillHandler {
     public static void radiusKillSpecificMobs(Player player, EntityType entityType, int radius) {
         int counter = 0;
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (!entity.getType().equals(entityType)) continue;
+            if (entity.getType() != entityType) continue;
             EliteEntity eliteEntity = EntityTracker.getEliteMobEntity(entity);
             if (eliteEntity != null) {
                 ((EliteEntity) entity).remove(RemovalReason.OTHER);

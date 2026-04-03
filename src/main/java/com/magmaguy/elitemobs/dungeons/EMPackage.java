@@ -41,10 +41,10 @@ public abstract class EMPackage extends ContentPackage implements NightbreakMana
     @Setter
     protected boolean isInstalled;
     @Setter
-    protected boolean outOfDate = false;
+    protected boolean outOfDate;
     @Getter
     @Setter
-    protected NightbreakAccount.AccessInfo cachedAccessInfo = null;
+    protected NightbreakAccount.AccessInfo cachedAccessInfo;
     @Getter
     protected List<CustomBossEntity> customBossEntityList = new ArrayList<>();
     protected List<TreasureChest> treasureChestList = new ArrayList<>();
@@ -79,7 +79,7 @@ public abstract class EMPackage extends ContentPackage implements NightbreakMana
     public static Set<String> getMetaPackageChildFilenames() {
         Set<String> childFilenames = new HashSet<>();
         for (EMPackage pkg : emPackages.values()) {
-            List<String> contained = pkg.getContentPackagesConfigFields().getContainedPackages();
+            List<String> contained = pkg.contentPackagesConfigFields.getContainedPackages();
             if (contained != null) childFilenames.addAll(contained);
         }
         return childFilenames;
@@ -287,7 +287,7 @@ public abstract class EMPackage extends ContentPackage implements NightbreakMana
 
         // If no Nightbreak slug, use legacy download link behavior
         if (slug == null || slug.isEmpty()) {
-            String downloadLink = getContentPackagesConfigFields().getDownloadLink();
+            String downloadLink = contentPackagesConfigFields.getDownloadLink();
             if (downloadLink == null || downloadLink.isEmpty()) {
                 Logger.sendSimpleMessage(player, "&cNo download link available for this content pack.");
                 return;
@@ -353,9 +353,7 @@ public abstract class EMPackage extends ContentPackage implements NightbreakMana
                 if (success && player.isOnline()) {
                     player.sendMessage(DungeonsConfig.getContentDownloadedReloadMessage());
                     // Schedule reload after a short delay
-                    Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> {
-                        com.magmaguy.elitemobs.commands.ReloadCommand.reload(player);
-                    }, 20L);
+                    Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> com.magmaguy.elitemobs.commands.ReloadCommand.reload(player), 20L);
                 }
             });
         });

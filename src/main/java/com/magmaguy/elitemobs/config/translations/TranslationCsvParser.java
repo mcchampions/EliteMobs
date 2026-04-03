@@ -49,15 +49,15 @@ public class TranslationCsvParser {
                 // Strip UTF-8 BOM from first line if present
                 if (firstLine) {
                     firstLine = false;
-                    if (line.length() > 0 && line.charAt(0) == '\uFEFF') {
+                    if (!line.isEmpty() && line.charAt(0) == '\uFEFF') {
                         line = line.substring(1);
                     }
                 }
 
                 // Skip empty lines at the start
-                if (currentRow.length() == 0 && line.trim().isEmpty()) continue;
+                if (currentRow.isEmpty() && line.trim().isEmpty()) continue;
                 // Skip comment lines
-                if (currentRow.length() == 0 && line.trim().startsWith("#")) continue;
+                if (currentRow.isEmpty() && !line.trim().isEmpty() && line.trim().charAt(0) == '#') continue;
 
                 currentRow.append(line);
 
@@ -85,7 +85,7 @@ public class TranslationCsvParser {
         }
 
         // First row is header with languages
-        String[] header = rows.get(0);
+        String[] header = rows.getFirst();
         if (header.length < 2) {
             throw new IOException("CSV header must have at least 'key' and one language column");
         }

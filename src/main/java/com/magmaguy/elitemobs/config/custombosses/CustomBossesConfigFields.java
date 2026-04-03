@@ -25,7 +25,7 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     @Getter
     private static final Map<String, CustomBossesConfigFields> regionalElites = new HashMap<>();
     @Getter
-    private CustomLootTable customLootTable = null;
+    private CustomLootTable customLootTable;
     @Getter
     @Setter
     private EntityType entityType = EntityType.ZOMBIE;
@@ -35,7 +35,7 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     private String level = "dynamic";
     @Getter
     @Setter
-    private boolean isPersistent = false;
+    private boolean isPersistent;
     @Getter
     @Setter
     private double healthMultiplier = 1;
@@ -44,64 +44,64 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     private double damageMultiplier = 1;
     @Getter
     @Setter
-    private boolean frozen = false;
+    private boolean frozen;
     @Getter
     @Setter
-    private boolean reinforcement = false;
+    private boolean reinforcement;
     @Getter
     @Setter
-    private List<String> onDeathCommands = null;
+    private List<String> onDeathCommands;
     @Getter
     @Setter
-    private List<String> onSpawnCommands = null;
+    private List<String> onSpawnCommands;
     @Getter
     @Setter
-    private List<String> onCombatEnterCommands = null;
+    private List<String> onCombatEnterCommands;
     @Getter
     @Setter
-    private List<String> onCombatLeaveCommands = null;
+    private List<String> onCombatLeaveCommands;
     @Getter
     @Setter
-    private List<Object> uniqueLootList = null;
+    private List<Object> uniqueLootList;
     @Getter
     @Setter
-    private List<Object> powers = null;
+    private List<Object> powers;
     @Getter
     @Setter
-    private List<String> onDamageMessages = null;
+    private List<String> onDamageMessages;
     @Getter
     @Setter
-    private List<String> onDamagedMessages = null;
+    private List<String> onDamagedMessages;
     @Getter
     @Setter
-    private List<String> trails = null;
+    private List<String> trails;
     @Getter
     @Setter
-    private List<String> phases = null;
+    private List<String> phases;
     @Getter
     @Setter
-    private String locationMessage = null;
+    private String locationMessage;
     @Getter
     @Setter
-    private String mountedEntity = null;
+    private String mountedEntity;
     @Getter
     @Setter
-    private String customModelMountPointID = null;
+    private String customModelMountPointID;
     @Getter
     @Setter
-    private String spawnMessage = null;
+    private String spawnMessage;
     @Getter
     @Setter
-    private String deathMessage = null;
+    private String deathMessage;
     @Getter
     @Setter
-    private List<String> deathMessages = null;
+    private List<String> deathMessages;
     @Getter
     @Setter
-    private String escapeMessage = null;
+    private String escapeMessage;
     @Getter
     @Setter
-    private boolean baby = false;
+    private boolean baby;
     @Getter
     @Setter
     private boolean dropsEliteMobsLoot = true;
@@ -119,14 +119,13 @@ public class CustomBossesConfigFields extends CustomConfigFields {
      */
     @Getter
     @Setter
-    private String disguise = null;
+    private String disguise;
     @Getter
     @Setter
-    private String customDisguiseData = null;
+    private String customDisguiseData;
     @Getter
     @Setter
-    private String customModel = null;
-    private boolean customModelExists = false;
+    private String customModel;
     /**
      * Announcement priority:
      * 0 - no messages
@@ -139,87 +138,87 @@ public class CustomBossesConfigFields extends CustomConfigFields {
      */
     @Getter
     @Setter
-    private int announcementPriority = 0;
+    private int announcementPriority;
     @Getter
     @Setter
     private Integer followDistance = 0;
     @Getter
     @Setter
-    private int spawnCooldown = 0;
+    private int spawnCooldown;
     @Getter
     @Setter
-    private int timeout = 0;
+    private int timeout;
     @Getter
     @Setter
-    private double leashRadius = 0;
+    private double leashRadius;
     @Getter
     @Setter
-    private ItemStack helmet = null;
+    private ItemStack helmet;
     @Getter
     @Setter
-    private ItemStack chestplate = null;
+    private ItemStack chestplate;
     @Getter
     @Setter
-    private ItemStack leggings = null;
+    private ItemStack leggings;
     @Getter
     @Setter
-    private ItemStack boots = null;
+    private ItemStack boots;
     @Getter
     @Setter
-    private ItemStack mainHand = null;
+    private ItemStack mainHand;
     @Getter
     @Setter
-    private ItemStack offHand = null;
+    private ItemStack offHand;
     @Getter
     @Setter
-    private boolean regionalBoss = false;
+    private boolean regionalBoss;
     @Getter
     @Setter
     private boolean cullReinforcements = true;
     @Getter
     @Setter
-    private HashMap<Material, Double> damageModifiers = new HashMap();
+    private HashMap<Material, Double> damageModifiers = new HashMap<>();
     @Getter
     @Setter
-    private boolean normalizedCombat = false;
+    private boolean normalizedCombat;
     @Getter
     @Setter
-    private boolean scaledCombat = false;
+    private boolean scaledCombat;
     @Getter
     @Setter
-    private Double movementSpeedAttribute = null;
+    private Double movementSpeedAttribute;
     //this saves files for regional boss respawn cooldowns
     @Getter
     @Setter
-    private boolean filesOutOfSync = false;
+    private boolean filesOutOfSync;
     @Getter
     private List<String> onSpawnBlockStates = new ArrayList<>(), onRemoveBlockStates = new ArrayList<>();
     @Getter
     @Setter
-    private boolean instanced = false;
+    private boolean instanced;
     @Getter
     @Setter
-    private String phaseSpawnLocation = null;
+    private String phaseSpawnLocation;
     @Getter
     @Setter
-    private ConfigurationSection rawEliteScripts = null;
+    private ConfigurationSection rawEliteScripts;
     @Getter
     private List<EliteScriptBlueprint> eliteScript = new ArrayList<>();
     @Getter
     @Setter
-    private String song = null;
+    private String song;
     @Getter
     @Setter
-    private boolean alert = false;
+    private boolean alert;
     @Getter
     @Setter
-    private boolean removeAfterDeath = false;
+    private boolean removeAfterDeath;
     @Getter
     @Setter
     private int slimeSize = 4;
     @Getter
     @Setter
-    private boolean neutral = false;
+    private boolean neutral;
     @Getter
     private String onKillMessage;
     @Getter
@@ -234,7 +233,7 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     private boolean ai = true;
     @Getter
     @Setter
-    private boolean alwaysShowName = false;
+    private boolean alwaysShowName;
     @Getter
     @Setter
     private List<String> spawnLocations = new ArrayList<>();
@@ -265,9 +264,9 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     //This method unifies all level placeholders down to $level and applies a custom level for quest display purposes
     public String getCleanName(int level) {
         String cleanNameLevel;
-        if (level == 0 && this.level.equalsIgnoreCase("dynamic")) cleanNameLevel = "?";
+        if (level == 0 && "dynamic".equalsIgnoreCase(this.level)) cleanNameLevel = "?";
         else if (level == 0) cleanNameLevel = level + "";
-        else if (this.level.equalsIgnoreCase("dynamic")) cleanNameLevel = level + "";
+        else if ("dynamic".equalsIgnoreCase(this.level)) cleanNameLevel = level + "";
         else cleanNameLevel = this.level;
         return ChatColorConverter.convert(getName().replace("$level", cleanNameLevel)
                 .replace("$normalLevel", ChatColorConverter.convert("&2[&a" + cleanNameLevel + "&2]&f"))
@@ -300,11 +299,11 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     }
 
     public int getLevel() {
-        if (level.equalsIgnoreCase("dynamic")) {
+        if ("dynamic".equalsIgnoreCase(level)) {
             return -1;
         } else {
             try {
-                return Integer.valueOf(level);
+                return Integer.parseInt(level);
             } catch (Exception ex) {
                 Logger.warn("Regional Elite Mob level for " + getFilename() + " is neither numeric nor dynamic. Fix the configuration for it.");
                 return 1;
@@ -402,7 +401,7 @@ public class CustomBossesConfigFields extends CustomConfigFields {
         cullReinforcements = processBoolean("cullReinforcements", cullReinforcements, true, false);
         damageModifiers = processDamageModifiers("damageModifiers", damageModifiers);
 
-        if (MobCombatSettingsConfig.isNormalizeRegionalBosses() && (isRegionalBoss() || isInstanced()))
+        if (MobCombatSettingsConfig.isNormalizeRegionalBosses() && (regionalBoss || instanced))
             this.normalizedCombat = true;
         else
             this.normalizedCombat = processBoolean("normalizedCombat", normalizedCombat, false, false);
@@ -447,6 +446,7 @@ public class CustomBossesConfigFields extends CustomConfigFields {
     }
 
     public boolean isCustomModelExists() {
+        boolean customModelExists;
         if (CustomModel.customModelsEnabled() && CustomModel.modelExists(customModel))
             return customModelExists = true;
         return false;

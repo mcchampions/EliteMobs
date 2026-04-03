@@ -18,9 +18,10 @@ public class DiamondLeagueArena extends ContentPackagesConfigFields {
                 true,
                 "em_diamond_arena,4.5,79,-28.5,0,0",
                 0,
-                "Difficulty: &chard\n" +
-                        "Face 50 waves of the arena, from\n" +
-                        "level 100 to level 150!",
+                """
+                        Difficulty: &chard
+                        Face 50 waves of the arena, from
+                        level 100 to level 150!""",
                 "&fAre you prepared to face the arena?",
                 "&fNow leaving the diamond league arena!",
                 "diamond_league_arena",

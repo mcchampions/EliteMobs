@@ -89,7 +89,7 @@ public abstract class EliteMobProperties extends PluginMobProperties {
 
     public static boolean isValidEliteMobType(EntityType entityType) {
         for (EliteMobProperties eliteMobProperties : eliteMobData)
-            if (eliteMobProperties.getEntityType().equals(entityType))
+            if (eliteMobProperties.getEntityType() == entityType)
                 if (eliteMobProperties.isEnabled)
                     return true;
         return false;
@@ -97,7 +97,7 @@ public abstract class EliteMobProperties extends PluginMobProperties {
 
     public static EliteMobProperties getPluginData(EntityType entityType) {
         for (EliteMobProperties eliteMobProperties : eliteMobData)
-            if (eliteMobProperties.getEntityType().equals(entityType))
+            if (eliteMobProperties.getEntityType() == entityType)
                 return eliteMobProperties;
         return null;
     }

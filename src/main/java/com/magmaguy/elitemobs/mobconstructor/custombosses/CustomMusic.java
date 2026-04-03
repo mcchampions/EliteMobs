@@ -20,25 +20,26 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 
 public class CustomMusic {
     private static final HashMap<UUID, CustomMusic> playerSongSingleton = new HashMap<>();
     private static final HashMap<UUID, CustomMusic> dungeonMusic = new HashMap<>();
+    private static final Pattern PATTERN = Pattern.compile("->");
     private final HashMap<UUID, CustomMusic> players = new HashMap<>();
     private final ContentType contentType;
-    private CustomBossEntity customBossEntity = null;
-    private ContentPackagesConfigFields contentPackagesConfigFields = null;
+    private CustomBossEntity customBossEntity;
     @Getter
     private String name;
     @Getter
     private int durationTicks;
     @Getter
-    private String name2 = null;
+    private String name2;
     @Getter
     private int durationTicks2 = -1;
-    private BukkitTask bossScannerTask = null;
-    private BukkitTask songTask = null;
+    private BukkitTask bossScannerTask;
+    private BukkitTask songTask;
     private World world;
 
     //Format: name=rsp.name length=durations_milliseconds->name=rsp.name length=duration_milliseconds
@@ -48,7 +49,7 @@ public class CustomMusic {
         if (!rawString.contains("->")) {
             parse(rawString, 1);
         } else {
-            String[] rawEntries = rawString.split("->");
+            String[] rawEntries = PATTERN.split(rawString);
             parse(rawEntries[0], 1);
             parse(rawEntries[1], 2);
         }
@@ -56,12 +57,11 @@ public class CustomMusic {
 
     public CustomMusic(String rawString, ContentPackagesConfigFields contentPackagesConfigFields, World world) {
         this.world = world;
-        this.contentPackagesConfigFields = contentPackagesConfigFields;
         contentType = ContentType.DUNGEON;
         if (!rawString.contains("->")) {
             parse(rawString, 1);
         } else {
-            String[] rawEntries = rawString.split("->");
+            String[] rawEntries = PATTERN.split(rawString);
             parse(rawEntries[0], 1);
             parse(rawEntries[1], 2);
         }

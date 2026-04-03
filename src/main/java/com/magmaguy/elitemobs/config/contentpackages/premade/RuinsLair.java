@@ -22,9 +22,10 @@ public class RuinsLair extends ContentPackagesConfigFields {
                 "em_the_ruins,-63.5,190.0,111.5,-132,0",
                 "em_the_ruins,-60.5,190.0,109.5,-132,0",
                 0,
-                "Difficulty: &cHard\n" +
-                        "$bossCount level $lowestTier Big Boss!\n" +
-                        "&cA tough fight against a Norse god!",
+                """
+                        Difficulty: &cHard
+                        $bossCount level $lowestTier Big Boss!
+                        &cA tough fight against a Norse god!""",
                 "&8[EM] &3Those who challenge the myths must be prepared for their downfall!",
                 "&8[EM] &3You now know what it takes to make a legend!",
                 List.of("filename=ruins_boss_p1.yml"),

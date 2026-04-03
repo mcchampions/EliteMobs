@@ -229,7 +229,7 @@ public class PlayerSkillSelection {
      */
     public static void loadFromDatabase(UUID uuid) {
         String json = PlayerData.getSkillBonusSelections(uuid);
-        if (json == null || json.isEmpty() || json.equals("{}")) {
+        if (json == null || json.isEmpty() || "{}".equals(json)) {
             activeSkills.put(uuid, new EnumMap<>(SkillType.class));
             return;
         }

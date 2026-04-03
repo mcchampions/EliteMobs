@@ -40,7 +40,7 @@ public class DefaultDropsHandler implements Listener {
             for (ItemStack itemStack : droppedItems) {
 
                 if (itemStack == null) continue;
-                if (itemStack.getType().equals(Material.AIR)) continue;
+                if (itemStack.getType() == Material.AIR) continue;
                 boolean itemIsWorn = false;
 
                 for (ItemStack wornItem : wornItems)
@@ -67,7 +67,7 @@ public class DefaultDropsHandler implements Listener {
 
         EntityEquipment equipment = entity.getEquipment();
 
-        if (equipment.getItemInMainHand() != null && !equipment.getItemInMainHand().getType().equals(Material.AIR))
+        if (equipment.getItemInMainHand() != null && equipment.getItemInMainHand().getType() != Material.AIR)
             wornItems.add(equipment.getItemInMainHand());
 
         if (equipment.getHelmet() != null)

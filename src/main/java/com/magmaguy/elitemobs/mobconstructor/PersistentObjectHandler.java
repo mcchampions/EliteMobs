@@ -160,7 +160,7 @@ public class PersistentObjectHandler {
             loadWorld(event.getWorld());
         }
 
-        @EventHandler (priority = EventPriority.LOWEST)
+        @EventHandler(priority = EventPriority.LOWEST)
         public void chunkUnloadEvent(ChunkUnloadEvent event) {
             int chunkLocation = chunkLocation(event.getChunk());
             List<PersistentObjectHandler> simplePersistentEntityList = new ArrayList<>(persistentObjects.get(chunkLocation + ""));

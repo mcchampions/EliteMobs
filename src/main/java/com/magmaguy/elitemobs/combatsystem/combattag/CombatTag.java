@@ -41,7 +41,7 @@ public class CombatTag implements Listener {
 
         if (player == null) return;
 
-        if (player.getGameMode().equals(GameMode.CREATIVE)) return;
+        if (player.getGameMode() == GameMode.CREATIVE) return;
 
         //if (player.isInvulnerable()) player.setInvulnerable(false);
         if (player.isFlying()) {

@@ -22,8 +22,8 @@ public class PhaseBossEntity {
 
     private final CustomBossEntity customBossEntity;
     @Getter
-    private List<BossPhase> bossPhases = new ArrayList();
-    private BossPhase currentPhase = null;
+    private List<BossPhase> bossPhases = new ArrayList<>();
+    private BossPhase currentPhase;
     private Location originalSpawnLocation;
 
     public PhaseBossEntity(CustomBossEntity customBossEntity) {
@@ -41,14 +41,14 @@ public class PhaseBossEntity {
             }
             unsortedBossPhases.sort((o1, o2) -> (int) (o2.healthPercentage * 100 - o1.healthPercentage * 100));
             this.bossPhases = unsortedBossPhases;
-            currentPhase = bossPhases.get(0);
+            currentPhase = bossPhases.getFirst();
         } catch (Exception ex) {
             Logger.warn("Your phase boss " + customBossEntity.customBossesConfigFields.getFilename() + " does not have a valid phases setup. Its phases will not work.");
         }
     }
 
     public boolean isInFirstPhase() {
-        return bossPhases.get(0).equals(currentPhase);
+        return bossPhases.getFirst().equals(currentPhase);
     }
 
     private void switchPhase(BossPhase bossPhase, RemovalReason removalReason, double healthPercentage) {
@@ -60,11 +60,11 @@ public class PhaseBossEntity {
         customBossEntity.remove(removalReason);
         if (customBossEntity.getCustomModel() != null) customBossEntity.getCustomModel().switchPhase();
         if (bossPhase.customBossesConfigFields == null) {
-            Logger.warn("A phase for phase boss " + bossPhases.get(0).customBossesConfigFields.getFilename() + " was not valid! The boss will not be able to switch phases until it is fixed.");
+            Logger.warn("A phase for phase boss " + bossPhases.getFirst().customBossesConfigFields.getFilename() + " was not valid! The boss will not be able to switch phases until it is fixed.");
             return;
         }
         customBossEntity.setCustomBossesConfigFields(bossPhase.customBossesConfigFields);
-        if (removalReason.equals(RemovalReason.PHASE_BOSS_RESET)) {
+        if (removalReason == RemovalReason.PHASE_BOSS_RESET) {
             if (bossPhase.customBossesConfigFields.getSong() != null)
                 customBossEntity.setBossMusic(new CustomMusic(bossPhase.customBossesConfigFields.getSong(), customBossEntity));
             //Necessary to reset phase bosses which move their spawn point via teleportation
@@ -75,7 +75,7 @@ public class PhaseBossEntity {
             if (bossPhase.customBossesConfigFields.getPhaseSpawnLocation() != null) {
                 Location location = ConfigurationLocation.serialize(bossPhase.customBossesConfigFields.getPhaseSpawnLocation(), true);
                 if (bossPhase.customBossesConfigFields.getPhaseSpawnLocation() != null &&
-                        bossPhase.customBossesConfigFields.getPhaseSpawnLocation().split(",")[0].equalsIgnoreCase("same_as_boss"))
+                        "same_as_boss".equalsIgnoreCase(bossPhase.customBossesConfigFields.getPhaseSpawnLocation().split(",")[0]))
                     location.setWorld(customBossEntity.getLocation().getWorld());
                 if (location != null) {
                     customBossEntity.setSpawnLocation(location);
@@ -112,11 +112,11 @@ public class PhaseBossEntity {
     }
 
     public void resetToFirstPhase() {
-        switchPhase(bossPhases.get(0), RemovalReason.PHASE_BOSS_RESET, 1);
+        switchPhase(bossPhases.getFirst(), RemovalReason.PHASE_BOSS_RESET, 1);
     }
 
     public void silentReset() {
-        currentPhase = bossPhases.get(0);
+        currentPhase = bossPhases.getFirst();
         customBossEntity.setCustomBossesConfigFields(currentPhase.customBossesConfigFields);
     }
 
@@ -126,7 +126,7 @@ public class PhaseBossEntity {
      * @return The configuration file for phase 1 of Phase Bosses
      */
     public CustomBossesConfigFields getPhase1Config() {
-        return bossPhases.get(0).customBossesConfigFields;
+        return bossPhases.getFirst().customBossesConfigFields;
     }
 
     public void checkPhaseBossSwitch(EliteMobDamagedEvent event) {

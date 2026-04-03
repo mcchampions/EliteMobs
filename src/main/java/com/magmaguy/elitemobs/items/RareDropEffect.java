@@ -15,12 +15,12 @@ public class RareDropEffect implements Listener {
     public static void runEffect(Item item) {
 
         if (!ItemSettingsConfig.isEnableRareItemParticleEffects()) return;
-        if (!(ItemQualityColorizer.getItemQuality(item.getItemStack()).equals(ItemQualityColorizer.ItemQuality.LIGHT_BLUE) ||
-                ItemQualityColorizer.getItemQuality(item.getItemStack()).equals(ItemQualityColorizer.ItemQuality.GOLD)))
+        if (!(ItemQualityColorizer.getItemQuality(item.getItemStack()) == ItemQualityColorizer.ItemQuality.LIGHT_BLUE ||
+              ItemQualityColorizer.getItemQuality(item.getItemStack()) == ItemQualityColorizer.ItemQuality.GOLD))
             return;
 
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

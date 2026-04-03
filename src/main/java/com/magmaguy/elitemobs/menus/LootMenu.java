@@ -93,7 +93,7 @@ public class LootMenu extends EliteMenu {
     public void removeMenu() {
         LootMenu lootMenu = playerLoot.get(player.getUniqueId());
         if (lootMenu == this) {
-            if (player.isOnline() && player.getOpenInventory().getTopInventory().equals(lootMenu.getInventory()))
+            if (player.isOnline() && player.getOpenInventory().getTopInventory().equals(lootMenu.inventory))
                 player.closeInventory();
             playerLoot.remove(player.getUniqueId());
         }
@@ -109,7 +109,7 @@ public class LootMenu extends EliteMenu {
             if (!lootMenu.inventory.equals(event.getInventory())) return;
             event.setCancelled(true);
             if (isBottomMenu(event)) return;
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             lootMenu.renderMenu();
             int slot = event.getSlot();
             //Greed slots

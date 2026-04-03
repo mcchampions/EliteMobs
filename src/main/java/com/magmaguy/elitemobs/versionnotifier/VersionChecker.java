@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class VersionChecker {
     private static final List<EMPackage> outdatedPackages = new ArrayList<>();
@@ -28,14 +29,15 @@ public class VersionChecker {
     private static final int MAX_RETRY_ATTEMPTS = 3;
     private static final int RETRY_DELAY_SECONDS = 60;
     private static final long REFRESH_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+    private static final Pattern PATTERN = Pattern.compile("[.]");
     private static boolean pluginIsUpToDate = true;
-    private static boolean connectionFailed = false;
-    private static int connectionRetryCount = 0;
+    private static boolean connectionFailed;
+    private static int connectionRetryCount;
     private static final long CHECK_INTERVAL_TICKS = 20L * 60 * 60 * 24; // 24 hours in ticks
 
     private VersionChecker() {
     }
-    private static volatile long lastRefreshTimestamp = 0;
+    private static volatile long lastRefreshTimestamp;
 
     /**
      * Compares a Minecraft version with the current version on the server. Returns true if the version on the server is older.
@@ -47,12 +49,12 @@ public class VersionChecker {
      */
     public static boolean serverVersionOlderThan(int majorVersion, int minorVersion) {
 
-        String[] splitVersion = Bukkit.getBukkitVersion().split("[.]");
+        String[] splitVersion = PATTERN.split(Bukkit.getBukkitVersion());
 
         int actualMajorVersion;
         int actualMinorVersion = 0;
 
-        if (splitVersion[0].equals("1")) {
+        if ("1".equals(splitVersion[0])) {
             // Legacy format: 1.MAJOR.MINOR-R0.1-SNAPSHOT (e.g. 1.21.11-R0.1-SNAPSHOT)
             actualMajorVersion = Integer.parseInt(splitVersion[1].split("-")[0]);
             if (splitVersion.length > 2)
@@ -231,7 +233,7 @@ public class VersionChecker {
             if (slug != null && versionStr != null && !versionStr.isEmpty()) {
                 try {
                     // Version format is "v11" or similar, strip the 'v' prefix
-                    String numericVersion = versionStr.startsWith("v") ? versionStr.substring(1) : versionStr;
+                    String numericVersion = !versionStr.isEmpty() && versionStr.charAt(0) == 'v' ? versionStr.substring(1) : versionStr;
                     int version = Integer.parseInt(numericVersion);
                     versions.put(slug, version);
                 } catch (NumberFormatException e) {
@@ -406,7 +408,7 @@ public class VersionChecker {
 
                 // Schedule a retry after delay
                 Bukkit.getScheduler().runTaskLaterAsynchronously(MetadataHandler.PLUGIN,
-                        () -> checkContentVersion(), 20L * RETRY_DELAY_SECONDS);
+                        VersionChecker::checkContentVersion, 20L * RETRY_DELAY_SECONDS);
             } else {
                 Logger.warn("Failed to connect for " + checkType + " after " + MAX_RETRY_ATTEMPTS +
                         " attempts. Will continue without version checking. Error: " + e.getMessage());

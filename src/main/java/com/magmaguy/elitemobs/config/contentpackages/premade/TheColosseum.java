@@ -20,9 +20,10 @@ public class TheColosseum extends ContentPackagesConfigFields {
                 "em_the_colosseum,-83.5,66.0,251.5,-72,0",
                 "em_the_colosseum,-79.5,65.2,253.5,-66,0",
                 0,
-                "Difficulty: &cHard\n" +
-                        "$bossCount bosses, from tier $lowestTier to $highestTier\n" +
-                        "&2A great Lair!",
+                """
+                        Difficulty: &cHard
+                        $bossCount bosses, from tier $lowestTier to $highestTier
+                        &2A great Lair!""",
                 "&8[EM] &8Now entering the Colosseum. Do you dare challenge the champion...",
                 "&8[EM] &8You have left the Colosseum.",
                 List.of("filename=colosseum_tier_70_boss_p1.yml"),

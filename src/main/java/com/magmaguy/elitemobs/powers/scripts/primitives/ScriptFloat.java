@@ -3,9 +3,9 @@ package com.magmaguy.elitemobs.powers.scripts.primitives;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ScriptFloat {
-    private Float value = null;
-    private Float lowestRange = null;
-    private Float highestRange = null;
+    private Float value;
+    private Float lowestRange;
+    private Float highestRange;
 
     public ScriptFloat(float lowestRange, float highestRange) {
         this.lowestRange = lowestRange;

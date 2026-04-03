@@ -20,7 +20,7 @@ public class PlayerPreTeleportEvent extends Event implements Cancellable {
     private final Location originalLocation;
     @Getter
     private final Player player;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     /**
      * Called when a player initiates a teleport to a location. The teleport will go through 3 seconds after the event is

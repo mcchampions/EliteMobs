@@ -74,7 +74,7 @@ public class InstancedDungeonBrowser extends EliteMenu {
 
         for (int i = 0; i < dungeonInstances.size(); i++) {
             ItemStack itemStack = null;
-            if (instancesList.get(i).getState().equals(MatchInstance.InstancedRegionState.WAITING))
+            if (instancesList.get(i).getState() == MatchInstance.InstancedRegionState.WAITING)
                 itemStack = playerItem(instancesList.get(i));
             else if (DungeonsConfig.isAllowSpectatorsInInstancedContent())
                 itemStack = spectatorItem(instancesList.get(i));
@@ -117,7 +117,7 @@ public class InstancedDungeonBrowser extends EliteMenu {
             if (!isEliteMenu(event, inventories.keySet())) return;
             event.setCancelled(true);
             if (!isTopMenu(event)) return;
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             InstancedDungeonBrowser instancedDungeonBrowser = inventories.get(event.getInventory());
 
             if (instancedDungeonBrowser.hasBackButton() && event.getSlot() == BACK_SLOT) {

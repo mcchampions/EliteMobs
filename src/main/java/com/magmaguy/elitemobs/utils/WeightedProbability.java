@@ -3,19 +3,20 @@ package com.magmaguy.elitemobs.utils;
 import com.magmaguy.elitemobs.items.customitems.CustomItem;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class WeightedProbability {
 
     public static String pickWeighedProbability(HashMap<String, Double> weighedValues) {
         double totalWeight = 0;
-        for (String string : weighedValues.keySet())
-            totalWeight += weighedValues.get(string);
+        for (Double v : weighedValues.values())
+            totalWeight += v;
         String selectedString = null;
         double random = Math.random() * totalWeight;
-        for (String string : weighedValues.keySet()) {
-            random -= weighedValues.get(string);
+        for (Map.Entry<String, Double> entry : weighedValues.entrySet()) {
+            random -= entry.getValue();
             if (random <= 0) {
-                selectedString = string;
+                selectedString = entry.getKey();
                 break;
             }
         }
@@ -24,14 +25,14 @@ public class WeightedProbability {
 
     public static CustomItem pickWeighedProbabilityFromCustomItems(HashMap<CustomItem, Double> weighedValues) {
         double totalWeight = 0;
-        for (CustomItem customItem : weighedValues.keySet())
-            totalWeight += weighedValues.get(customItem);
+        for (Double v : weighedValues.values())
+            totalWeight += v;
         CustomItem selectedCustomItem = null;
         double random = Math.random() * totalWeight;
-        for (CustomItem customItem : weighedValues.keySet()) {
-            random -= weighedValues.get(customItem);
+        for (Map.Entry<CustomItem, Double> entry : weighedValues.entrySet()) {
+            random -= entry.getValue();
             if (random <= 0) {
-                selectedCustomItem = customItem;
+                selectedCustomItem = entry.getKey();
                 break;
             }
         }

@@ -303,7 +303,7 @@ public class HigherLowerGame {
      */
     private static void revealCardAnimation(Player player, HigherLowerSession session, Inventory inventory, int nextCard, boolean playerWins) {
         new BukkitRunnable() {
-            int ticks = 0;
+            int ticks;
 
             @Override
             public void run() {
@@ -431,13 +431,13 @@ public class HigherLowerGame {
     private static class HigherLowerSession extends GamblingSession {
         int currentCard;
         int nextCard;
-        int streak = 0;
+        int streak;
         double multiplier = 1.0;
-        boolean isProcessing = false;
-        boolean lastGuessCorrect = false;
-        boolean gameOver = false;
-        boolean forcedCashOut = false;
-        double winAmount = 0;
+        boolean isProcessing;
+        boolean lastGuessCorrect;
+        boolean gameOver;
+        boolean forcedCashOut;
+        double winAmount;
 
         HigherLowerSession(UUID playerUUID, int betAmount) {
             super(playerUUID, betAmount);

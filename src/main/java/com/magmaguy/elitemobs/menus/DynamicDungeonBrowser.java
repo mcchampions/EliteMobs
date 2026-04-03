@@ -43,7 +43,7 @@ public class DynamicDungeonBrowser extends EliteMenu {
     private final List<Integer> difficultySlots = List.of(2, 4, 6, 0, 8, 1, 3, 5, 7);
     private final List<Integer> validSlots = new ArrayList<>(List.of(18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
             31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53));
-    private Integer selectedLevel = null;
+    private Integer selectedLevel;
     private List<DynamicDungeonInstance> instancesList = new ArrayList<>();
 
     public DynamicDungeonBrowser(Player player, String dynamicDungeonName) {
@@ -125,7 +125,7 @@ public class DynamicDungeonBrowser extends EliteMenu {
         for (int i = 0; i < instancesList.size() && i < validSlots.size(); i++) {
             DynamicDungeonInstance instance = instancesList.get(i);
             ItemStack itemStack = null;
-            if (instance.getState().equals(MatchInstance.InstancedRegionState.WAITING))
+            if (instance.getState() == MatchInstance.InstancedRegionState.WAITING)
                 itemStack = playerItem(instance);
             else if (DungeonsConfig.isAllowSpectatorsInInstancedContent())
                 itemStack = spectatorItem(instance);
@@ -205,7 +205,7 @@ public class DynamicDungeonBrowser extends EliteMenu {
             if (!isEliteMenu(event, inventories.keySet())) return;
             event.setCancelled(true);
             if (!isTopMenu(event)) return;
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
 
             DynamicDungeonBrowser browser = inventories.get(event.getInventory());
             Player player = (Player) event.getWhoClicked();

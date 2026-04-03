@@ -13,7 +13,7 @@ public class EliteMobSpawnEvent extends Event implements Cancellable {
     private final LivingEntity livingEntity;
     private final EliteEntity eliteEntity;
     private final CreatureSpawnEvent.SpawnReason spawnReason;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     /**
      * Cancelling this event will prevent the Elite Mob from being constructed by removing it and the entity it would've converted

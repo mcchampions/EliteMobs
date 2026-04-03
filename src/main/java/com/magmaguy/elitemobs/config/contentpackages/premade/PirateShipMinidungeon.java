@@ -24,10 +24,11 @@ public class PirateShipMinidungeon extends ContentPackagesConfigFields {
                 "em_the_pirate_ship,-85.5,65.0,243.5,180,0",
                 "em_the_pirate_ship,-85.5,63.0,233.5,180,0",
                 0,
-                "Difficulty: &6Medium\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&6One of the best hunting grounds for" +
-                        "&6aspiring adventurers!",
+                """
+                        Difficulty: &6Medium
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &6One of the best hunting grounds for\
+                        &6aspiring adventurers!""",
                 "&8[EM] &3Yarr, now boarding the Pirate Ship! &bPillage and plunder to yer' hearts content!",
                 "&8[EM] &3Player overboard! &bReturn when you've earned your sea-legs ye' landlubber!",
                 List.of("filename=pirate_ship_tier_45_boss_blackbeard.yml"),

@@ -30,15 +30,15 @@ public class SkillTestResult {
     private final int testLevel;
 
     // Proc testing
-    private int totalHits = 0;
-    private int procCount = 0;
-    private double expectedProcRate = 0;
+    private int totalHits;
+    private int procCount;
+    private double expectedProcRate;
 
     // Damage testing
-    private double totalDamageDealt = 0;
-    private double baseDamageDealt = 0;
-    private double skillBonusDamage = 0;
-    private int hitsToKill = 0;
+    private double totalDamageDealt;
+    private double baseDamageDealt;
+    private double skillBonusDamage;
+    private int hitsToKill;
 
     // Expected values
     private double expectedDamageMultiplier = 1.0;
@@ -46,8 +46,8 @@ public class SkillTestResult {
 
     // Status
     private boolean passed = true;
-    private boolean skipped = false;
-    private String verificationTag = null;
+    private boolean skipped;
+    private String verificationTag;
     private final List<String> issues = new ArrayList<>();
     private final List<String> logs = new ArrayList<>();
 

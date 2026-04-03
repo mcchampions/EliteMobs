@@ -19,37 +19,37 @@ public class ScriptConditionsBlueprint {
     private final String scriptName;
     private final String filename;
 
-    @Getter private Boolean isAlive = null;
+    @Getter private Boolean isAlive;
     @Getter private Boolean runIfIsAliveIs = true;
 
-    @Getter private List<String> hasTags = null;
+    @Getter private List<String> hasTags;
     @Getter private Boolean runIfHasTagIs = true;
 
-    @Getter private Boolean locationIsAir = null;
+    @Getter private Boolean locationIsAir;
     @Getter private Boolean runIfLocationIsAirIs = true;
 
-    @Getter private Boolean isOnFloor = null;
+    @Getter private Boolean isOnFloor;
     @Getter private Boolean runIfIsOnFloorIs = true;
 
-    @Getter private List<String> doesNotHaveTags = null;
+    @Getter private List<String> doesNotHaveTags;
     @Getter private Boolean runIfDoesNotHaveTagIs = true;
 
-    @Getter private ScriptTargetsBlueprint scriptTargets = null;
+    @Getter private ScriptTargetsBlueprint scriptTargets;
     @Getter private Boolean runIfScriptTargetsIs = true;
 
-    @Getter private Double randomChance = null;
+    @Getter private Double randomChance;
     @Getter private Boolean runIfRandomChanceIs = true;
 
-    @Getter @Setter private ConditionType conditionType = null;
+    @Getter @Setter private ConditionType conditionType;
     @Getter private Boolean runIfConditionTypeIs = true;
 
-    @Getter @Setter private Integer targetCountLowerThan = null;
+    @Getter @Setter private Integer targetCountLowerThan;
     @Getter private Boolean runIfTargetCountLowerThanIs = true;
 
-    @Getter @Setter private Integer targetCountGreaterThan = null;
+    @Getter @Setter private Integer targetCountGreaterThan;
     @Getter private Boolean runIfTargetCountGreaterThanIs = true;
 
-    @Getter @Setter private Material isStandingOnMaterial = null;
+    @Getter @Setter private Material isStandingOnMaterial;
     @Getter private Boolean runIfIsStandingOnMaterialIs = true;
 
     // Process from a script

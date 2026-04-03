@@ -159,7 +159,7 @@ public class ArrowShopMenu {
         @EventHandler
         public void onClick(InventoryClickEvent event) {
             if (!menus.contains(event.getInventory())) return;
-            if (event.getClickedInventory() == null || !event.getClickedInventory().getType().equals(InventoryType.CHEST)) {
+            if (event.getClickedInventory() == null || event.getClickedInventory().getType() != InventoryType.CHEST) {
                 event.setCancelled(true);
                 return;
             }

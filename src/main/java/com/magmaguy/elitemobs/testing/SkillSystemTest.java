@@ -169,7 +169,7 @@ public class SkillSystemTest implements Listener {
     private final CombatTestLog testLog;
     private final TestReport report;
 
-    private boolean cancelled = false;
+    private boolean cancelled;
     private BukkitTask currentTask;
     private BossBar progressBar;
 
@@ -204,8 +204,8 @@ public class SkillSystemTest implements Listener {
 
     // Test queue
     private final Queue<SkillType> typeQueue = new LinkedList<>();
-    private SkillType currentType = null;
-    private int currentLevelIndex = 0;
+    private SkillType currentType;
+    private int currentLevelIndex;
 
     // Results: skillId -> level -> passed
     private final Map<String, Map<Integer, Boolean>> results = new HashMap<>();
@@ -214,13 +214,13 @@ public class SkillSystemTest implements Listener {
     private final Map<Integer, Double> defensiveSkillDamage = new HashMap<>();
     private final Map<Integer, Integer> defensiveSkillHits = new HashMap<>();
     // Overall progress tracking
-    private int totalTypes = 0;
-    private int completedTypes = 0;
+    private int totalTypes;
+    private int completedTypes;
     private double savedMaxHealthBase;
     private double savedMaxAbsorption;
     private float savedWalkSpeed;
     // Saved weather state for storm-dependent skill testing
-    private boolean savedStormState = false;
+    private boolean savedStormState;
 
     public SkillSystemTest(Player player) {
         this(player, null);
@@ -384,7 +384,7 @@ public class SkillSystemTest implements Listener {
                 }
 
                 // Spawn dummy for this weapon type
-                SkillBonus firstSkill = testableSkills.get(0);
+                SkillBonus firstSkill = testableSkills.getFirst();
                 if (!combatSimulator.spawnSingleDummy(firstSkill)) {
                     log("§cFailed to spawn dummy for " + currentType.getDisplayName());
                     testNextType();
@@ -434,7 +434,7 @@ public class SkillSystemTest implements Listener {
         }
 
         // Run baseline damage check BEFORE activating skills
-        String baselineDummyId = skills.get(0).getSkillId();
+        String baselineDummyId = skills.getFirst().getSkillId();
         if (currentType == SkillType.ARMOR) {
             runDefensiveBaseline(testLevel, baselineDummyId);
         } else {
@@ -484,7 +484,7 @@ public class SkillSystemTest implements Listener {
      * "spawn projectile + direct damage" trick for instant hits.
      */
     private void testInstantLevel(int testLevel, List<SkillBonus> skills) {
-        String dummyId = skills.get(0).getSkillId();
+        String dummyId = skills.getFirst().getSkillId();
 
         // Check if any skills need the dummy at low HP for part of the test
         boolean hasThresholdSkills = skills.stream()
@@ -543,7 +543,7 @@ public class SkillSystemTest implements Listener {
 
                 // Ensure dummy exists
                 if (!combatSimulator.hasDummy(dummyId)) {
-                    combatSimulator.respawnIfDead(dummyId, skills.get(0));
+                    combatSimulator.respawnIfDead(dummyId, skills.getFirst());
                     // Re-place water if dummy was respawned
                     if (hasWaterSkills) {
                         combatSimulator.placeWaterAtDummy(dummyId);
@@ -698,7 +698,7 @@ public class SkillSystemTest implements Listener {
                         }
 
                         if (!combatSimulator.hasDummy(dummyId)) {
-                            combatSimulator.respawnIfDead(dummyId, skills.get(0));
+                            combatSimulator.respawnIfDead(dummyId, skills.getFirst());
                         }
 
                         combatSimulator.simulateFatalIncomingDamage(dummyId);
@@ -1091,14 +1091,16 @@ public class SkillSystemTest implements Listener {
         for (SkillBonus skill : skills) {
             if (skill.getTestStrategy() != SkillBonus.TestStrategy.CONDITION_SETUP) continue;
 
-            if (skill instanceof OverdrawSkill) {
-                OverdrawSkill.simulateFullDraw(playerUUID);
-            } else if (skill instanceof SteadyAimSkill) {
-                SteadyAimSkill.simulateStationary(playerUUID, 3000); // 3 seconds standing still
-            } else if (skill instanceof ReturningHasteSkill) {
-                ReturningHasteSkill.simulateStacks(playerUUID, 3); // Pre-set 3 stacks
-            } else if (skill instanceof IronStanceSkill) {
-                IronStanceSkill.simulateStationary(playerUUID); // Mark as standing still
+            switch (skill) {
+                case OverdrawSkill overdrawSkill -> OverdrawSkill.simulateFullDraw(playerUUID);
+                case SteadyAimSkill steadyAimSkill ->
+                        SteadyAimSkill.simulateStationary(playerUUID, 3000); // 3 seconds standing still
+                case ReturningHasteSkill returningHasteSkill ->
+                        ReturningHasteSkill.simulateStacks(playerUUID, 3); // Pre-set 3 stacks
+                case IronStanceSkill ironStanceSkill ->
+                        IronStanceSkill.simulateStationary(playerUUID); // Mark as standing still
+                default -> {
+                }
             }
             // ExecutionerSkill and FinishingFlourishSkill use CONDITION_SETUP too,
             // but their condition (low HP dummy) is handled in testInstantLevel() via HEALTH_THRESHOLD_SKILLS
@@ -1115,10 +1117,8 @@ public class SkillSystemTest implements Listener {
         return switch (skillId) {
             case SwiftStrikesSkill.SKILL_ID -> player.getWalkSpeed() > 0.2f;
             case PoiseSkill.SKILL_ID -> hasModifier(Attribute.KNOCKBACK_RESISTANCE, PoiseSkill.MODIFIER_KEY_STRING);
-            case FlurrySkill.SKILL_ID -> {
-                // Flurry is STACKING - it only applies after hits, so check it with proc count as fallback
-                yield skill.getProcCount(player) > 0 || hasModifier(Attribute.ATTACK_SPEED, FlurrySkill.MODIFIER_KEY_STRING);
-            }
+            case FlurrySkill.SKILL_ID -> // Flurry is STACKING - it only applies after hits, so check it with proc count as fallback
+                    skill.getProcCount(player) > 0 || hasModifier(Attribute.ATTACK_SPEED, FlurrySkill.MODIFIER_KEY_STRING);
             case GrimReachSkill.SKILL_ID -> {
                 try {
                     yield hasModifier(Attribute.ENTITY_INTERACTION_RANGE, GrimReachSkill.MODIFIER_KEY_STRING);
@@ -1212,7 +1212,7 @@ public class SkillSystemTest implements Listener {
         // Ensure dummy is alive
         List<SkillBonus> skills = skillsByType.get(type);
         if (!combatSimulator.hasDummy(dummyId) && skills != null && !skills.isEmpty()) {
-            combatSimulator.respawnIfDead(dummyId, skills.get(0));
+            combatSimulator.respawnIfDead(dummyId, skills.getFirst());
         }
 
         double totalDamage = 0;
@@ -1234,7 +1234,7 @@ public class SkillSystemTest implements Listener {
         // Perform baseline attacks
         for (int i = 0; i < BASELINE_HITS; i++) {
             if (!combatSimulator.hasDummy(dummyId) && skills != null && !skills.isEmpty()) {
-                combatSimulator.respawnIfDead(dummyId, skills.get(0));
+                combatSimulator.respawnIfDead(dummyId, skills.getFirst());
             }
             double dmg = performAttack(type, dummyId);
             if (dmg > 0) {
@@ -1262,7 +1262,7 @@ public class SkillSystemTest implements Listener {
         // Ensure dummy is alive
         List<SkillBonus> skills = skillsByType.get(SkillType.ARMOR);
         if (!combatSimulator.hasDummy(dummyId) && skills != null && !skills.isEmpty()) {
-            combatSimulator.respawnIfDead(dummyId, skills.get(0));
+            combatSimulator.respawnIfDead(dummyId, skills.getFirst());
         }
 
         double totalDamage = 0;
@@ -1289,7 +1289,7 @@ public class SkillSystemTest implements Listener {
         testLog.logSection("DAMAGE VALIDATION");
 
         // Build offensive damage data for report
-        Map<SkillType, Map<Integer, double[]>> offData = new HashMap<>();
+        Map<SkillType, Map<Integer, double[]>> offData = new EnumMap<>(SkillType.class);
         for (var typeEntry : offensiveBaseline.entrySet()) {
             SkillType type = typeEntry.getKey();
             Map<Integer, double[]> levelData = new HashMap<>();

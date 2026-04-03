@@ -114,9 +114,7 @@ public class DownloadAllContentCommand extends AdvancedCommand {
             if (index >= packages.size()) {
                 IS_BULK_DOWNLOADING.set(false);
                 if (completed.get() > 0) {
-                    Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> {
-                        ReloadCommand.reload(Bukkit.getConsoleSender());
-                    }, 20L);
+                    Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> ReloadCommand.reload(Bukkit.getConsoleSender()), 20L);
                 }
                 return;
             }
@@ -146,9 +144,7 @@ public class DownloadAllContentCommand extends AdvancedCommand {
             if (completed.get() > 0) {
                 sender.sendMessage(
                     CommandMessagesConfig.getDownloadAllReloadingMessage());
-                Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> {
-                    ReloadCommand.reload(sender);
-                }, 20L);
+                Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> ReloadCommand.reload(sender), 20L);
             }
             return;
         }

@@ -99,8 +99,8 @@ public class VanguardSkill extends SkillBonus implements CooldownSkill {
 
         // Charge forward
         new BukkitRunnable() {
-            int ticks = 0;
-            double distanceTraveled = 0;
+            int ticks;
+            double distanceTraveled;
 
             @Override
             public void run() {

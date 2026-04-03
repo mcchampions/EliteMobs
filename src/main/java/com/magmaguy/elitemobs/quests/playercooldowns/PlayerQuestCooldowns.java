@@ -49,13 +49,13 @@ public class PlayerQuestCooldowns implements Serializable {
         if (PlayerData.getPlayerQuestCooldowns(player.getUniqueId()) == null) return;
         PermissionAttachment permissionAttachment = Objects.requireNonNull(player).addAttachment(MetadataHandler.PLUGIN);
         PlayerQuestCooldowns playerQuestCooldowns = PlayerData.getPlayerQuestCooldowns(player.getUniqueId());
-        for (QuestCooldown questCooldown : playerQuestCooldowns.getQuestCooldowns()) {
+        for (QuestCooldown questCooldown : playerQuestCooldowns.questCooldowns) {
             if (questCooldown.getBukkitTask() != null)
                 questCooldown.getBukkitTask().cancel();
             permissionAttachment.setPermission(questCooldown.getPermission(), false);
             player.removeMetadata(questCooldown.getPermission(), MetadataHandler.PLUGIN);
         }
-        playerQuestCooldowns.getQuestCooldowns().clear();
+        playerQuestCooldowns.questCooldowns.clear();
         PlayerData.resetQuests(player.getUniqueId());
         PlayerData.resetPlayerQuestCooldowns(player.getUniqueId());
     }
@@ -66,7 +66,7 @@ public class PlayerQuestCooldowns implements Serializable {
         String lockoutPermission = customQuestsConfigFields.getQuestLockoutPermission();
         if (lockoutPermission == null || lockoutPermission.isEmpty()) return;
         PlayerQuestCooldowns playerQuestCooldowns = PlayerData.getPlayerQuestCooldowns(player.getUniqueId());
-        for (QuestCooldown questCooldown : playerQuestCooldowns.getQuestCooldowns()) {
+        for (QuestCooldown questCooldown : playerQuestCooldowns.questCooldowns) {
             if (questCooldown.getPermission().equals(lockoutPermission)) {
                 if (questCooldown.getBukkitTask() != null)
                     questCooldown.getBukkitTask().cancel();

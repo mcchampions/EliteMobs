@@ -24,25 +24,25 @@ public class PlayerItem {
 
     public EquipmentSlot equipmentSlot;
     public Player player;
-    public ItemStack itemStack = null;
-    public int itemTier = 0;
+    public ItemStack itemStack;
+    public int itemTier;
     public ArrayList<ElitePotionEffect> continuousPotionEffects = new ArrayList<>();
     public ArrayList<ElitePotionEffect> onHitPotionEffects = new ArrayList<>();
-    public int damageArthropodsLevel = 0;
-    public int damageUndeadLevel = 0;
-    public int thornsLevel = 0;
-    private double plasmaBootsLevel = 0;
-    private double critChance = 0;
-    private double hunterChance = 0;
-    private double lightningChance = 0;
-    private double earthquakeLevel = 0;
-    private double eliteDamageReduction = 0;
-    private double protectionProjectile = 0;
-    private double eliteDamage = 0;
-    private double blastProtection = 0;
-    private double loudStrikesBonus = 0;
+    public int damageArthropodsLevel;
+    public int damageUndeadLevel;
+    public int thornsLevel;
+    private double plasmaBootsLevel;
+    private double critChance;
+    private double hunterChance;
+    private double lightningChance;
+    private double earthquakeLevel;
+    private double eliteDamageReduction;
+    private double protectionProjectile;
+    private double eliteDamage;
+    private double blastProtection;
+    private double loudStrikesBonus;
 
-    private boolean displayingAsBroken = false;
+    private boolean displayingAsBroken;
 
     /**
      * Stores an instance of the custom EliteMobs values of what a player is wearing. This is used to reduce the amount
@@ -123,7 +123,7 @@ public class PlayerItem {
 
         //case when the item changed during runtime to another valid ItemStack
         this.itemStack = itemStack;
-        if (equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
+        if (equipmentSlot == EquipmentSlot.MAINHAND) {
             this.itemTier = (int) Math.round(EliteItemManager.getWeaponLevel(itemStack));
             this.eliteDamage = EliteItemManager.getEliteDamageFromEliteAttributes(itemStack);
         } else
@@ -135,7 +135,7 @@ public class PlayerItem {
                 dungeonInstance.getLevelSync() > 0) {
             if (itemTier > dungeonInstance.getLevelSync()) {
                 itemTier = dungeonInstance.getLevelSync();
-                if (equipmentSlot.equals(EquipmentSlot.MAINHAND))
+                if (equipmentSlot == EquipmentSlot.MAINHAND)
                     this.eliteDamage = EliteItemManager.calculateEliteBonus(itemStack, itemTier);
             }
         }

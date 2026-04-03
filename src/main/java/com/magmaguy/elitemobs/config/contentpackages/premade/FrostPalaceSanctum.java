@@ -23,7 +23,11 @@ public class FrostPalaceSanctum extends ContentPackagesConfigFields {
                 "em_id_frost_palace,195.5,-31,-51.5,90,30",
                 "em_id_frost_palace,183.5,-58,-51.5,90.0,0.0",
                 0,
-                "&aDynamic Sanctum\n" + "$bossCount boss encounters\n" + "&bA 7 phase fight against\n" + "&bthe queen of ice!",
+                """
+                        &aDynamic Sanctum
+                        $bossCount boss encounters
+                        &bA 7 phase fight against
+                        &bthe queen of ice!""",
                 "&bYou are stepping into the Frost Palace! Stay frosty!",
                 "&bYou have left the Frost Palace!",
                 List.of("filename=frost_palace_frost_queen_p0.yml"),

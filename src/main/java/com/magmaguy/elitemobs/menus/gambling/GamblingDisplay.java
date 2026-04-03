@@ -20,7 +20,7 @@ public class GamblingDisplay {
      */
     public static Player validateClick(InventoryClickEvent event, Set<Inventory> menus) {
         if (!menus.contains(event.getInventory())) return null;
-        if (event.getClickedInventory() == null || !event.getClickedInventory().getType().equals(InventoryType.CHEST)) {
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() != InventoryType.CHEST) {
             event.setCancelled(true);
             return null;
         }

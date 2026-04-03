@@ -59,7 +59,7 @@ public class EliteMobTargetPlayerEvent extends Event {
             EliteEntity eliteEntity = EntityTracker.getEliteMobEntity(event.getEntity());
             if (eliteEntity == null) return;
 
-            if (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))
+            if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL)
                 Bukkit.getServer().getPluginManager().callEvent(new EliteMobTargetPlayerEvent(eliteEntity, player, event));
         }
     }

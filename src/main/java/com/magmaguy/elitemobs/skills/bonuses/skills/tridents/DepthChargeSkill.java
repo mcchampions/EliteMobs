@@ -78,7 +78,7 @@ public class DepthChargeSkill extends SkillBonus implements ConditionalSkill {
         EliteMobDamagedByPlayerEvent.EliteMobDamagedByPlayerEventFilter.bypass = true;
         try {
             target.getNearbyEntities(AOE_RADIUS, AOE_RADIUS, AOE_RADIUS).stream()
-                    .filter(e -> e instanceof LivingEntity && !(e instanceof Player) && ((LivingEntity) e).isInWater())
+                    .filter(e -> e instanceof LivingEntity && !(e instanceof Player) && e.isInWater())
                     .forEach(e -> ((LivingEntity) e).damage(aoeDamage, player));
         } finally {
             EliteMobDamagedByPlayerEvent.EliteMobDamagedByPlayerEventFilter.bypass = false;

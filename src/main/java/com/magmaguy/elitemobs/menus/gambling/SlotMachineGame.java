@@ -282,7 +282,7 @@ public class SlotMachineGame {
             final int REEL_2_STOP = 25;
             final int REEL_3_STOP = 35;
             final int ANIMATION_END = 45;
-            int ticks = 0;
+            int ticks;
 
             @Override
             public void run() {
@@ -489,10 +489,10 @@ public class SlotMachineGame {
      */
     private static class SlotSession extends GamblingSession {
         Symbol[] results;
-        boolean isSpinning = false;
-        boolean playerWon = false;
-        double winAmount = 0;
-        boolean gameOver = false;
+        boolean isSpinning;
+        boolean playerWon;
+        double winAmount;
+        boolean gameOver;
 
         SlotSession(UUID playerUUID, int betAmount) {
             super(playerUUID, betAmount);

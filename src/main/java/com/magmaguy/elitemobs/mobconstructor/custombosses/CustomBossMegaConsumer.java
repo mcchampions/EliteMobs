@@ -168,7 +168,7 @@ public class CustomBossMegaConsumer {
         customBossEntity.setMovementSpeedAttribute(AttributeManager.getAttributeBaseValue(livingEntity, "generic_movement_speed"));
         customBossEntity.setFollowDistance(AttributeManager.getAttributeBaseValue(livingEntity, "generic_follow_range"));
 
-        if (livingEntity.getType().equals(EntityType.ENDER_DRAGON)) {
+        if (livingEntity.getType() == EntityType.ENDER_DRAGON) {
             ((EnderDragon) livingEntity).setPhase(EnderDragon.Phase.CIRCLING);
             if (((EnderDragon) livingEntity).getDragonBattle() != null)
                 ((EnderDragon) livingEntity).getDragonBattle().generateEndPortal(false);

@@ -106,7 +106,7 @@ public class ShatterSkill extends SkillBonus implements CooldownSkill {
         // Particle ring expanding outward
         new BukkitRunnable() {
             double radius = 0.5;
-            int ticks = 0;
+            int ticks;
 
             @Override
             public void run() {

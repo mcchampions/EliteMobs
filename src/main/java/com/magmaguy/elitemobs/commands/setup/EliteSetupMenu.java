@@ -95,7 +95,7 @@ public class EliteSetupMenu {
         if (DefaultConfig.useResourcePackModels())
             menuTitle = ChatColor.WHITE + "\uDB83\uDEF1\uDB83\uDE0B\uDB83\uDEF5          " + menuTitle;
 
-        new SetupMenu((JavaPlugin) MetadataHandler.PLUGIN, player, infoButton, allPackages,
+        new SetupMenu(MetadataHandler.PLUGIN, player, infoButton, allPackages,
                 List.of(createFilter(emPackages, Material.GRASS_BLOCK, "Filter By Dungeons", EliteSetupMenu::filterDungeon),
                         createFilter(emPackages, Material.SKULL_BANNER_PATTERN, "Filter By Events", EliteSetupMenu::filterEvents),
                         createFilter(emPackages, Material.ARMOR_STAND, "Filter By Custom Models", EliteSetupMenu::filterModels)),

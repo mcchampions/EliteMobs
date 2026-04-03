@@ -24,11 +24,10 @@ import java.util.Map;
 
 public class EliteCustomLootEntry extends CustomLootEntry implements Serializable {
     @Getter
-    private String filename = null;
-    private String difficultyID = null;
+    private String filename;
+    private String difficultyID;
 
     public EliteCustomLootEntry(List<CustomLootEntry> entries, String rawString, String configFilename) {
-        super();
         //old format
         if (!rawString.contains("filename=")) {
             parseLegacyFormat(rawString, configFilename);

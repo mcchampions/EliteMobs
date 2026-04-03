@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class VaultCompatibility {
 
-    public static boolean VAULT_ENABLED = false;
-    private static Economy econ = null;
+    public static boolean VAULT_ENABLED;
+    private static Economy econ;
 
     public static void vaultSetup() {
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("Vault")) {

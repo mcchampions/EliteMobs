@@ -14,10 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -27,12 +24,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ScriptConditions {
 
     private final ScriptConditionsBlueprint conditionsBlueprint;
-    private final ScriptRuntimeOwner runtimeOwner;
     private final ScriptTargets scriptTargets;
 
     public ScriptConditions(ScriptConditionsBlueprint scriptConditionsBlueprint, ScriptRuntimeOwner runtimeOwner, boolean actionCondition) {
         this.conditionsBlueprint = scriptConditionsBlueprint;
-        this.runtimeOwner = runtimeOwner;
 
         if (conditionsBlueprint.getScriptTargets() != null) {
             this.scriptTargets = new ScriptTargets(conditionsBlueprint.getScriptTargets(), runtimeOwner);
@@ -108,7 +103,7 @@ public class ScriptConditions {
             return false;
         }
         if (entityTags == null) return false;
-        return entityTags.containsAll(blueprintTags);
+        return new HashSet<>(entityTags).containsAll(blueprintTags);
     }
 
     private boolean targetCountLowerThan(int targetCount) {
@@ -186,11 +181,11 @@ public class ScriptConditions {
         if (scriptTargets == null) return true;
         if (data == null) { Logger.warn("ScriptActionData is null in meetsActionConditions."); return false; }
 
-        if (scriptTargets.getTargetBlueprint().getTargetType().equals(TargetType.SELF)
-                && !isAliveCheck(data.getEliteEntity().getLivingEntity())) {
+        if (scriptTargets.getTargetBlueprint().getTargetType() == TargetType.SELF
+            && !isAliveCheck(data.getEliteEntity().getLivingEntity())) {
             return false;
         }
-        if (!conditionsBlueprint.getConditionType().equals(ConditionType.BLOCKING)) return true;
+        if (conditionsBlueprint.getConditionType() != ConditionType.BLOCKING) return true;
 
         Collection<LivingEntity> entities = scriptTargets.getTargetEntities(data);
         int count = entities.size();
@@ -229,7 +224,7 @@ public class ScriptConditions {
 
         Collection<Location> targets = scriptTargets.getTargetLocations(data);
 
-        if (scriptTargets.getTargetBlueprint().getTargetType().equals(TargetType.ACTION_TARGET)) {
+        if (scriptTargets.getTargetBlueprint().getTargetType() == TargetType.ACTION_TARGET) {
             original.removeIf(loc -> !checkConditions(loc));
             return original;
         }
@@ -251,7 +246,7 @@ public class ScriptConditions {
     protected Collection<LivingEntity> validateEntities(ScriptActionData data, @NotNull Collection<LivingEntity> original) {
         if (scriptTargets == null) return original;
         if (data == null) { Logger.warn("ScriptActionData is null in validateEntities."); return original; }
-        if (scriptTargets.getTargetBlueprint().getTargetType().equals(TargetType.ACTION_TARGET)) {
+        if (scriptTargets.getTargetBlueprint().getTargetType() == TargetType.ACTION_TARGET) {
             original.removeIf(ent -> !checkConditions(ent));
         } else {
             for (LivingEntity e : scriptTargets.getTargetEntities(data)) if (!checkConditions(e)) return new ArrayList<>();

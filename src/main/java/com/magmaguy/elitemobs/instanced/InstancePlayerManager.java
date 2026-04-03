@@ -25,7 +25,7 @@ public class InstancePlayerManager {
         if (event.isCancelled()) return false;
 
         //Right now new players can't join ongoing instances
-        if (!matchInstance.state.equals(MatchInstance.InstancedRegionState.WAITING)) {
+        if (matchInstance.state != MatchInstance.InstancedRegionState.WAITING) {
             player.sendMessage(ArenasConfig.getArenasOngoingMessage());
             return false;
         }
@@ -58,7 +58,7 @@ public class InstancePlayerManager {
             public void run() {
                 //Teleport the player to the correct location
                 MatchInstance.MatchInstanceEvents.teleportBypass = true;
-                Location destination = (matchInstance.state.equals(MatchInstance.InstancedRegionState.WAITING) && matchInstance.lobbyLocation != null)
+                Location destination = (matchInstance.state == MatchInstance.InstancedRegionState.WAITING && matchInstance.lobbyLocation != null)
                         ? matchInstance.lobbyLocation
                         : matchInstance.startLocation;
 

@@ -91,7 +91,7 @@ public class PeaceBannerItem {
 
         for (Map.Entry<String, String> entry : PeaceBannerConfig.getRecipeIngredients().entrySet()) {
             String value = entry.getValue();
-            if (value.equals("ANY_BANNER")) {
+            if ("ANY_BANNER".equals(value)) {
                 recipe.setIngredient(entry.getKey().charAt(0),
                         new RecipeChoice.MaterialChoice(ALL_BANNERS));
             } else {

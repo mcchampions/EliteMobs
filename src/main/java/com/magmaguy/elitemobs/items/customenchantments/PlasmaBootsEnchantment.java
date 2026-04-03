@@ -66,7 +66,7 @@ public class PlasmaBootsEnchantment extends CustomEnchantment {
     private static void createProjectile(Vector shotVector, Location sourceLocation, Player player) {
         new BukkitRunnable() {
             final Location currentLocation = sourceLocation.clone();
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -78,7 +78,7 @@ public class PlasmaBootsEnchantment extends CustomEnchantment {
                 for (Entity entity : Objects.requireNonNull(currentLocation.getWorld())
                         .getNearbyEntities(currentLocation, 0.1, 0.1, 0.1)) {
                     if (!(entity instanceof LivingEntity)) continue;
-                    if (entity.getType().equals(EntityType.PLAYER)) continue;
+                    if (entity.getType() == EntityType.PLAYER) continue;
                     cancel();
                     doDamage(player, (LivingEntity) entity);
                     break;

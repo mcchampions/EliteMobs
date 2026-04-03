@@ -399,7 +399,7 @@ final class LuaBossTableBuilder {
             }
         }
         if (sampled.isEmpty()) {
-            sampled.add(source.get(0));
+            sampled.add(source.getFirst());
         }
         return sampled;
     }
@@ -463,7 +463,7 @@ final class LuaBossTableBuilder {
     private void monitorEntityLanding(Entity entity, LuaFunction callback, int maxTicks) {
         final int[] taskId = new int[1];
         taskId[0] = taskController.runRepeating(1, 1, new Runnable() {
-            private int counter = 0;
+            private int counter;
 
             @Override
             public void run() {

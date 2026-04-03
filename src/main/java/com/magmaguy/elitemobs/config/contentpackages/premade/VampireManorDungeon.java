@@ -20,7 +20,11 @@ public class VampireManorDungeon extends ContentPackagesConfigFields {
                 "em_the_vampire_manor,283.5,31.0,1591.5,-180,0",
                 "em_the_vampire_manor,281.5,31.0,1587.5,-180,0",
                 1,
-                "&aDynamic Lair\n" + "$bossCount boss encounters\n" + "&4Enter the manor and\n" + "&4defeat the Vampire King!",
+                """
+                        &aDynamic Lair
+                        $bossCount boss encounters
+                        &4Enter the manor and
+                        &4defeat the Vampire King!""",
                 "&8[EM] &4You have entered the Vampire Manor!",
                 "&8[EM] &4You have left the Vampire Manor!",
                 List.of("filename=vampire_king_final_boss.yml"),

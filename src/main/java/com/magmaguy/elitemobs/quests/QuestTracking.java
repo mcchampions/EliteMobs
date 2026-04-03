@@ -49,7 +49,7 @@ public class QuestTracking {
     private BukkitTask locationRefresher;
     private BukkitTask compassTask;
     private BossBar compassBar;
-    private boolean questIsDone = false;
+    private boolean questIsDone;
 
     public QuestTracking(Player player, CustomQuest customQuest) {
         this.player = player;
@@ -129,7 +129,7 @@ public class QuestTracking {
     private List<ObjectiveDestinations> getKillLocations(CustomKillObjective customKillObjective) {
         List<ObjectiveDestinations> destinations = new ArrayList<>();
         List<Location> locations = new ArrayList<>();
-        new ArrayList<EliteEntity>(EntityTracker.getEliteMobEntities().values()).forEach(eliteEntity -> {
+        new ArrayList<>(EntityTracker.getEliteMobEntities().values()).forEach(eliteEntity -> {
             if (eliteEntity instanceof CustomBossEntity)
                 if (((CustomBossEntity) eliteEntity).getPhaseBossEntity() != null &&
                         ((CustomBossEntity) eliteEntity).getPhaseBossEntity().getPhase1Config().getFilename().equals(customKillObjective.getCustomBossFilename())) {
@@ -292,13 +292,12 @@ public class QuestTracking {
 
         if (questIsDone)
             return "⦿";
-        if (objective instanceof KillObjective)
-            return "☠";
-        else if (objective instanceof DialogObjective)
-            return "⦿";
-        else if (objective instanceof CustomFetchObjective)
-            return "⚔";
-        return "⦿";
+        return switch (objective) {
+            case KillObjective killObjective -> "☠";
+            case DialogObjective dialogObjective -> "⦿";
+            case CustomFetchObjective customFetchObjective -> "⚔";
+            default -> "⦿";
+        };
     }
 
     public static class QuestTrackingEvents implements Listener {

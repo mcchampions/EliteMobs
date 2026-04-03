@@ -22,7 +22,11 @@ public class PrimisGladiusInvasionDungeon extends ContentPackagesConfigFields {
                 "em_id_primis_gladius,-108.5,69.0,40.5,-90.499999,0",
                 "em_id_primis_gladius,-100.5,69.0,40.5,-69.499999,0",
                 0,
-                "&aDungeon &7- Levels 1-20\n" + "$bossCount boss encounters\n" + "&aIt is time to take\n" + "&aGladius back!",
+                """
+                        &aDungeon &7- Levels 1-20
+                        $bossCount boss encounters
+                        &aIt is time to take
+                        &aGladius back!""",
                 "&bWelcome to the Gladius Invasion!",
                 "2&bYou have left the Gladius Invasion!",
                 List.of("filename=primis_gladius_bell_id.yml"),

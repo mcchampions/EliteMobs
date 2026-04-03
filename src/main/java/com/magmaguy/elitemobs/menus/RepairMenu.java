@@ -103,8 +103,7 @@ public class RepairMenu extends EliteMenu {
                 ItemStack clonedConfirmButton = RepairMenuConfig.confirmButton.clone();
 
                 List<String> lore = new ArrayList<>();
-                for (String string : RepairMenuConfig.confirmButton.getItemMeta().getLore())
-                    lore.add(string);
+                lore.addAll(RepairMenuConfig.confirmButton.getItemMeta().getLore());
                 RepairMenuConfig.confirmButton.getItemMeta().setLore(lore);
                 ItemMeta clonedMeta = clonedConfirmButton.getItemMeta();
                 clonedMeta.setLore(lore);

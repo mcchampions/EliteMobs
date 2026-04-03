@@ -21,7 +21,7 @@ public class CustomModelMEG implements CustomModelInterface {
     ModelBlueprint modelBlueprint;
 
     @Getter
-    private boolean success = false;
+    private boolean success;
 
     public CustomModelMEG(LivingEntity livingEntity, String modelName, String nametagName) {
         try {
@@ -66,7 +66,7 @@ public class CustomModelMEG implements CustomModelInterface {
 
     public static CustomModelMEG generateCustomModel(LivingEntity livingEntity, String modelName, String nametagName) {
         CustomModelMEG customModel = new CustomModelMEG(livingEntity, modelName, nametagName);
-        return customModel.isSuccess() ? customModel : null;
+        return customModel.success ? customModel : null;
     }
 
     public static void reloadModels() {

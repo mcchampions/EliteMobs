@@ -74,8 +74,8 @@ public class ShieldWallSupport {
         private double southHealthPool;
         private double eastHealthPool;
         private double westHealthPool;
-        private boolean isActive = false;
-        private BukkitTask task = null;
+        private boolean isActive;
+        private BukkitTask task;
 
         private ShieldWallState(EliteEntity eliteEntity) {
             this.eliteEntity = eliteEntity;
@@ -218,9 +218,10 @@ public class ShieldWallSupport {
                     return;
                 }
                 int visualShieldsLeft = 0;
-                for (Direction direction : armorStands.keySet()) {
+                for (Map.Entry<Direction, List<ArmorStand>> entry : armorStands.entrySet()) {
+                    Direction direction = entry.getKey();
                     for (int i = -1; i < 2; i++) {
-                        ArmorStand armorStand = armorStands.get(direction).get(i + 1);
+                        ArmorStand armorStand = entry.getValue().get(i + 1);
                         if (armorStand == null || !armorStand.isValid()) continue;
                         switch (direction) {
                             case NORTH -> {

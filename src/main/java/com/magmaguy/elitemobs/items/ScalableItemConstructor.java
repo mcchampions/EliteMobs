@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ScalableItemConstructor {
@@ -48,9 +49,9 @@ public class ScalableItemConstructor {
 
     private static HashMap<Enchantment, Integer> updateDynamicEnchantments(HashMap<Enchantment, Integer> enchantmentsList) {
         List<Enchantment> enchantmentsArray = new ArrayList<>();
-        for (Enchantment enchantment : enchantmentsList.keySet())
-            for (int i = 0; i < enchantmentsList.get(enchantment); i++)
-                enchantmentsArray.add(enchantment);
+        for (Map.Entry<Enchantment, Integer> entry : enchantmentsList.entrySet())
+            for (int i = 0; i < entry.getValue(); i++)
+                enchantmentsArray.add(entry.getKey());
 
         HashMap<Enchantment, Integer> newEnchantmentList = new HashMap<>();
 
@@ -86,7 +87,7 @@ public class ScalableItemConstructor {
             Currently elitemobs has no way of telling if there will be a limited item available for the specific asked tier
             //todo: fix this
              */
-        if (localLootList.size() == 0)
+        if (localLootList.isEmpty())
             ItemStackGenerator.generateItemStack(Material.AIR);
 
         CustomItem customItem = localLootList.get(ThreadLocalRandom.current().nextInt(localLootList.size()));

@@ -26,7 +26,7 @@ public class Navigation implements Listener {
         NMSManager.getAdapter().doNotMove(livingEntity);
     }
 
-    private static final HashMap<CustomBossEntity, BukkitTask> currentlyNavigating = new HashMap();
+    private static final HashMap<CustomBossEntity, BukkitTask> currentlyNavigating = new HashMap<>();
 
     public static void addSoftLeashAI(RegionalBossEntity regionalBossEntity) {
         if (NMSManager.getAdapter() == null) return;
@@ -80,7 +80,7 @@ public class Navigation implements Listener {
         if (currentlyNavigating.get(customBossEntity) != null) currentlyNavigating.get(customBossEntity).cancel();
         int finalDuration = duration;
         currentlyNavigating.put(customBossEntity, new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

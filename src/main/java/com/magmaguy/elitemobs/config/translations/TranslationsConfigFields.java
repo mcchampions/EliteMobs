@@ -28,8 +28,8 @@ public class TranslationsConfigFields {
     private TranslationCsvParser.TranslationData translationDataSnapshot;
     private Path translationsPath;
     private Path translationsDataPath;
-    private boolean saving = false;
-    private boolean dirty = false;
+    private boolean saving;
+    private boolean dirty;
 
     public TranslationsConfigFields() {
         // Parse language name from config (e.g., "french" or "french.yml" -> "french")
@@ -209,7 +209,7 @@ public class TranslationsConfigFields {
         translationData.set(realKey, "en", value);
 
         // Also add to target language column (placeholder for translator)
-        if (!languageCode.equals("en") && translationData.get(realKey, languageCode) == null) {
+        if (!"en".equals(languageCode) && translationData.get(realKey, languageCode) == null) {
             translationData.set(realKey, languageCode, value);
         }
 
@@ -227,7 +227,7 @@ public class TranslationsConfigFields {
 
         // Try target language first (unless we're English)
         Object value = null;
-        if (!languageCode.equals("en")) {
+        if (!"en".equals(languageCode)) {
             value = translationData.get(realKey, languageCode);
         }
 

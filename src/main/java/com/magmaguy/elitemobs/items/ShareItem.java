@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class ShareItem {
 
     public static void showOnChat(Player player) {
-        if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) return;
+        if (player.getInventory().getItemInMainHand().getType() == Material.AIR) return;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (!itemStack.hasItemMeta()) return;
         if (!itemStack.getItemMeta().hasDisplayName()) return;
@@ -31,21 +31,21 @@ public class ShareItem {
     public static void setItemHoverEvent(TextComponent textComponent, ItemStack itemStack) {
         if (!EliteItemManager.isEliteMobsItem(itemStack))
             return;
-        String stringList = itemStack.getItemMeta().getDisplayName();
+        StringBuilder stringList = new StringBuilder(itemStack.getItemMeta().getDisplayName());
         if (itemStack.getItemMeta().hasLore())
             for (String loreString : itemStack.getItemMeta().getLore())
-                stringList += "\n" + ChatColor.DARK_PURPLE + ChatColor.ITALIC + loreString;
-        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(stringList).create()));
+                stringList.append("\n" + ChatColor.DARK_PURPLE + ChatColor.ITALIC).append(loreString);
+        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(stringList.toString()).create()));
     }
 
     public static TextComponent hoverableItemTextComponent(ItemStack itemStack) {
         TextComponent textComponent = new TextComponent();
-        String stringList = "";
+        StringBuilder stringList = new StringBuilder();
         if (itemStack.getItemMeta().hasLore())
             for (String loreString : itemStack.getItemMeta().getLore())
-                stringList += "\n" + ChatColor.DARK_PURPLE + ChatColor.ITALIC + loreString;
+                stringList.append("\n" + ChatColor.DARK_PURPLE + ChatColor.ITALIC).append(loreString);
         textComponent.setText(itemStack.getItemMeta().getDisplayName());
-        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(stringList).create()));
+        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(stringList.toString()).create()));
         return textComponent;
     }
 

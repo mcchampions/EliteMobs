@@ -17,11 +17,11 @@ public class ScriptRelativeVectorBlueprint {
     private final String scriptFilename;
 
     @Getter
-    private ScriptTargetsBlueprint sourceTarget = null;
+    private ScriptTargetsBlueprint sourceTarget;
     @Getter
-    private ScriptTargetsBlueprint destinationTarget = null;
+    private ScriptTargetsBlueprint destinationTarget;
     @Getter
-    private boolean normalize = false;
+    private boolean normalize;
     @Getter
     private ScriptFloat multiplier = new ScriptFloat(1.0f);
     @Getter
@@ -30,13 +30,13 @@ public class ScriptRelativeVectorBlueprint {
     public ScriptRelativeVectorBlueprint(String scriptName, String scriptFilename, Map<String, ?> configurationValues) {
         this.scriptName = scriptName;
         this.scriptFilename = scriptFilename;
-        configurationValues.entrySet().forEach(entry -> processKeyAndValue(entry.getKey(), entry.getValue()));
+        configurationValues.forEach((key, value) -> processKeyAndValue(key, value));
     }
 
     public ScriptRelativeVectorBlueprint(String scriptName, String scriptFilename, LinkedHashMap<String, ?> configurationValues) {
         this.scriptName = scriptName;
         this.scriptFilename = scriptFilename;
-        configurationValues.entrySet().forEach(entry -> processKeyAndValue(entry.getKey(), entry.getValue()));
+        configurationValues.forEach((key, value) -> processKeyAndValue(key, value));
     }
 
     protected void processKeyAndValue(String key, Object value) {

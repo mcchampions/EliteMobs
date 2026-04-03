@@ -95,7 +95,7 @@ public class PlayerPotionEffects implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerHitWithPotionEffect(EntityDamageByEntityEvent event) {
         LivingEntity damager = EntityFinder.getRealDamager(event);
-        if (damager == null || !damager.getType().equals(EntityType.PLAYER)) return;
+        if (damager == null || damager.getType() != EntityType.PLAYER) return;
         Player player = (Player) damager;
 
         //citizens

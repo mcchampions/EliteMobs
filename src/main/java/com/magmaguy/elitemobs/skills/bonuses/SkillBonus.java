@@ -35,7 +35,7 @@ public abstract class SkillBonus {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                 TextComponent.fromLegacyText(ChatColorConverter.convert(
                         DungeonsConfig.getSkillActivationFormat()
-                                .replace("$skillName", skill.getBonusName()))));
+                                .replace("$skillName", skill.bonusName))));
     }
 
     @Getter
@@ -183,7 +183,7 @@ public abstract class SkillBonus {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                 TextComponent.fromLegacyText(ChatColorConverter.convert(
                         DungeonsConfig.getSkillStackFormat()
-                                .replace("$skillName", skill.getBonusName())
+                                .replace("$skillName", skill.bonusName)
                                 .replace("$current", String.valueOf(currentStacks))
                                 .replace("$max", String.valueOf(maxStacks)))));
     }

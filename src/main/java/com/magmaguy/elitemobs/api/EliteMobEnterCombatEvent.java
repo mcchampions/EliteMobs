@@ -43,7 +43,7 @@ public class EliteMobEnterCombatEvent extends Event {
                 }
                 if (!eliteEntity.isInCombatGracePeriod()) {
                     double followRange = AttributeManager.getAttributeBaseValue(eliteEntity.getLivingEntity(), "generic_follow_range");
-                    if (eliteEntity.getLivingEntity().getType().equals(EntityType.ENDER_DRAGON))
+                    if (eliteEntity.getLivingEntity().getType() == EntityType.ENDER_DRAGON)
                         followRange = 200;
                     if (EntitySearch.getNearbyCombatPlayers(eliteEntity.getLocation(), followRange).isEmpty()) {
                         task.cancel();

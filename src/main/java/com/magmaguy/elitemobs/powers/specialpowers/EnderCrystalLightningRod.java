@@ -18,7 +18,7 @@ public class EnderCrystalLightningRod {
 
     public EnderCrystalLightningRod(EliteEntity eliteEntity, EnderCrystal enderCrystal) {
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -44,10 +44,10 @@ public class EnderCrystalLightningRod {
     public static class EnderCrystalLightningRodEvents implements Listener {
         @EventHandler(ignoreCancelled = true)
         public void damageEvent(EntityDamageEvent event) {
-            if (!event.getEntity().getType().equals(EntityType.END_CRYSTAL)) return;
-            if (!(event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
-                    event.getCause().equals(EntityDamageEvent.DamageCause.FALLING_BLOCK) ||
-                    event.getCause().equals(EntityDamageEvent.DamageCause.LIGHTNING))) return;
+            if (event.getEntity().getType() != EntityType.END_CRYSTAL) return;
+            if (!(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
+                  event.getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK ||
+                  event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING)) return;
             if (!event.getEntity().getPersistentDataContainer().has(new NamespacedKey(MetadataHandler.PLUGIN, "eliteCrystal"), PersistentDataType.STRING))
                 return;
             event.setCancelled(true);

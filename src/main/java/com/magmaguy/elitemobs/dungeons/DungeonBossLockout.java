@@ -109,12 +109,6 @@ public class DungeonBossLockout implements Serializable {
      */
     public void cleanupExpiredLockouts() {
         long currentTime = System.currentTimeMillis();
-        Iterator<Map.Entry<String, Long>> iterator = lockouts.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Long> entry = iterator.next();
-            if (currentTime >= entry.getValue()) {
-                iterator.remove();
-            }
-        }
+        lockouts.entrySet().removeIf(entry -> currentTime >= entry.getValue());
     }
 }

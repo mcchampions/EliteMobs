@@ -13,8 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 public class WorldInstancedDungeonPackage extends EMPackage implements CombatContent {
+    private static final Pattern PATTERN = Pattern.compile(".*_\\d{1,2}$");
     private int level;
 
     public WorldInstancedDungeonPackage(ContentPackagesConfigFields contentPackagesConfigFields) {
@@ -58,7 +60,7 @@ public class WorldInstancedDungeonPackage extends EMPackage implements CombatCon
         } else {
             //This removes all instanced worlds not previously correctly removed
             for (File worldFile : Bukkit.getWorldContainer().listFiles()) {
-                if (worldFile.getName().contains(file.getName()) && worldFile.getName().matches(".*_\\d{1,2}$")) {
+                if (worldFile.getName().contains(file.getName()) && PATTERN.matcher(worldFile.getName()).matches()) {
                     try {
                         FileUtils.deleteDirectory(worldFile);
                         Logger.info("Removing previously instanced world " + worldFile.getName());

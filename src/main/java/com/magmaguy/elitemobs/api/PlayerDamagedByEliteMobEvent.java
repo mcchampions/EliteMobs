@@ -135,96 +135,108 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
             if (!skill.meetsLevelRequirement(skillLevel)) continue;
 
             // Evasion - chance to completely dodge
-            if (skill instanceof EvasionSkill evasion) {
-                if (evasion.tryEvade(player, this)) {
-                    skill.incrementProcCount(player);
-                    SkillBonus.sendSkillActionBar(player, skill);
-                    setCancelled(true);
-                    return true;
-                }
-                continue; // Skip generic processing for this skill
-            }
-
-            // Retaliation - chance to reflect damage back
-            if (skill instanceof RetaliationSkill retaliation) {
-                LivingEntity attacker = getAttacker();
-                if (attacker != null) {
-                    retaliation.onDamageTaken(player, attacker, getDamage());
-                }
-                continue;
-            }
-
-            // Fortify - stacking damage reduction (always applies, action bar handled internally)
-            if (skill instanceof FortifySkill fortify) {
-                double modifiedDamage = fortify.modifyIncomingDamage(player, getDamage());
-                setDamage(modifiedDamage);
-                skill.incrementProcCount(player);
-                continue;
-            }
-
-            // ReactiveShielding - check trigger + apply shield reduction
-            if (skill instanceof ReactiveShieldingSkill reactiveShielding) {
-                // Check if this hit should trigger the shield
-                double damagePercent = getDamage() / player.getMaxHealth();
-                reactiveShielding.checkTrigger(player, damagePercent);
-                // Apply shield reduction if active (might have been activated by this hit or a previous one)
-                double modifiedDamage = reactiveShielding.modifyIncomingDamage(player, getDamage());
-                if (modifiedDamage != getDamage()) {
-                    setDamage(modifiedDamage);
-                    skill.incrementProcCount(player);
-                    SkillBonus.sendSkillActionBar(player, skill);
-                }
-                continue;
-            }
-
-            // AdrenalineSurge - buffs when health drops below threshold
-            if (skill instanceof AdrenalineSurgeSkill adrenaline) {
-                double newHealthPercent = (player.getHealth() - getDamage()) / player.getMaxHealth();
-                adrenaline.checkTrigger(player, newHealthPercent);
-                continue;
-            }
-
-            // SecondWind - heal when health drops below threshold
-            if (skill instanceof SecondWindSkill secondWind) {
-                double newHealthPercent = (player.getHealth() - getDamage()) / player.getMaxHealth();
-                secondWind.checkTrigger(player, newHealthPercent);
-                continue;
-            }
-
-            // LastStand - prevent fatal damage
-            if (skill instanceof LastStandSkill lastStand) {
-                boolean fatal = player.getHealth() - getDamage() <= 0;
-                if (fatal) {
-                    if (lastStand.preventDeath(player, getDamage())) {
+            switch (skill) {
+                case EvasionSkill evasion -> {
+                    if (evasion.tryEvade(player, this)) {
                         skill.incrementProcCount(player);
                         SkillBonus.sendSkillActionBar(player, skill);
                         setCancelled(true);
                         return true;
                     }
+                    continue; // Skip generic processing for this skill
                 }
-                continue;
-            }
 
-            // IronStance - damage reduction when standing still (custom movement check)
-            if (skill instanceof IronStanceSkill ironStance) {
-                double modifiedDamage = ironStance.modifyIncomingDamage(player, getDamage(), this);
-                if (modifiedDamage != getDamage()) {
+
+                // Retaliation - chance to reflect damage back
+                case RetaliationSkill retaliation -> {
+                    LivingEntity attacker = getAttacker();
+                    if (attacker != null) {
+                        retaliation.onDamageTaken(player, attacker, getDamage());
+                    }
+                    continue;
+                }
+
+
+                // Fortify - stacking damage reduction (always applies, action bar handled internally)
+                case FortifySkill fortify -> {
+                    double modifiedDamage = fortify.modifyIncomingDamage(player, getDamage());
                     setDamage(modifiedDamage);
                     skill.incrementProcCount(player);
-                    SkillBonus.sendSkillActionBar(player, skill);
+                    continue;
                 }
-                continue;
-            }
 
-            // Grit - scaling damage reduction based on health (custom health-based scaling)
-            if (skill instanceof GritSkill grit) {
-                double modifiedDamage = grit.modifyIncomingDamage(player, getDamage(), this);
-                if (modifiedDamage != getDamage()) {
-                    setDamage(modifiedDamage);
-                    skill.incrementProcCount(player);
-                    SkillBonus.sendSkillActionBar(player, skill);
+
+                // ReactiveShielding - check trigger + apply shield reduction
+                case ReactiveShieldingSkill reactiveShielding -> {
+                    // Check if this hit should trigger the shield
+                    double damagePercent = getDamage() / player.getMaxHealth();
+                    reactiveShielding.checkTrigger(player, damagePercent);
+                    // Apply shield reduction if active (might have been activated by this hit or a previous one)
+                    double modifiedDamage = reactiveShielding.modifyIncomingDamage(player, getDamage());
+                    if (modifiedDamage != getDamage()) {
+                        setDamage(modifiedDamage);
+                        skill.incrementProcCount(player);
+                        SkillBonus.sendSkillActionBar(player, skill);
+                    }
+                    continue;
                 }
-                continue;
+
+
+                // AdrenalineSurge - buffs when health drops below threshold
+                case AdrenalineSurgeSkill adrenaline -> {
+                    double newHealthPercent = (player.getHealth() - getDamage()) / player.getMaxHealth();
+                    adrenaline.checkTrigger(player, newHealthPercent);
+                    continue;
+                }
+
+
+                // SecondWind - heal when health drops below threshold
+                case SecondWindSkill secondWind -> {
+                    double newHealthPercent = (player.getHealth() - getDamage()) / player.getMaxHealth();
+                    secondWind.checkTrigger(player, newHealthPercent);
+                    continue;
+                }
+
+
+                // LastStand - prevent fatal damage
+                case LastStandSkill lastStand -> {
+                    boolean fatal = player.getHealth() - getDamage() <= 0;
+                    if (fatal) {
+                        if (lastStand.preventDeath(player, getDamage())) {
+                            skill.incrementProcCount(player);
+                            SkillBonus.sendSkillActionBar(player, skill);
+                            setCancelled(true);
+                            return true;
+                        }
+                    }
+                    continue;
+                }
+
+
+                // IronStance - damage reduction when standing still (custom movement check)
+                case IronStanceSkill ironStance -> {
+                    double modifiedDamage = ironStance.modifyIncomingDamage(player, getDamage(), this);
+                    if (modifiedDamage != getDamage()) {
+                        setDamage(modifiedDamage);
+                        skill.incrementProcCount(player);
+                        SkillBonus.sendSkillActionBar(player, skill);
+                    }
+                    continue;
+                }
+
+
+                // Grit - scaling damage reduction based on health (custom health-based scaling)
+                case GritSkill grit -> {
+                    double modifiedDamage = grit.modifyIncomingDamage(player, getDamage(), this);
+                    if (modifiedDamage != getDamage()) {
+                        setDamage(modifiedDamage);
+                        skill.incrementProcCount(player);
+                        SkillBonus.sendSkillActionBar(player, skill);
+                    }
+                    continue;
+                }
+                default -> {
+                }
             }
 
             // For any remaining skills (PASSIVE like BattleHardened),
@@ -337,7 +349,7 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
     public static class PlayerDamagedByEliteMobEventFilter implements Listener {
         @Getter
         @Setter
-        private static boolean bypass = false;
+        private static boolean bypass;
         @Getter
         @Setter
         private static double specialMultiplier = 1;
@@ -393,13 +405,13 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
             // 5. Distance attenuation for explosions (creeper, ghast)
             if (eliteEntity.getLivingEntity() != null && player.isValid() &&
                     player.getLocation().getWorld().equals(eliteEntity.getLivingEntity().getWorld())) {
-                if (eliteEntity.getLivingEntity().getType().equals(EntityType.CREEPER)) {
+                if (eliteEntity.getLivingEntity().getType() == EntityType.CREEPER) {
                     Creeper creeper = (Creeper) eliteEntity.getLivingEntity();
                     double distance = player.getLocation().distance(eliteEntity.getLivingEntity().getLocation());
                     double distanceAttenuation = Math.max(0, 1 - distance / creeper.getExplosionRadius());
                     scaledDamage *= distanceAttenuation;
-                } else if (eliteEntity.getLivingEntity().getType().equals(EntityType.GHAST) &&
-                        event.getDamager().getType().equals(EntityType.FIREBALL)) {
+                } else if (eliteEntity.getLivingEntity().getType() == EntityType.GHAST &&
+                           event.getDamager().getType() == EntityType.FIREBALL) {
                     double distance = player.getLocation().distance(eliteEntity.getLivingEntity().getLocation());
                     double distanceAttenuation = Math.max(0, 1 - distance / ((Fireball) event.getDamager()).getYield());
                     scaledDamage *= distanceAttenuation;
@@ -440,7 +452,7 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
         //Remove potion effects of creepers when they blow up because Minecraft passes those effects to players, and they are infinite
         @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
         private void explosionEvent(EntityExplodeEvent event) {
-            if (event.getEntity().getType().equals(EntityType.CREEPER) && EntityTracker.isEliteMob(event.getEntity())) {
+            if (event.getEntity().getType() == EntityType.CREEPER && EntityTracker.isEliteMob(event.getEntity())) {
                 //by default minecraft spreads potion effects
                 Set<PotionEffect> potionEffects = new HashSet<>(((Creeper) event.getEntity()).getActivePotionEffects());
                 potionEffects.forEach(potionEffectType -> ((Creeper) event.getEntity()).removePotionEffect(potionEffectType.getType()));
@@ -467,7 +479,7 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
             else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof LivingEntity) {
                 eliteEntity = EntityTracker.getEliteMobEntity((LivingEntity) ((Projectile) event.getDamager()).getShooter());
                 projectile = (Projectile) event.getDamager();
-            } else if (event.getDamager().getType().equals(EntityType.EVOKER_FANGS))
+            } else if (event.getDamager().getType() == EntityType.EVOKER_FANGS)
                 if (((EvokerFangs) event.getDamager()).getOwner() != null)
                     eliteEntity = EntityTracker.getEliteMobEntity(((EvokerFangs) event.getDamager()).getOwner());
 
@@ -482,7 +494,7 @@ public class PlayerDamagedByEliteMobEvent extends EliteDamageEvent {
             //Blocking reduces melee damage and nullifies most ranged damage at the cost of shield durability
             if (player.isBlocking() || (com.magmaguy.elitemobs.testing.CombatSimulator.isTestingActive() && com.magmaguy.elitemobs.testing.CombatSimulator.isBlockingOverride())) {
                 blocking = true;
-                if (player.getInventory().getItemInOffHand().getType().equals(Material.SHIELD)) {
+                if (player.getInventory().getItemInOffHand().getType() == Material.SHIELD) {
                     ItemMeta itemMeta = player.getInventory().getItemInOffHand().getItemMeta();
                     org.bukkit.inventory.meta.Damageable damageable = (Damageable) itemMeta;
 

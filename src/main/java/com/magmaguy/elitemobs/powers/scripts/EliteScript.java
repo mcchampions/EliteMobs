@@ -31,7 +31,7 @@ public class EliteScript extends ElitePower implements Cloneable, ScriptRuntimeO
     protected Map<String, ScriptExecutable> eliteScriptMap;
     @Setter
     //Set by halt action
-    private boolean halt = false;
+    private boolean halt;
 
     public EliteScript(EliteScriptBlueprint scriptBlueprint, Map<String, ScriptExecutable> eliteScriptMap, EliteEntity eliteEntity) {
         super(scriptBlueprint.getCustomConfigFields());
@@ -49,7 +49,7 @@ public class EliteScript extends ElitePower implements Cloneable, ScriptRuntimeO
     //Parse from boss config
     public static List<EliteScript> generateBossScripts(List<EliteScriptBlueprint> blueprints, EliteEntity eliteEntity) {
         //The map is declared here because it needs to be shared inside of all scripts in the same file so they can be referenced.
-        HashMap<String, ScriptExecutable> powerMap = new HashMap();
+        HashMap<String, ScriptExecutable> powerMap = new HashMap<>();
         return blueprints.stream().map(eliteScriptBlueprint -> new EliteScript(eliteScriptBlueprint, powerMap, eliteEntity)).collect(Collectors.toList());
     }
 

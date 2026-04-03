@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 public class EliteDamageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final Event event;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
     @Getter
     private double damage;
 

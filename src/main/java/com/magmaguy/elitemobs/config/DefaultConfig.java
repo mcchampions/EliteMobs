@@ -156,7 +156,7 @@ public class DefaultConfig extends ConfigurationFile {
                     ConfigurationEngine.setString(
                             List.of("Sets the default spawn location of the server for EliteMobs. /em spawntp will lead to this location."),
                             file, fileConfiguration, "defaultSpawnLocation",
-                            ConfigurationLocation.deserialize(Bukkit.getWorlds().get(0).getSpawnLocation()), false));
+                            ConfigurationLocation.deserialize(Bukkit.getWorlds().getFirst().getSpawnLocation()), false));
         } catch (Exception ex) {
             Logger.warn("There is an issue with your defaultSpawnLocation in the config.yml configuration file! Fix it!");
         }

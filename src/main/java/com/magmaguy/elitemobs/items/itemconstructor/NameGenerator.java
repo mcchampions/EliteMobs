@@ -28,87 +28,34 @@ public class NameGenerator {
     }
 
     private static List<String> getNameListForMaterial(Material material) {
-        switch (material) {
-            case DIAMOND_SWORD:
-            case GOLDEN_SWORD:
-            case IRON_SWORD:
-            case STONE_SWORD:
-            case WOODEN_SWORD:
-                return StaticItemNamesConfig.getSwordNames();
-            case BOW:
-                return StaticItemNamesConfig.getBowNames();
-            case DIAMOND_PICKAXE:
-            case GOLDEN_PICKAXE:
-            case IRON_PICKAXE:
-            case STONE_PICKAXE:
-            case WOODEN_PICKAXE:
-                return StaticItemNamesConfig.getPickaxeNames();
-            case DIAMOND_SHOVEL:
-            case GOLDEN_SHOVEL:
-            case IRON_SHOVEL:
-            case STONE_SHOVEL:
-            case WOODEN_SHOVEL:
-                return StaticItemNamesConfig.getShovelNames();
-            case DIAMOND_HOE:
-            case GOLDEN_HOE:
-            case IRON_HOE:
-            case STONE_HOE:
-            case WOODEN_HOE:
-                return StaticItemNamesConfig.getHoeNames();
-            case DIAMOND_AXE:
-            case GOLDEN_AXE:
-            case IRON_AXE:
-            case STONE_AXE:
-            case WOODEN_AXE:
-                return StaticItemNamesConfig.getAxeNames();
-            case CHAINMAIL_HELMET:
-            case DIAMOND_HELMET:
-            case GOLDEN_HELMET:
-            case IRON_HELMET:
-            case LEATHER_HELMET:
-            case TURTLE_HELMET:
-                return StaticItemNamesConfig.getHelmetNames();
-            case CHAINMAIL_CHESTPLATE:
-            case DIAMOND_CHESTPLATE:
-            case GOLDEN_CHESTPLATE:
-            case IRON_CHESTPLATE:
-            case LEATHER_CHESTPLATE:
-                return StaticItemNamesConfig.getChestplateNames();
-            case CHAINMAIL_LEGGINGS:
-            case DIAMOND_LEGGINGS:
-            case GOLDEN_LEGGINGS:
-            case IRON_LEGGINGS:
-            case LEATHER_LEGGINGS:
-                return StaticItemNamesConfig.getLeggingsNames();
-            case CHAINMAIL_BOOTS:
-            case DIAMOND_BOOTS:
-            case GOLDEN_BOOTS:
-            case IRON_BOOTS:
-            case LEATHER_BOOTS:
-                return StaticItemNamesConfig.getBootsNames();
-            case SHEARS:
-                return StaticItemNamesConfig.getShearsNames();
-            case FISHING_ROD:
-                return StaticItemNamesConfig.getFishingRodNames();
-            case SHIELD:
-                return StaticItemNamesConfig.getShieldNames();
-            case TRIDENT:
-                return StaticItemNamesConfig.getTridentNames();
-            case CROSSBOW:
-                return StaticItemNamesConfig.getCrossbowNames();
-            case MACE:
-                return StaticItemNamesConfig.getMaceNames();
-            case DIAMOND_SPEAR:
-            case IRON_SPEAR:
-            case GOLDEN_SPEAR:
-            case STONE_SPEAR:
-            case WOODEN_SPEAR:
-            case COPPER_SPEAR:
-            case NETHERITE_SPEAR:
-                return StaticItemNamesConfig.getSpearNames();
-            default:
-                return null;
-        }
+        return switch (material) {
+            case DIAMOND_SWORD, GOLDEN_SWORD, IRON_SWORD, STONE_SWORD, WOODEN_SWORD ->
+                    StaticItemNamesConfig.getSwordNames();
+            case BOW -> StaticItemNamesConfig.getBowNames();
+            case DIAMOND_PICKAXE, GOLDEN_PICKAXE, IRON_PICKAXE, STONE_PICKAXE, WOODEN_PICKAXE ->
+                    StaticItemNamesConfig.getPickaxeNames();
+            case DIAMOND_SHOVEL, GOLDEN_SHOVEL, IRON_SHOVEL, STONE_SHOVEL, WOODEN_SHOVEL ->
+                    StaticItemNamesConfig.getShovelNames();
+            case DIAMOND_HOE, GOLDEN_HOE, IRON_HOE, STONE_HOE, WOODEN_HOE -> StaticItemNamesConfig.getHoeNames();
+            case DIAMOND_AXE, GOLDEN_AXE, IRON_AXE, STONE_AXE, WOODEN_AXE -> StaticItemNamesConfig.getAxeNames();
+            case CHAINMAIL_HELMET, DIAMOND_HELMET, GOLDEN_HELMET, IRON_HELMET, LEATHER_HELMET, TURTLE_HELMET ->
+                    StaticItemNamesConfig.getHelmetNames();
+            case CHAINMAIL_CHESTPLATE, DIAMOND_CHESTPLATE, GOLDEN_CHESTPLATE, IRON_CHESTPLATE, LEATHER_CHESTPLATE ->
+                    StaticItemNamesConfig.getChestplateNames();
+            case CHAINMAIL_LEGGINGS, DIAMOND_LEGGINGS, GOLDEN_LEGGINGS, IRON_LEGGINGS, LEATHER_LEGGINGS ->
+                    StaticItemNamesConfig.getLeggingsNames();
+            case CHAINMAIL_BOOTS, DIAMOND_BOOTS, GOLDEN_BOOTS, IRON_BOOTS, LEATHER_BOOTS ->
+                    StaticItemNamesConfig.getBootsNames();
+            case SHEARS -> StaticItemNamesConfig.getShearsNames();
+            case FISHING_ROD -> StaticItemNamesConfig.getFishingRodNames();
+            case SHIELD -> StaticItemNamesConfig.getShieldNames();
+            case TRIDENT -> StaticItemNamesConfig.getTridentNames();
+            case CROSSBOW -> StaticItemNamesConfig.getCrossbowNames();
+            case MACE -> StaticItemNamesConfig.getMaceNames();
+            case DIAMOND_SPEAR, IRON_SPEAR, GOLDEN_SPEAR, STONE_SPEAR, WOODEN_SPEAR, COPPER_SPEAR, NETHERITE_SPEAR ->
+                    StaticItemNamesConfig.getSpearNames();
+            default -> null;
+        };
     }
 
 }

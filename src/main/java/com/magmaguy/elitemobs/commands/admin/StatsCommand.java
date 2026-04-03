@@ -16,6 +16,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MagmaGuy on 01/05/2017.
@@ -41,8 +42,8 @@ public class StatsCommand {
 
         StringBuilder breakdownString = new StringBuilder(CommandMessagesConfig.getStatsBreakdownPrefix());
 
-        for (EntityType entityType : entitiesCounted.keySet()) {
-            breakdownString.append(entitiesCounted.get(entityType)).append(" ").append(entityType).append("&2, &a");
+        for (Map.Entry<EntityType, Integer> entry : entitiesCounted.entrySet()) {
+            breakdownString.append(entry.getValue()).append(" ").append(entry.getKey()).append("&2, &a");
         }
 
         double highestThreat = 0;

@@ -70,7 +70,7 @@ public class SoulbindEnchantment extends CustomEnchantment {
 
                 new BukkitRunnable() {
                     final Location lastLocation = item.getLocation().clone();
-                    int counter = 0;
+                    int counter;
 
                     @Override
                     public void run() {

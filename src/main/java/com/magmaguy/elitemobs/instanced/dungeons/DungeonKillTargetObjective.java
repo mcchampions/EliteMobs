@@ -22,7 +22,7 @@ public class DungeonKillTargetObjective extends DungeonObjective {
     @Getter
     private int targetAmount = 1;
     @Getter
-    private int currentAmount = 0;
+    private int currentAmount;
 
 
     public DungeonKillTargetObjective(DungeonInstance dungeonInstance, String objectiveString) {
@@ -30,9 +30,9 @@ public class DungeonKillTargetObjective extends DungeonObjective {
         String[] strings = objectiveString.split(":");
         for (String seperatedByColon : strings) {
             String[] separatedByEquals = seperatedByColon.split("=");
-            if (separatedByEquals[0].equalsIgnoreCase("filename")) {
+            if ("filename".equalsIgnoreCase(separatedByEquals[0])) {
                 this.bossFilename = separatedByEquals[1];
-            } else if (separatedByEquals[0].equalsIgnoreCase("amount")) {
+            } else if ("amount".equalsIgnoreCase(separatedByEquals[0])) {
                 try {
                     this.targetAmount = Integer.parseInt(separatedByEquals[1]);
                 } catch (Exception ex) {

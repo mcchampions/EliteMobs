@@ -14,16 +14,15 @@ public class DungeonKillPercentageObjective extends DungeonObjective {
 
     private final int currentAmount = 0;
     private int targetAmount;
-    private double percentage;
 
     public DungeonKillPercentageObjective(DungeonInstance dungeonInstance, String objectiveString) {
         super(dungeonInstance, objectiveString);
         String[] strings = objectiveString.split(":");
         for (String seperatedByColon : strings) {
             String[] separatedByEquals = seperatedByColon.split("=");
-            if (separatedByEquals[0].equalsIgnoreCase("percentage")) {
+            if ("percentage".equalsIgnoreCase(separatedByEquals[0])) {
                 try {
-                    this.percentage = Double.parseDouble(separatedByEquals[1]);
+                    double percentage = Double.parseDouble(separatedByEquals[1]);
                 } catch (Exception ex) {
                     Logger.warn("Value " + separatedByEquals[1] + " is not a valid integer amount!");
                 }

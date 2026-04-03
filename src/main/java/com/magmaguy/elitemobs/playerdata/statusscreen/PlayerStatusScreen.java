@@ -54,7 +54,7 @@ public class PlayerStatusScreen implements Listener {
                 .replace("§a", "§0").replace("§b", "§0")
                 .replace("§d", "§0").replace("§6", "§0")
                 .replace("§9", "§0");
-        if (!string.startsWith("§"))
+        if (!(!string.isEmpty() && string.charAt(0) == '§'))
             string = "§0" + string;
         return string;
     }

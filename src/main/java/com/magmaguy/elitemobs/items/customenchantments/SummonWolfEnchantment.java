@@ -87,7 +87,7 @@ public class SummonWolfEnchantment extends CustomEnchantment {
                     playerCooldowns.remove(playerUUID);
                 }
             }.runTaskLater(MetadataHandler.PLUGIN, 20 * 60L);
-            if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+            if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
                 return;
             if (getEnchantment(event.getPlayer().getInventory().getItemInMainHand().getItemMeta()) > 0)
                 summonWolf(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand());

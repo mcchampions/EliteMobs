@@ -52,14 +52,14 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
     public static Set<CustomBossEntity> dynamicLevelBossEntities = new HashSet<>();
     @Getter
     protected static HashSet<CustomBossEntity> trackableCustomBosses = new HashSet<>();
-    private static BukkitTask dynamicLevelUpdater = null;
+    private static BukkitTask dynamicLevelUpdater;
     private final List<BukkitTask> globalReinforcements = new ArrayList<>();
     @Getter
     protected CustomBossesConfigFields customBossesConfigFields;
-    protected CustomBossEntity customBossMount = null;
-    protected LivingEntity livingEntityMount = null;
+    protected CustomBossEntity customBossMount;
+    protected LivingEntity livingEntityMount;
     protected CustomBossEntity mount;
-    protected PersistentObjectHandler persistentObjectHandler = null;
+    protected PersistentObjectHandler persistentObjectHandler;
     @Setter
     protected Location persistentLocation;
     protected CustomBossTrail customBossTrail;
@@ -67,33 +67,33 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
     protected BossTrackingBar bossTrackingBar;
     protected Integer escapeMechanism;
     @Getter
-    protected PhaseBossEntity phaseBossEntity = null;
+    protected PhaseBossEntity phaseBossEntity;
     protected String worldName;
-    private long lastTick = 0;
+    private long lastTick;
     private int attemptsCounter = 1;
     //For use by the phase switcher, which requires passing a specific spawn location for the phase, but when it's for a
     //regional boss this causes issues such as reinforcements getting shifted over to the new spawn location
     @Getter
     @Setter
-    private Location respawnOverrideLocation = null;
+    private Location respawnOverrideLocation;
     @Getter
     @Setter
-    private EMPackage emPackage = null;
+    private EMPackage emPackage;
     @Setter
-    private CustomSpawn customSpawn = null;
-    private int existsFailureCount = 0;
+    private CustomSpawn customSpawn;
+    private int existsFailureCount;
     @Getter
     @Setter
-    private boolean isMount = false;
+    private boolean isMount;
     @Getter
     @Setter
-    private CustomModel customModel = null;
+    private CustomModel customModel;
     @Getter
     private boolean normalizedCombat;
     private boolean scaledCombat;
     @Getter
     @Setter
-    private CustomMusic bossMusic = null;
+    private CustomMusic bossMusic;
     @Getter
     @Setter
     private double followDistance;
@@ -102,7 +102,7 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
     private double movementSpeedAttribute;
     @Getter
     @Setter
-    private boolean dynamicLevel = false;
+    private boolean dynamicLevel;
 
     /**
      * Uses a builder pattern in order to construct a CustomBossEntity at an arbitrary point in the future. Does not
@@ -114,7 +114,6 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
      */
     public CustomBossEntity(CustomBossesConfigFields customBossesConfigFields) {
         //This creates a placeholder empty EliteMobEntity to be filled in later
-        super();
         if (customBossesConfigFields.getSong() != null)
             bossMusic = new CustomMusic(customBossesConfigFields.getSong(), this);
         //This stores everything that will need to be initialized for the EliteMobEntity
@@ -315,7 +314,7 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
             for (ElitePower elitePower : elitePowers)
                 if (elitePower instanceof CustomSummonPower)
                     ((CustomSummonPower) elitePower).getCustomBossReinforcements().forEach((customBossReinforcement -> {
-                        if (customBossReinforcement.summonType.equals(CustomSummonPower.SummonType.GLOBAL))
+                        if (customBossReinforcement.summonType == CustomSummonPower.SummonType.GLOBAL)
                             globalReinforcements.add(CustomSummonPower.summonGlobalReinforcement(customBossReinforcement, this));
                     }));
 
@@ -525,21 +524,21 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
         if (customBossTrail != null) customBossTrail.terminateTrails();
         if (livingEntityMount != null) livingEntityMount.remove();
         if (customBossMount != null) customBossMount.remove(RemovalReason.REINFORCEMENT_CULL);
-        if (customBossesConfigFields.isCullReinforcements() || removalReason.equals(RemovalReason.PHASE_BOSS_RESET))
+        if (customBossesConfigFields.isCullReinforcements() || removalReason == RemovalReason.PHASE_BOSS_RESET)
             cullReinforcements(false);
 
-        if (removalReason.equals(RemovalReason.PHASE_BOSS_PHASE_END))
+        if (removalReason == RemovalReason.PHASE_BOSS_PHASE_END)
             if (inCombat)
                 new EventCaller(new EliteMobExitCombatEvent(this, EliteMobExitCombatEvent.EliteMobExitCombatReason.PHASE_SWITCH));
 
         boolean bossInstanceEnd =
-                removalReason.equals(RemovalReason.KILL_COMMAND) ||
-                        removalReason.equals(RemovalReason.DEATH) ||
-                        removalReason.equals(RemovalReason.BOSS_TIMEOUT) ||
-                        removalReason.equals(RemovalReason.SHUTDOWN) ||
-                        removalReason.equals(RemovalReason.ARENA_RESET) ||
-                        removalReason.equals(RemovalReason.REMOVE_COMMAND) ||
-                        removalReason.equals(RemovalReason.WORLD_UNLOAD) && this instanceof InstancedBossEntity;
+                removalReason == RemovalReason.KILL_COMMAND ||
+                removalReason == RemovalReason.DEATH ||
+                removalReason == RemovalReason.BOSS_TIMEOUT ||
+                removalReason == RemovalReason.SHUTDOWN ||
+                removalReason == RemovalReason.ARENA_RESET ||
+                removalReason == RemovalReason.REMOVE_COMMAND ||
+                removalReason == RemovalReason.WORLD_UNLOAD && this instanceof InstancedBossEntity;
 
         if (!isPersistent) bossInstanceEnd = true;
 
@@ -555,9 +554,9 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
             }
             if (bossTrackingBar != null)
                 bossTrackingBar.remove();
-            if (!removalReason.equals(RemovalReason.SHUTDOWN) &&
-                    !removalReason.equals(RemovalReason.DEATH) &&
-                    !removalReason.equals(RemovalReason.ARENA_RESET))
+            if (removalReason != RemovalReason.SHUTDOWN &&
+                removalReason != RemovalReason.DEATH &&
+                removalReason != RemovalReason.ARENA_RESET)
                 if (phaseBossEntity != null)
                     phaseBossEntity.silentReset();
             globalReinforcements.forEach((bukkitTask -> {
@@ -565,7 +564,7 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
                     bukkitTask.cancel();
             }));
             globalReinforcements.clear();
-            if (!removalReason.equals(RemovalReason.REINFORCEMENT_CULL)) {
+            if (removalReason != RemovalReason.REINFORCEMENT_CULL) {
                 if (summoningEntity != null)
                     summoningEntity.removeReinforcement(this);
                 if (customSpawn != null)
@@ -574,7 +573,7 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
 
             if (customBossesConfigFields.isCullReinforcements()) cullReinforcements(true);
 
-        } else if (removalReason.equals(RemovalReason.CHUNK_UNLOAD) || removalReason.equals(RemovalReason.WORLD_UNLOAD)) {
+        } else if (removalReason == RemovalReason.CHUNK_UNLOAD || removalReason == RemovalReason.WORLD_UNLOAD) {
             //Cancel boss tracking bar to prevent task leak and potential NPE from stale world references
             if (bossTrackingBar != null)
                 bossTrackingBar.remove();
@@ -583,7 +582,7 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
                 persistentObjectHandler.updatePersistentLocation(getPersistentLocation());
         }
 
-        if (!removalReason.equals(RemovalReason.PHASE_BOSS_PHASE_END) && bossMusic != null) {
+        if (removalReason != RemovalReason.PHASE_BOSS_PHASE_END && bossMusic != null) {
             bossMusic.stop();
         }
     }

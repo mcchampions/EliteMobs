@@ -57,7 +57,7 @@ public class TrackingFireballSupport {
                         }
                     }
                 }
-            }.runTaskTimer(MetadataHandler.PLUGIN, 0, 20L * 8);
+            }.runTaskTimer(MetadataHandler.PLUGIN, 0, 20L << 3);
         }
     }
 
@@ -77,7 +77,7 @@ public class TrackingFireballSupport {
             trackingFireballs.put(repeatingFireball.getUniqueId(), this);
 
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {

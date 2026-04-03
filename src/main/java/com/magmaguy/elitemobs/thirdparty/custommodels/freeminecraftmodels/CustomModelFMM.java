@@ -90,7 +90,7 @@ public class CustomModelFMM implements CustomModelInterface {
         if (dynamicEntity == null) return null;
         List<Bone> nametagBones = dynamicEntity.getNametagBones();
         if (nametagBones == null || nametagBones.isEmpty()) return null;
-        return nametagBones.get(0).getBoneLocation();
+        return nametagBones.getFirst().getBoneLocation();
     }
 
     @Override

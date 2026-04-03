@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 public class ScriptListener implements Listener {
-    public static HashMap<FallingBlock, FallingEntityDataPair> fallingBlocks = new HashMap();
+    public static HashMap<FallingBlock, FallingEntityDataPair> fallingBlocks = new HashMap<>();
     public static HashMap<FallingBlock, BiConsumer<FallingBlock, Location>> luaFallingBlocks = new HashMap<>();
     public static HashMap<Entity, FallingEntityDataPair> fallingEntities = new HashMap<>();
 

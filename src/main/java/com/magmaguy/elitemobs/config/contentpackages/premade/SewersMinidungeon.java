@@ -22,9 +22,10 @@ public class SewersMinidungeon extends ContentPackagesConfigFields {
                 "em_sewer_maze,-24.0,168.2,-174.0,90,0",
                 "em_sewer_maze,-29.9,168.2,-173.9,90,0",
                 0,
-                "Difficulty: &6Medium\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&6A complex dungeon maze with a challenging sections!",
+                """
+                        Difficulty: &6Medium
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &6A complex dungeon maze with a challenging sections!""",
                 "&8[EM] &5This place looks abandoned... &dYet something lurks in these sewers!",
                 "&8[EM] &5You managed to stay above water. &dMaybe next time you'll drown.",
                 List.of("filename=sewer_tier_70_boss.yml"),

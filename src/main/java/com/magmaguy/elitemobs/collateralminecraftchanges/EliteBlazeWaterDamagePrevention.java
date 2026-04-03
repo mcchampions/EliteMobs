@@ -11,8 +11,8 @@ public class EliteBlazeWaterDamagePrevention implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlazeWaterDamage(EliteMobDamagedEvent event) {
         if (event.getEntity() == null) return;
-        if (!event.getEntity().getType().equals(EntityType.BLAZE)) return;
-        if (!event.getEntityDamageEvent().getCause().equals(EntityDamageEvent.DamageCause.DROWNING)) return;
+        if (event.getEntity().getType() != EntityType.BLAZE) return;
+        if (event.getEntityDamageEvent().getCause() != EntityDamageEvent.DamageCause.DROWNING) return;
         event.setCancelled(true);
     }
 }

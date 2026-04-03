@@ -46,7 +46,7 @@ public class DungeonUtils {
     }
 
     public static boolean unloadWorld(WorldPackage worldPackage) {
-        World defaultWorld = Bukkit.getWorlds().get(0);
+        World defaultWorld = Bukkit.getWorlds().getFirst();
         World wormholeWorld = null;
         if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
             wormholeWorld = ((WorldDungeonPackage) worldPackage).getWormholeWorld();

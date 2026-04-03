@@ -53,7 +53,7 @@ public class EarthquakeEnchantment extends CustomEnchantment {
         double distance = Math.log(level + 2 / 2D) * 3;
         for (Entity entity : player.getNearbyEntities(distance, distance, distance)) {
             if (entity instanceof LivingEntity) {
-                if (entity.getType().equals(EntityType.PLAYER)) continue;
+                if (entity.getType() == EntityType.PLAYER) continue;
                 EliteEntity eliteEntity = EntityTracker.getEliteMobEntity(entity);
                 if (eliteEntity == null) {
                     try {

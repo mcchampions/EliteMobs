@@ -77,7 +77,7 @@ public class TranslationsConfig {
         String lang = DefaultConfig.getLanguage();
         if (lang == null) return true;
         lang = lang.toLowerCase().replace(".yml", "").replace(".csv", "");
-        return lang.equals("english") || lang.equals("en");
+        return "english".equals(lang) || "en".equals(lang);
     }
 
     /**

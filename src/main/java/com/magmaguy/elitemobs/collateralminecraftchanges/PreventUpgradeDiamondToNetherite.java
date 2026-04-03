@@ -14,7 +14,7 @@ public class PreventUpgradeDiamondToNetherite implements Listener {
                 !ItemTagger.isEliteItem(event.getInventory().getItem(1)))
             return;
         if (event.getInventory().getItem(0) != null &&
-                event.getInventory().getItem(0).getType().equals(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+            event.getInventory().getItem(0).getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
             event.setResult(ItemStackGenerator.generateItemStack(Material.AIR));
     }
 }

@@ -12,10 +12,10 @@ public class EliteMobHealEvent extends Event implements Cancellable {
     @Getter
     private final EliteEntity eliteEntity;
     @Getter
-    private double healAmount = 0;
-    private boolean isCancelled = false;
+    private double healAmount;
+    private boolean isCancelled;
     @Getter
-    private boolean fullHeal = false;
+    private boolean fullHeal;
 
     public EliteMobHealEvent(EliteEntity eliteEntity, double healAmount) {
         this.eliteEntity = eliteEntity;

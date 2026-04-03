@@ -39,7 +39,7 @@ public class WormholeManager {
     private final Map<UUID, PlayerWormholeData> playerTeleportData = new HashMap<>();
     private BukkitTask wormholeTask;
     private static final int TELEPORT_CHECK_INTERVAL = 5; // Check teleports every 5 ticks
-    private int tickCounter = 0;
+    private int tickCounter;
 
     // Constructor
     private WormholeManager() {
@@ -190,7 +190,7 @@ public class WormholeManager {
 
         // Perform teleport on the main thread
         if (sourceEntry.getWormhole().getWormholeConfigFields().isBlindPlayer()) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 << 1, 0));
         }
 
         // Use PlayerTeleportEvent to trigger dungeon music and other listeners
@@ -322,7 +322,7 @@ public class WormholeManager {
         private final Location destination;
         private final long timeStamp;
         private final WormholeEntry wormholeEntry;
-        private boolean hasLeftTeleportRadius = false;
+        private boolean hasLeftTeleportRadius;
 
         public PlayerWormholeData(Player player, WormholeEntry destinationWormhole, long timeStamp) {
             this.player = player;

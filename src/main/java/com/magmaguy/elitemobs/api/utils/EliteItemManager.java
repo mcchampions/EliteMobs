@@ -170,13 +170,12 @@ public class EliteItemManager {
         int enchantmentLevel = ItemTagger.getEnchantment(itemStack.getItemMeta(), Enchantment.SHARPNESS.getKey());
         if (enchantmentLevel > 0 && ItemSettingsConfig.isUseEliteEnchantments()) {
             enchantmentLevel -= Enchantment.SHARPNESS.getMaxLevel();
-            if (enchantmentLevel < 0) enchantmentLevel = 0;
         } else {
             enchantmentLevel = ItemTagger.getEnchantment(itemStack.getItemMeta(), Enchantment.POWER.getKey());
             if (enchantmentLevel > 0 && ItemSettingsConfig.isUseEliteEnchantments())
                 enchantmentLevel -= Enchantment.POWER.getMaxLevel();
-            if (enchantmentLevel < 0) enchantmentLevel = 0;
         }
+        if (enchantmentLevel < 0) enchantmentLevel = 0;
 
         if (enchantmentLevel < 1)
             //Note: this means sharpness works on bows and that power works on weapons. By default, this state is not reachable, so it doesn't really matter.
@@ -265,19 +264,19 @@ public class EliteItemManager {
     public static boolean isWeapon(@Nullable ItemStack itemStack) {
         if (itemStack == null) return false;
         //Wooden axe stats are so bad they can't even get detected properly
-        if (itemStack.getType().equals(Material.WOODEN_AXE) || itemStack.getType().equals(Material.CROSSBOW))
+        if (itemStack.getType() == Material.WOODEN_AXE || itemStack.getType() == Material.CROSSBOW)
             return true;
         if (ItemSettingsConfig.isUseHoesAsWeapons() &&
-                (itemStack.getType().equals(Material.WOODEN_HOE) ||
-                        itemStack.getType().equals(Material.GOLDEN_HOE) ||
-                        itemStack.getType().equals(Material.STONE_HOE) ||
-                        itemStack.getType().equals(Material.IRON_HOE) ||
-                        itemStack.getType().equals(Material.DIAMOND_HOE) ||
-                        itemStack.getType().equals(Material.NETHERITE_HOE)))
+                (itemStack.getType() == Material.WOODEN_HOE ||
+                 itemStack.getType() == Material.GOLDEN_HOE ||
+                 itemStack.getType() == Material.STONE_HOE ||
+                 itemStack.getType() == Material.IRON_HOE ||
+                 itemStack.getType() == Material.DIAMOND_HOE ||
+                 itemStack.getType() == Material.NETHERITE_HOE))
             return true;
         // Mace has slow attack speed (0.6) - needs special handling like wooden axe
         try {
-            if (itemStack.getType().equals(Material.MACE))
+            if (itemStack.getType() == Material.MACE)
                 return true;
         } catch (NoSuchFieldError ignored) {
             // MACE doesn't exist pre-1.21

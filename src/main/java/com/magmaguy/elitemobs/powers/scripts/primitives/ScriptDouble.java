@@ -3,9 +3,9 @@ package com.magmaguy.elitemobs.powers.scripts.primitives;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ScriptDouble {
-    private Double value = null;
-    private Double lowestRange = null;
-    private Double highestRange = null;
+    private Double value;
+    private Double lowestRange;
+    private Double highestRange;
     public ScriptDouble(double lowestRange, double highestRange) {
         this.lowestRange = lowestRange;
         this.highestRange = highestRange;

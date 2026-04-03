@@ -14,11 +14,11 @@ public abstract class Objective implements Serializable {
     //todo: this class should be the one that handles giving out quest rewards
 
     @Getter
-    protected boolean objectiveCompleted = false;
+    protected boolean objectiveCompleted;
 
     @Getter
     @Setter
-    protected int currentAmount = 0;
+    protected int currentAmount;
     @Getter
     protected int targetAmount;
 

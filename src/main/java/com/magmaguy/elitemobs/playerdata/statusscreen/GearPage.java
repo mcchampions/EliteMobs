@@ -140,70 +140,30 @@ public class GearPage {
     }
 
     private static ChatColor unicodeColorizer(Material material) {
-        switch (material) {
-            case DIAMOND_AXE:
-            case DIAMOND_SWORD:
-            case DIAMOND_HOE:
-            case DIAMOND_HELMET:
-            case DIAMOND_CHESTPLATE:
-            case DIAMOND_LEGGINGS:
-            case DIAMOND_BOOTS:
-            case DIAMOND_SHOVEL:
-            case DIAMOND_PICKAXE:
-                return ChatColor.AQUA;
-            case IRON_AXE:
-            case IRON_SWORD:
-            case IRON_HOE:
-            case IRON_HELMET:
-            case IRON_CHESTPLATE:
-            case IRON_LEGGINGS:
-            case IRON_BOOTS:
-            case IRON_SHOVEL:
-            case IRON_PICKAXE:
-            case CHAINMAIL_HELMET:
-            case CHAINMAIL_CHESTPLATE:
-            case CHAINMAIL_LEGGINGS:
-            case CHAINMAIL_BOOTS:
-            case STONE_AXE:
-            case STONE_SWORD:
-            case STONE_HOE:
-            case STONE_SHOVEL:
-            case STONE_PICKAXE:
-                return ChatColor.GRAY;
-            case GOLDEN_AXE:
-            case GOLDEN_SWORD:
-            case GOLDEN_HOE:
-            case GOLDEN_HELMET:
-            case GOLDEN_CHESTPLATE:
-            case GOLDEN_LEGGINGS:
-            case GOLDEN_BOOTS:
-            case GOLDEN_SHOVEL:
-            case GOLDEN_PICKAXE:
-                return ChatColor.YELLOW;
-            case LEATHER_HELMET:
-            case LEATHER_CHESTPLATE:
-            case LEATHER_LEGGINGS:
-            case LEATHER_BOOTS:
-            case WOODEN_AXE:
-            case WOODEN_SWORD:
-            case WOODEN_HOE:
-            case WOODEN_SHOVEL:
-            case WOODEN_PICKAXE:
-                return ChatColor.GOLD;
-            case TURTLE_HELMET:
-                return ChatColor.GREEN;
-            default:
+        return switch (material) {
+            case DIAMOND_AXE, DIAMOND_SWORD, DIAMOND_HOE, DIAMOND_HELMET, DIAMOND_CHESTPLATE, DIAMOND_LEGGINGS,
+                 DIAMOND_BOOTS, DIAMOND_SHOVEL, DIAMOND_PICKAXE -> ChatColor.AQUA;
+            case IRON_AXE, IRON_SWORD, IRON_HOE, IRON_HELMET, IRON_CHESTPLATE, IRON_LEGGINGS, IRON_BOOTS, IRON_SHOVEL,
+                 IRON_PICKAXE, CHAINMAIL_HELMET, CHAINMAIL_CHESTPLATE, CHAINMAIL_LEGGINGS, CHAINMAIL_BOOTS, STONE_AXE,
+                 STONE_SWORD, STONE_HOE, STONE_SHOVEL, STONE_PICKAXE -> ChatColor.GRAY;
+            case GOLDEN_AXE, GOLDEN_SWORD, GOLDEN_HOE, GOLDEN_HELMET, GOLDEN_CHESTPLATE, GOLDEN_LEGGINGS, GOLDEN_BOOTS,
+                 GOLDEN_SHOVEL, GOLDEN_PICKAXE -> ChatColor.YELLOW;
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS, WOODEN_AXE, WOODEN_SWORD,
+                 WOODEN_HOE, WOODEN_SHOVEL, WOODEN_PICKAXE -> ChatColor.GOLD;
+            case TURTLE_HELMET -> ChatColor.GREEN;
+            default -> {
                 if (material.equals(Material.NETHERITE_HELMET) ||
-                        material.equals(Material.NETHERITE_CHESTPLATE) ||
-                        material.equals(Material.NETHERITE_LEGGINGS) ||
-                        material.equals(Material.NETHERITE_BOOTS) ||
-                        material.equals(Material.NETHERITE_SWORD) ||
-                        material.equals(Material.NETHERITE_AXE) ||
-                        material.equals(Material.NETHERITE_HOE) ||
-                        material.equals(Material.NETHERITE_PICKAXE))
-                    return ChatColor.BLACK;
-                return ChatColor.DARK_GRAY;
-        }
+                    material.equals(Material.NETHERITE_CHESTPLATE) ||
+                    material.equals(Material.NETHERITE_LEGGINGS) ||
+                    material.equals(Material.NETHERITE_BOOTS) ||
+                    material.equals(Material.NETHERITE_SWORD) ||
+                    material.equals(Material.NETHERITE_AXE) ||
+                    material.equals(Material.NETHERITE_HOE) ||
+                    material.equals(Material.NETHERITE_PICKAXE))
+                    yield ChatColor.BLACK;
+                yield ChatColor.DARK_GRAY;
+            }
+        };
     }
 
     protected static void gearPage(Player requestingPlayer, Player targetPlayer) {

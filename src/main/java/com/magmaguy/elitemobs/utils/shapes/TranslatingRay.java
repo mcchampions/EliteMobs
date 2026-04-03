@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TranslatingRay extends Ray {
-    private final Location finalCenterLocation;
 
     public TranslatingRay(boolean ignoresSolidBlocks,
                           double pointRadius,
@@ -17,7 +16,7 @@ public class TranslatingRay extends Ray {
                           Location finalTarget2,
                           int animationDuration) {
         super(ignoresSolidBlocks, pointRadius, target, finalTarget);
-        this.finalCenterLocation = finalTarget == null ? target : finalTarget;
+        Location finalCenterLocation = finalTarget == null ? target : finalTarget;
         locations = drawLine(target, target2);
         startAnimation(target.clone(), finalCenterLocation.clone(), target2.clone(), finalTarget2.clone(), animationDuration);
     }
@@ -28,7 +27,7 @@ public class TranslatingRay extends Ray {
                                 Location endLocation2,
                                 int animationDuration) {
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

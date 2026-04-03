@@ -21,7 +21,7 @@ public class EnderDragonEmpoweredLightningSupport {
         }
 
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

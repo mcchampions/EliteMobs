@@ -25,9 +25,9 @@ public class ScriptTargets {
     @Getter
     private final ScriptRuntimeOwner runtimeOwner;
     //collection of targets, can be shapes, entities or locations
-    private List anonymousTargets = null;
+    private List anonymousTargets;
     @Getter
-    private ScriptRelativeVector scriptRelativeVector = null;
+    private ScriptRelativeVector scriptRelativeVector;
 
     public ScriptTargets(ScriptTargetsBlueprint targetBlueprint, ScriptRuntimeOwner runtimeOwner) {
         this.targetBlueprint = targetBlueprint;
@@ -46,7 +46,7 @@ public class ScriptTargets {
 
     public void setAnonymousTargets(List anonymousTargets) {
         //Animated zones can't be cached!
-        if (getTargetBlueprint().isTrack() || getScriptZone().getZoneBlueprint().getAnimationDuration().getValue() > 1)
+        if (targetBlueprint.isTrack() || getScriptZone().getZoneBlueprint().getAnimationDuration().getValue() > 1)
             return;
         //Non-animated zones must be cached for script inheritance and such
         this.anonymousTargets = anonymousTargets;
@@ -61,7 +61,7 @@ public class ScriptTargets {
             return null;
         }
         Location parsedLocation = ConfigurationLocation.serialize(locationString);
-        if (parsedLocation.getWorld() == null && locationString.split(",")[0].equalsIgnoreCase("same_as_boss")) {
+        if (parsedLocation.getWorld() == null && "same_as_boss".equalsIgnoreCase(locationString.split(",")[0])) {
             parsedLocation.setWorld(eliteEntity.getLocation().getWorld());
         }
 
@@ -71,10 +71,10 @@ public class ScriptTargets {
     }
 
     protected void cacheTargets(ScriptActionData scriptActionData) {
-        if (getTargetBlueprint().isTrack()) {
+        if (targetBlueprint.isTrack()) {
             //Zones that animate independently can not be set to track, as this causes confusion. This is forced to make it easier on scripters.
             if (getScriptZone().isValid() && getScriptZone().getZoneBlueprint().getAnimationDuration().getValue() > 0)
-                getTargetBlueprint().setTrack(false);
+                targetBlueprint.setTrack(false);
             else return;
         }
         //Only cache locations - caching living entities would probably be very confusing
@@ -88,7 +88,7 @@ public class ScriptTargets {
         if (!animatedScriptZone) {
             anonymousTargets = new ArrayList<>(getTargetLocations(scriptActionData));
         }
-        if (!getTargetBlueprint().isTrack() && targetBlueprint.getScriptRelativeVectorBlueprint() != null) {
+        if (!targetBlueprint.isTrack() && targetBlueprint.getScriptRelativeVectorBlueprint() != null) {
             scriptRelativeVector = new ScriptRelativeVector(targetBlueprint.getScriptRelativeVectorBlueprint(), runtimeOwner, null);
             scriptRelativeVector.cacheVector(scriptActionData);
         }
@@ -96,8 +96,8 @@ public class ScriptTargets {
 
     //Get living entity targets. New array lists so they are not immutable.
     public Collection<LivingEntity> getTargetEntities(ScriptActionData scriptActionData) {
-        if (getTargetBlueprint().isTrack() && anonymousTargets != null &&
-                (anonymousTargets.isEmpty() || anonymousTargets.get(0) instanceof LivingEntity)) {
+        if (targetBlueprint.isTrack() && anonymousTargets != null &&
+            (anonymousTargets.isEmpty() || anonymousTargets.getFirst() instanceof LivingEntity)) {
             return (List<LivingEntity>) anonymousTargets;
         }
 
@@ -177,13 +177,13 @@ public class ScriptTargets {
      * @return Validated location for the script behavior
      */
     public Collection<Location> getTargetLocations(ScriptActionData scriptActionData) {
-        if (anonymousTargets != null && !anonymousTargets.isEmpty() && anonymousTargets.get(0) instanceof Location location) {
+        if (anonymousTargets != null && !anonymousTargets.isEmpty() && anonymousTargets.getFirst() instanceof Location location) {
             return (List<Location>) anonymousTargets;
         }
 
         Collection<Location> newLocations = null;
 
-        switch (this.getTargetBlueprint().getTargetType()) {
+        switch (this.targetBlueprint.getTargetType()) {
             case ALL_PLAYERS, WORLD_PLAYERS, NEARBY_PLAYERS, DIRECT_TARGET, SELF, NEARBY_MOBS, NEARBY_ELITES:
                 return getTargetEntities(scriptActionData).stream().map(targetEntity -> addOffsets(targetEntity.getLocation(), scriptActionData)).collect(Collectors.toSet());
             case SELF_SPAWN:
@@ -207,7 +207,7 @@ public class ScriptTargets {
                 //This is an edge case of action target, if there were no nearby targets it can't assume a value so it passes action target as a fallback. That just means there aren't valid targets.
                 return new ArrayList<>();
             default: {
-                Logger.warn("Failed to get target type in script " + getTargetBlueprint().getScriptName() + " ! Type was: " + getTargetBlueprint().getTargetType());
+                Logger.warn("Failed to get target type in script " + targetBlueprint.getScriptName() + " ! Type was: " + targetBlueprint.getTargetType());
             }
         }
 

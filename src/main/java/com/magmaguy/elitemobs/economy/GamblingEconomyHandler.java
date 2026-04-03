@@ -29,7 +29,7 @@ public class GamblingEconomyHandler {
      * Positive = house profit, Negative = house loss (players winning more than losing).
      */
     @Getter
-    private static double houseEarnings = 0;
+    private static double houseEarnings;
 
     /**
      * Tracks players with active, unresolved gambling sessions.
@@ -171,11 +171,10 @@ public class GamblingEconomyHandler {
             EconomyHandler.subtractCurrency(uuid, betAmount);
         } else {
             // Player needs to go into debt
-            double fromBalance = balance;
             double fromDebt = betAmount - balance;
 
             // Take all remaining balance
-            if (fromBalance > 0) {
+            if (balance > 0) {
                 EconomyHandler.setCurrency(uuid, 0);
             }
 

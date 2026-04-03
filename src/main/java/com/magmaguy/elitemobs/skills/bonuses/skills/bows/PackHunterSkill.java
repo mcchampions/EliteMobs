@@ -37,7 +37,7 @@ public class PackHunterSkill extends SkillBonus implements ConditionalSkill {
      * Used by SkillSystemTest to test PackHunter without requiring multiple online players.
      */
     @Getter @Setter
-    private static boolean testOverrideNearbyPlayers = false;
+    private static boolean testOverrideNearbyPlayers;
 
     @Override
     public boolean conditionMet(Player player, Object context) {

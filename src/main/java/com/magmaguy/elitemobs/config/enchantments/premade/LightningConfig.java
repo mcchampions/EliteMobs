@@ -18,6 +18,6 @@ public class LightningConfig extends EnchantmentsConfigFields {
 
     @Override
     public void processAdditionalFields() {
-        minimumCooldown = ConfigurationEngine.setInt(super.fileConfiguration, "minimumCooldownSeconds", 60 * 2);
+        minimumCooldown = ConfigurationEngine.setInt(super.fileConfiguration, "minimumCooldownSeconds", 60 << 1);
     }
 }

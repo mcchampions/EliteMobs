@@ -3,10 +3,10 @@ package com.magmaguy.elitemobs.powers.scripts.primitives;
 import org.bukkit.util.Vector;
 
 public class ScriptVector {
-    private Vector value = null;
-    private ScriptFloat x = null;
-    private ScriptFloat y = null;
-    private ScriptFloat z = null;
+    private Vector value;
+    private ScriptFloat x;
+    private ScriptFloat y;
+    private ScriptFloat z;
 
     public ScriptVector(ScriptFloat x, ScriptFloat y, ScriptFloat z) {
         this.x = x;

@@ -26,7 +26,7 @@ public class MeteorShowerEnchantment extends CustomEnchantment {
 
     public static void doMeteorShower(Player player) {
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

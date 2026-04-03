@@ -67,7 +67,7 @@ public class SummonMerchantEnchantment extends CustomEnchantment implements List
 
         @EventHandler
         public void onItemInteract(PlayerInteractEvent event) {
-            if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+            if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
                 return;
             if (getEnchantment(event.getPlayer().getInventory().getItemInMainHand().getItemMeta()) < 1)
                 return;

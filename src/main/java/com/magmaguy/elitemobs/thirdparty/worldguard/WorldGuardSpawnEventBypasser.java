@@ -7,7 +7,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class WorldGuardSpawnEventBypasser implements Listener {
 
-    private static boolean force = false;
+    private static boolean force;
 
     public static void forceSpawn() {
         force = true;

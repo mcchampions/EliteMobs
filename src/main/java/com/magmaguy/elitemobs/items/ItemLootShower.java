@@ -49,7 +49,7 @@ public class ItemLootShower {
     // For legacy (pre-1.21.4) real item system
     public static HashMap<UUID, LegacyCoin> coinValues = new HashMap<>();
     // Cached version check result
-    private static Boolean useFakeItems = null;
+    private static Boolean useFakeItems;
 
     public ItemLootShower(double itemLevel, double mobLevel, Location location, Player player) {
 
@@ -67,7 +67,7 @@ public class ItemLootShower {
         if (Math.abs(mobLevel - ElitePlayerInventory.playerInventories.get(player.getUniqueId()).getFullPlayerTier(false))
                 > ItemSettingsConfig.getLootLevelDifferenceLockout()) {
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {
@@ -119,7 +119,7 @@ public class ItemLootShower {
         if (playerCurrencyPickup.containsKey(playerUUID)) return;
 
         new BukkitRunnable() {
-            double oldAmount = 0;
+            double oldAmount;
 
             @Override
             public void run() {
@@ -404,7 +404,7 @@ public class ItemLootShower {
             // Coins are soulbound so if someone can pick them up they can have it
             if (!coinValues.containsKey(event.getItem().getUniqueId())) return;
             event.setCancelled(true);
-            if (!event.getEntity().getType().equals(EntityType.PLAYER)) return;
+            if (event.getEntity().getType() != EntityType.PLAYER) return;
 
             LegacyCoin coin = coinValues.get(event.getItem().getUniqueId());
             if (!coin.pickupable)
@@ -473,11 +473,11 @@ public class ItemLootShower {
 
             // Animation task
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
                 final int LAUNCH_TICKS = 15; // Initial launch phase
                 final float ROTATION_PER_TICK = 9f; // 360 degrees / 40 ticks = 1 full turn per 2 seconds
-                boolean attracting = false;
-                float rotation = 0; // Y-axis rotation in degrees
+                boolean attracting;
+                float rotation; // Y-axis rotation in degrees
 
                 @Override
                 public void run() {
@@ -596,14 +596,14 @@ public class ItemLootShower {
 
             // Animation/attraction task
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {
                     if (!item.isValid() ||
-                            !player.isValid() ||
-                            !player.getWorld().equals(item.getWorld()) ||
-                            counter > 20 * 4 ||
+                        !player.isValid() ||
+                        !player.getWorld().equals(item.getWorld()) ||
+                        counter > 20 << 2 ||
                             item.getLocation().distanceSquared(player.getLocation()) > 900) {
                         cancel();
                         pickupable = true;

@@ -39,22 +39,22 @@ public class SkillBonusConfigFields extends CustomConfigFields {
     private double scalingPerLevel = 0.1;
 
     @Getter
-    private double procChance = 0.0;
+    private double procChance;
 
     @Getter
-    private double cooldownSeconds = 0.0;
+    private double cooldownSeconds;
 
     @Getter
-    private int maxStacks = 0;
+    private int maxStacks;
 
     @Getter
-    private double stackBonus = 0.0;
+    private double stackBonus;
 
     @Getter
     private Material displayMaterial = Material.IRON_SWORD;
 
     @Getter
-    private int customModelData = 0;
+    private int customModelData;
 
     @Getter
     private String skillId;

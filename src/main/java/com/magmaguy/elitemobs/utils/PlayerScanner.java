@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerScanner {
-    private static final int range = Math.max(Bukkit.getServer().getViewDistance() * 16, 5 * 16);
+    private static final int range = Math.max(Bukkit.getServer().getViewDistance() << 4, 5 << 4);
 
     public static List<Player> getNearbyPlayers(Location location) {
         List<Player> nearbyPlayers = new ArrayList<>();

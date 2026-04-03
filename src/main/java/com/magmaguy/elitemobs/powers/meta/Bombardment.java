@@ -20,10 +20,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Bombardment extends MajorPower implements Listener {
 
     public static ArrayList<String> bombardments = new ArrayList<>();
-    public int firingTimer = 0;
-    private boolean isActive = false;
-    private boolean firing = false;
-    private BukkitTask task = null;
+    public int firingTimer;
+    private boolean isActive;
+    private boolean firing;
+    private BukkitTask task;
 
     public static void shutdown() {
         bombardments.clear();
@@ -40,7 +40,7 @@ public abstract class Bombardment extends MajorPower implements Listener {
         isActive = true;
 
         task = new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -55,19 +55,19 @@ public abstract class Bombardment extends MajorPower implements Listener {
 
                 if (ThreadLocalRandom.current().nextDouble() > 0.1) return;
 
-                if (eliteEntity.getLivingEntity().getType().equals(EntityType.ENDER_DRAGON)) {
+                if (eliteEntity.getLivingEntity().getType() == EntityType.ENDER_DRAGON) {
                     EnderDragon.Phase phase = ((EnderDragon) eliteEntity.getLivingEntity()).getPhase();
-                    if (phase.equals(EnderDragon.Phase.DYING) ||
-                            phase.equals(EnderDragon.Phase.HOVER) ||
-                            phase.equals(EnderDragon.Phase.ROAR_BEFORE_ATTACK) ||
-                            phase.equals(EnderDragon.Phase.FLY_TO_PORTAL) ||
-                            phase.equals(EnderDragon.Phase.SEARCH_FOR_BREATH_ATTACK_TARGET)) {
+                    if (phase == EnderDragon.Phase.DYING ||
+                        phase == EnderDragon.Phase.HOVER ||
+                        phase == EnderDragon.Phase.ROAR_BEFORE_ATTACK ||
+                        phase == EnderDragon.Phase.FLY_TO_PORTAL ||
+                        phase == EnderDragon.Phase.SEARCH_FOR_BREATH_ATTACK_TARGET) {
                         return;
                     }
                 }
 
                 for (Entity entity : eliteEntity.getLivingEntity().getNearbyEntities(10, 100, 10)) {
-                    if (entity.getType().equals(EntityType.PLAYER)) {
+                    if (entity.getType() == EntityType.PLAYER) {
                         firing = true;
                         fire(eliteEntity);
                         return;
@@ -94,7 +94,7 @@ public abstract class Bombardment extends MajorPower implements Listener {
             return true;
         }
 
-        if (eliteEntity.getLivingEntity().getType().equals(EntityType.ENDER_DRAGON))
+        if (eliteEntity.getLivingEntity().getType() == EntityType.ENDER_DRAGON)
             return !EnderDragonPhaseSimplifier.isFlying(
                     ((EnderDragon) eliteEntity.getLivingEntity()).getPhase(),
                     false);

@@ -240,7 +240,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
      */
     @Getter
     @Setter
-    private SkillType rangedSkillType = null;
+    private SkillType rangedSkillType;
 
     /**
      * The weapon skill level from launch time (for ranged attacks).
@@ -249,7 +249,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
      */
     @Getter
     @Setter
-    private int rangedSkillLevel = 0;
+    private int rangedSkillLevel;
 
     /**
      * Event fired when an elite is damaged by a player.
@@ -459,9 +459,9 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             case STACKING -> {
                 if (skill instanceof StackingSkill stackingSkill) {
                     // Special handling for target-tracking stacking skills
-                    if (skill instanceof RangersFocusSkill rf && getEliteMobEntity() != null
-                            && getEliteMobEntity().getLivingEntity() != null) {
-                        rf.setTargetedEnemy(player, getEliteMobEntity().getLivingEntity().getUniqueId());
+                    if (skill instanceof RangersFocusSkill rf && eliteMobEntity != null
+                        && eliteMobEntity.getLivingEntity() != null) {
+                        rf.setTargetedEnemy(player, eliteMobEntity.getLivingEntity().getUniqueId());
                     }
                     // Special handling for ReturningHaste - only stack on projectile attacks
                     if (skill instanceof ReturningHasteSkill) {
@@ -499,9 +499,9 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             }
             case PASSIVE -> {
                 // Passive side-effect skills (knockback, stun, speed, haste, etc.)
-                if (skill instanceof HeavyBoltsSkill hb && getEliteMobEntity() != null
-                        && getEliteMobEntity().getLivingEntity() != null) {
-                    hb.applyKnockback(player, getEliteMobEntity().getLivingEntity());
+                if (skill instanceof HeavyBoltsSkill hb && eliteMobEntity != null
+                    && eliteMobEntity.getLivingEntity() != null) {
+                    hb.applyKnockback(player, eliteMobEntity.getLivingEntity());
                     skill.incrementProcCount(player);
                     SkillBonus.sendSkillActionBar(player, skill);
                 }
@@ -636,7 +636,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
 
     //The thing that calls the event
     public static class EliteMobDamagedByPlayerEventFilter implements Listener {
-        public static boolean bypass = false;
+        public static boolean bypass;
 
         /**
          * Gets the total elite thorns enchantment level across all armor pieces.
@@ -669,7 +669,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                 if (level < 1) return 1.0;
                 return 1.0 + level * 0.025; // 2.5% per level
             }
-            if (livingEntity instanceof Zombie || livingEntity instanceof Skeleton || livingEntity instanceof Wither || livingEntity instanceof SkeletonHorse || livingEntity instanceof ZombieHorse || livingEntity.getType().equals(EntityType.ZOMBIFIED_PIGLIN)) {
+            if (livingEntity instanceof Zombie || livingEntity instanceof Skeleton || livingEntity instanceof Wither || livingEntity instanceof SkeletonHorse || livingEntity instanceof ZombieHorse || livingEntity.getType() == EntityType.ZOMBIFIED_PIGLIN) {
                 int level = ElitePlayerInventory.playerInventories.get(player.getUniqueId()).mainhand.getDamageUndeadLevel(player.getInventory().getItemInMainHand(), false);
                 level -= Enchantment.SMITE.getMaxLevel();
                 if (level < 1) return 1.0;
@@ -915,9 +915,8 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                     eliteEntity, simulatedMobLevel, eliteEntity.getHealthMultiplier());
             double actualBossMaxHP = eliteEntity.getMaxHealth();
             double damagePercentage = formulaDamage / simulatedMobHP;
-            double rescaledDamage = damagePercentage * actualBossMaxHP;
 
-            return rescaledDamage;
+            return damagePercentage * actualBossMaxHP;
         }
 
         /**
@@ -973,17 +972,17 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
 
         @EventHandler(ignoreCancelled = true)
         public void onEliteMobAttacked(EntityDamageByEntityEvent event) {
-            if (event.getEntity().getType().equals(EntityType.ENDER_DRAGON) && ((EnderDragon) event.getEntity()).getPhase().equals(EnderDragon.Phase.DYING))
+            if (event.getEntity().getType() == EntityType.ENDER_DRAGON && ((EnderDragon) event.getEntity()).getPhase() == EnderDragon.Phase.DYING)
                 return;
             LivingEntity livingEntity = EntityFinder.filterRangedDamagers(event.getDamager());
             if (livingEntity == null) return;
-            if (!livingEntity.getType().equals(EntityType.PLAYER)) return;
+            if (livingEntity.getType() != EntityType.PLAYER) return;
             Player player = (Player) livingEntity;
             EliteEntity eliteEntity = EntityTracker.getEliteMobEntity(event.getEntity());
             //Living entity is sometimes null when the damage is dealt to an already dead entity - might happen with mcmmo due to DOTs and stuff
             if (eliteEntity == null || !eliteEntity.isValid()) return;
             //There's at least 1 gun plugin that makes players the projectile themselves.
-            if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) && !(event.getDamager() instanceof Projectile))
+            if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE && !(event.getDamager() instanceof Projectile))
                 return;
 
             /*
@@ -1009,7 +1008,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             } else if (bypass) {
                 // Custom/bypass damage: use raw event damage, no formula
                 damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
-            } else if (event.getCause().equals(EntityDamageEvent.DamageCause.THORNS)) {
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
                 if (eliteEntity.isScaledCombat()) {
                     int simulatedLevel = getPlayerWeaponSkillLevel(player);
                     if (simulatedLevel <= 0) simulatedLevel = 1;
@@ -1027,9 +1026,9 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                     breakdown.setThornsAttack(true);
                     breakdown.setEliteLevel(eliteEntity.getLevel());
                 }
-            } else if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
-                    || event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)
-                    || event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                       || event.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK
+                       || event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
                 // Main combat formula: melee, sweep, or ranged
                 if (eliteEntity.isScaledCombat())
                     damage = scaledPlayerToEliteDamage(player, eliteEntity, event);
@@ -1042,7 +1041,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
 
             // Boss-specific damage modifier
             double damageModifier = 1;
-            if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE))
+            if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE)
                 if (CustomProjectileData.getCustomProjectileDataHashMap().get((Projectile) event.getDamager()) == null)
                     damageModifier = getCustomDamageModifier(eliteEntity, null);
                 else
@@ -1134,7 +1133,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             }
 
             //Dragons need special handling due to their custom deaths
-            if (eliteEntity.getLivingEntity() != null && eliteEntity.getLivingEntity().getType().equals(EntityType.ENDER_DRAGON) && eliteEntity.getLivingEntity().getHealth() - damage < 1) {
+            if (eliteEntity.getLivingEntity() != null && eliteEntity.getLivingEntity().getType() == EntityType.ENDER_DRAGON && eliteEntity.getLivingEntity().getHealth() - damage < 1) {
                 if (eliteEntity.isDying()) return;
                 damage = 0;
                 event.setCancelled(true);

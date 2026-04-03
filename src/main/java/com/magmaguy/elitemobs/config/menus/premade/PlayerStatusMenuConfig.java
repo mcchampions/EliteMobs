@@ -253,10 +253,11 @@ public class PlayerStatusMenuConfig extends MenusConfigFields {
 
         indexLineCreator(0, "&0&m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", "", "", fileConfiguration, file);
         indexLineCreator(1, "&5&l/ag &7- &6EliteMobs Hub",
-                "CLICK TO USE\n" +
-                        "The place where you can find\n" +
-                        "NPCs that give quests, buy and\n" +
-                        "sell items, give advice and more!",
+                """
+                        CLICK TO USE
+                        The place where you can find
+                        NPCs that give quests, buy and
+                        sell items, give advice and more!""",
                 "/ag", fileConfiguration, file);
         indexLineCreator(2, "&0&m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", "", "", fileConfiguration, file);
         indexLineCreator(3, "", "", "", fileConfiguration, file);
@@ -275,33 +276,37 @@ public class PlayerStatusMenuConfig extends MenusConfigFields {
         statsLineCreator(1, "&5&lPlayer Stats:", "", "", fileConfiguration, file);
         statsLineCreator(2, "&m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", "", "", fileConfiguration, file);
         statsLineCreator(3, "", "", "", fileConfiguration, file);
-        statsLineCreator(4, "&2Money: &a$money", "Kill Elite Mobs to loot currency or\n" +
-                "sell their drops in /em shop or\n" +
-                "complete quests!", "", fileConfiguration, file);
+        statsLineCreator(4, "&2Money: &a$money", """
+                Kill Elite Mobs to loot currency or
+                sell their drops in /em shop or
+                complete quests!""", "", fileConfiguration, file);
         statsLineCreator(5, "", "", "", fileConfiguration, file);
-        statsLineCreator(6, "&6Guild Tier: &3$guildtier", "Prestige Tier and Guild Rank:\n" +
-                "Guild Rank determines how good your loot can " +
-                "be, sets your bonus from the Prestige Tier, among " +
-                "other things. The Prestige Tier unlocks extremely " +
-                "powerful rewards, like increased max health, chance " +
-                "to dodge/crit, increased currency rewards and more! " +
-                "You can unlock Guild Ranks and Prestige Tiers at /ag!\n" +
-                "⚜ = prestige rank, ✧ = guild rank!", "", fileConfiguration, file);
+        statsLineCreator(6, "&6Guild Tier: &3$guildtier", """
+                Prestige Tier and Guild Rank:
+                Guild Rank determines how good your loot can \
+                be, sets your bonus from the Prestige Tier, among \
+                other things. The Prestige Tier unlocks extremely \
+                powerful rewards, like increased max health, chance \
+                to dodge/crit, increased currency rewards and more! \
+                You can unlock Guild Ranks and Prestige Tiers at /ag!
+                ⚜ = prestige rank, ✧ = guild rank!""", "", fileConfiguration, file);
         statsLineCreator(7, "&4Elite Kills: &c$kills", "Amount of Elite Mobs killed.", "", fileConfiguration, file);
-        statsLineCreator(8, "&4Max Lvl Killed: &c$highestkill", "Level of the highest Elite Mob killed.\n" +
-                "Elite Mob levels are based on the tier\n" +
-                "of your gear! Higher tiers, higher\n" +
-                "Elite Mob levels!\n" +
-                "Note: only non-exploity kills get counted!", "", fileConfiguration, file);
+        statsLineCreator(8, "&4Max Lvl Killed: &c$highestkill", """
+                Level of the highest Elite Mob killed.
+                Elite Mob levels are based on the tier
+                of your gear! Higher tiers, higher
+                Elite Mob levels!
+                Note: only non-exploity kills get counted!""", "", fileConfiguration, file);
         statsLineCreator(9, "&4Elite Deaths: &c$deaths", "Times killed by Elite Mobs.", "", fileConfiguration, file);
         statsLineCreator(10, "&5Quests Completed: &d$quests", "Amount of EliteMobs quests completed.\n" +
                 "You can accept quests by talking to NPCs!", "", fileConfiguration, file);
         statsLineCreator(11, "", "", "", fileConfiguration, file);
-        statsLineCreator(12, "&bScore: &3$score", "Your EliteMobs score. It goes up\n" +
-                "when you kill and elite mob,\n" +
-                "and it goes down when you die\n" +
-                "to an elite. Higher level\n" +
-                "elites give more score.", "", fileConfiguration, file);
+        statsLineCreator(12, "&bScore: &3$score", """
+                Your EliteMobs score. It goes up
+                when you kill and elite mob,
+                and it goes down when you die
+                to an elite. Higher level
+                elites give more score.""", "", fileConfiguration, file);
 
         gearLineCreator(0, "&m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", "", "", fileConfiguration, file);
         gearLineCreator(1, "&7&lArmor & Weapons:", "", "", fileConfiguration, file);
@@ -316,10 +321,12 @@ public class PlayerStatusMenuConfig extends MenusConfigFields {
         gearLineCreator(10, "{dmg : $damage}    {armr: $armor}", "{Base damage dealt to Elite Mobs}{Damage reduction from Elite Mobs}",
                 "", fileConfiguration, file);
         gearLineCreator(11, "Threat level: $threat",
-                "This determines the level of the\n" +
-                        "Elite Mobs that spawns near you.\n" +
-                        "Takes armor, weapon in hand, guild\n" +
-                        "tier into account.\n",
+                """
+                        This determines the level of the
+                        Elite Mobs that spawns near you.
+                        Takes armor, weapon in hand, guild
+                        tier into account.
+                        """,
                 "", fileConfiguration, file);
         gearLineCreator(12, "", "", "", fileConfiguration, file);
 
@@ -335,14 +342,16 @@ public class PlayerStatusMenuConfig extends MenusConfigFields {
         commandsLineCreator(1, "&3&lCommands:", "", "", fileConfiguration, file);
         commandsLineCreator(2, "&m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", "", "", fileConfiguration, file);
         commandsLineCreator(3, "", "", "", fileConfiguration, file);
-        commandsLineCreator(4, "&5/ag", "CLICK TO USE\n" +
-                "The place where you can find\n" +
-                "NPCs that give quests, buy and\n" +
-                "sell items, give advice and more!", "/ag", fileConfiguration, file);
+        commandsLineCreator(4, "&5/ag", """
+                CLICK TO USE
+                The place where you can find
+                NPCs that give quests, buy and
+                sell items, give advice and more!""", "/ag", fileConfiguration, file);
         commandsLineCreator(5, "", "", "", fileConfiguration, file);
-        commandsLineCreator(6, "&5/shareitem", "CLICK TO USE\n" +
-                "Shares the item you're holding\n" +
-                "on chat!", "/shareitem", fileConfiguration, file);
+        commandsLineCreator(6, "&5/shareitem", """
+                CLICK TO USE
+                Shares the item you're holding
+                on chat!""", "/shareitem", fileConfiguration, file);
         commandsLineCreator(7, "", "", "", fileConfiguration, file);
         commandsLineCreator(8, "", "", "", fileConfiguration, file);
         commandsLineCreator(9, "", "", "", fileConfiguration, file);

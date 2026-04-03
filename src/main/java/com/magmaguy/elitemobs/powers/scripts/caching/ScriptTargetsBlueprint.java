@@ -35,9 +35,9 @@ public class ScriptTargetsBlueprint {
     @Getter
     private ScriptFloat coverage = new ScriptFloat(1.0f);
     @Getter
-    private boolean isCustomCoverage = false;
+    private boolean isCustomCoverage;
     @Getter
-    private ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint = null;
+    private ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint;
 
     public ScriptTargetsBlueprint(Map<?, ?> entry, String scriptName, String filename) {
         this.scriptName = scriptName;

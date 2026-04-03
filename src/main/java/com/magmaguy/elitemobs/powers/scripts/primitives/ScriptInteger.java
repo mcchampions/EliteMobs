@@ -3,9 +3,9 @@ package com.magmaguy.elitemobs.powers.scripts.primitives;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ScriptInteger {
-    private Integer value = null;
-    private Integer lowestRange = null;
-    private Integer highestRange = null;
+    private Integer value;
+    private Integer lowestRange;
+    private Integer highestRange;
     public ScriptInteger(int lowestRange, int highestRange) {
         this.lowestRange = lowestRange;
         this.highestRange = highestRange;

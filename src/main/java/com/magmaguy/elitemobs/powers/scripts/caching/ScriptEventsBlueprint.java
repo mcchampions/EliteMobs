@@ -14,7 +14,7 @@ public class ScriptEventsBlueprint {
     @Getter
     private final Set<Class> events = new HashSet<>();
     @Getter
-    private boolean zoneListener = false;
+    private boolean zoneListener;
 
     public ScriptEventsBlueprint(List<String> values, String scriptName, String filename) {
         for (String entry : values) {

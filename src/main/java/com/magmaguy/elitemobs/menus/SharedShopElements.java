@@ -14,7 +14,7 @@ public class SharedShopElements {
     public static boolean itemNullPointerPrevention(InventoryClickEvent event) {
         //Check if current item is valid
         if (event.getCurrentItem() == null) return false;
-        if (event.getCurrentItem().getType().equals(Material.AIR)) return false;
+        if (event.getCurrentItem().getType() == Material.AIR) return false;
         return event.getCurrentItem().getItemMeta() != null;
     }
 

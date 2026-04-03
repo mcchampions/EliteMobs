@@ -20,7 +20,7 @@ public class ElitePlayerInventory {
     private final Player player;
     //Used by elite scripts
     private final HashSet<String> customMetadata = new HashSet<>();
-    private boolean isUpdateLock = false;
+    private boolean isUpdateLock;
 
     /**
      * Object of the player's inventory for EliteMobs.
@@ -127,7 +127,7 @@ public class ElitePlayerInventory {
     }
 
     public int getNaturalMobSpawnLevel(boolean update) {
-        if (player.getGameMode().equals(GameMode.SPECTATOR)) return 0;
+        if (player.getGameMode() == GameMode.SPECTATOR) return 0;
         return CombatLevelCalculator.calculateCombatLevel(player.getUniqueId());
     }
 
@@ -246,7 +246,7 @@ public class ElitePlayerInventory {
     }
 
     public void removeTags(List<String> string) {
-        customMetadata.removeAll(string);
+        string.forEach(customMetadata::remove);
     }
 
     public static class ElitePlayerInventoryEvents implements Listener {

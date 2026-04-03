@@ -20,7 +20,7 @@ public class ArenaEntity {
     private String bossfile;
     @Getter
     @Setter
-    private boolean mythicMob = false;
+    private boolean mythicMob;
     @Getter
     @Setter
     private int level = -1;

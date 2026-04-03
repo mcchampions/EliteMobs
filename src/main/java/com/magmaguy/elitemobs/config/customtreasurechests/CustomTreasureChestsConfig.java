@@ -24,7 +24,7 @@ public class CustomTreasureChestsConfig extends CustomConfig {
     }
 
     public static void addTreasureChestEntry(Player player, String customChestFileName) {
-        CustomTreasureChestConfigFields customTreasureChestConfigFields = getCustomTreasureChestConfigFields().get(customChestFileName);
+        CustomTreasureChestConfigFields customTreasureChestConfigFields = this.customTreasureChestConfigFields.get(customChestFileName);
         if (customTreasureChestConfigFields == null) {
             player.sendMessage(CommandMessagesConfig.getInvalidTreasureChestFilename());
             return;
@@ -33,7 +33,7 @@ public class CustomTreasureChestsConfig extends CustomConfig {
     }
 
     public static TreasureChest addTreasureChestEntry(Location location, String customChestFileName) {
-        CustomTreasureChestConfigFields customTreasureChestConfigFields = getCustomTreasureChestConfigFields().get(customChestFileName);
+        CustomTreasureChestConfigFields customTreasureChestConfigFields = this.customTreasureChestConfigFields.get(customChestFileName);
         if (location == null) {
             Logger.warn("Failed to commit a location for a treasure chest!");
             return null;
@@ -42,7 +42,7 @@ public class CustomTreasureChestsConfig extends CustomConfig {
     }
 
     public static void removeTreasureChestEntry(Location location, String customChestFileName) {
-        CustomTreasureChestConfigFields customTreasureChestConfigFields = getCustomTreasureChestConfigFields().get(customChestFileName);
+        CustomTreasureChestConfigFields customTreasureChestConfigFields = this.customTreasureChestConfigFields.get(customChestFileName);
         if (location == null || customTreasureChestConfigFields == null) {
             Logger.warn("Failed to remove a location for a treasure chest!");
             return;

@@ -157,7 +157,7 @@ public class CombatLevelDisplay implements Listener {
                 // The global tracker handles showing other players' displays automatically
                 createDisplay(joiningPlayer);
             }
-        }.runTaskLater(MetadataHandler.PLUGIN, 20L * 2);
+        }.runTaskLater(MetadataHandler.PLUGIN, 20L << 1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

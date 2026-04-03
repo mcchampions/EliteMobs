@@ -69,10 +69,10 @@ public class CombatSimulator {
      */
     private static final String DAMAGE_TEST_DUMMY_CONFIG = "damage_test_dummy.yml";
     @Getter
-    private static boolean testingActive = false;
+    private static boolean testingActive;
     @Getter
     @Setter
-    private static boolean blockingOverride = false;
+    private static boolean blockingOverride;
 
     @Getter
     private final Player player;
@@ -84,7 +84,7 @@ public class CombatSimulator {
     private final Map<String, Location> dummyLocations = new HashMap<>();
 
     // Track the current singleton dummy entity directly for guaranteed cleanup
-    private LivingEntity currentDummyEntity = null;
+    private LivingEntity currentDummyEntity;
 
     /**
      * Test dummy config file name.
@@ -100,7 +100,7 @@ public class CombatSimulator {
     @Setter
     private static double testDamageOverride = -1;
     // Saved block data for water placement restoration
-    private Location waterBlockLocation = null;
+    private Location waterBlockLocation;
 
     // Distance in front of player to spawn dummy
     private static final double SPAWN_DISTANCE = 5.0;
@@ -147,7 +147,7 @@ public class CombatSimulator {
             currentDummyEntity = null;
         }
     }
-    private Material savedBlockMaterial = null;
+    private Material savedBlockMaterial;
 
     /**
      * Updates a dummy's name to show it's currently being tested.
@@ -488,17 +488,16 @@ public class CombatSimulator {
         }
     }
 
-    // Track pending projectile damage for async measurement
-    private double lastProjectileDamage = 0;
-    private String lastProjectileTarget = null;
-    private double lastTargetHealthBefore = 0;
+    private String lastProjectileTarget;
+    private double lastTargetHealthBefore;
 
     /**
      * Clears projectile tracking state. Call this when starting a new skill test
      * to avoid stale data from previous tests.
      */
     public void resetProjectileTracking() {
-        lastProjectileDamage = 0;
+        // Track pending projectile damage for async measurement
+        double lastProjectileDamage = 0;
         lastProjectileTarget = null;
         lastTargetHealthBefore = 0;
     }
@@ -635,11 +634,10 @@ public class CombatSimulator {
             if (entity instanceof Player) continue;
             if (entity.getLocation().distanceSquared(center) > radiusSq) continue;
 
-            if (entity instanceof Arrow
-                    || entity instanceof AbstractArrow
-                    || entity instanceof Fireball
-                    || entity instanceof AreaEffectCloud
-                    || entity instanceof LightningStrike) {
+            if (entity instanceof AbstractArrow
+                || entity instanceof Fireball
+                || entity instanceof AreaEffectCloud
+                || entity instanceof LightningStrike) {
                 entity.remove();
             }
         }

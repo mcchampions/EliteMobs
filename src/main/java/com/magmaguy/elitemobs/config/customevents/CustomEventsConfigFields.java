@@ -32,25 +32,25 @@ public class CustomEventsConfigFields extends CustomConfigFields {
     private List<String> eventEndCommands = new ArrayList<>();
     @Getter
     @Setter
-    private int announcementPriority = 0;
+    private int announcementPriority;
     @Getter
     @Setter
-    private double chance = 0;
+    private double chance;
     @Getter
     @Setter
     private List<Material> breakableMaterials = new ArrayList<>();
     @Getter
     @Setter
-    private double localCooldown = 0;
+    private double localCooldown;
     @Getter
     @Setter
-    private double globalCooldown = 0;
+    private double globalCooldown;
     @Getter
     @Setter
-    private double weight = 0;
+    private double weight;
     @Getter
     @Setter
-    private double eventDuration = 0;
+    private double eventDuration;
     @Getter
     @Setter
     private int eventEndTime = -1;

@@ -6,7 +6,6 @@ import com.magmaguy.elitemobs.api.ArenaStartEvent;
 import com.magmaguy.elitemobs.api.EliteMobDamagedByPlayerEvent;
 import com.magmaguy.elitemobs.api.EliteMobDeathEvent;
 import com.magmaguy.elitemobs.api.internal.RemovalReason;
-import com.magmaguy.elitemobs.config.AdventurersGuildConfig;
 import com.magmaguy.elitemobs.config.ArenasConfig;
 import com.magmaguy.elitemobs.config.ItemSettingsConfig;
 import com.magmaguy.elitemobs.config.customarenas.CustomArenasConfigFields;
@@ -62,7 +61,7 @@ public class ArenaInstance extends MatchInstance {
     private int maxZ;
     private boolean cylindricalArena;
     @Getter
-    private int currentWave = 0;
+    private int currentWave;
     @Getter
     private ArenaState arenaState = ArenaState.IDLE;
     private Cylinder cylinder;
@@ -207,7 +206,7 @@ public class ArenaInstance extends MatchInstance {
 
         int delayBetweenWaves = customArenasConfigFields.getDelayBetweenWaves();
         if (customArenasConfigFields.getIntermissionWaves().contains(currentWave)) {
-            delayBetweenWaves *= 2;
+            delayBetweenWaves <<= 1;
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(MetadataHandler.PLUGIN, () -> {
@@ -269,8 +268,7 @@ public class ArenaInstance extends MatchInstance {
                 if (customBossEntity.getLevel() > highestArenaMobLevel)
                     highestArenaMobLevel = customBossEntity.getLevel();
                 if (!customBossEntity.exists()) {
-                    Logger.warn("Arena " + getCustomArenasConfigFields().getArenaName() + " failed to spawn boss " + customBossEntity.getCustomBossesConfigFields().getFilename());
-                    continue;
+                    Logger.warn("Arena " + customArenasConfigFields.getArenaName() + " failed to spawn boss " + customBossEntity.getCustomBossesConfigFields().getFilename());
                 } else customBosses.add(customBossEntity);
 
             } else {
@@ -320,7 +318,7 @@ public class ArenaInstance extends MatchInstance {
         super.endMatch();
         arenaState = ArenaState.IDLE;
         //victory state
-        if (currentWave > getCustomArenasConfigFields().getWaveCount()) {
+        if (currentWave > customArenasConfigFields.getWaveCount()) {
             participants.forEach(player -> player.sendTitle(ArenasConfig.getVictoryTitle().replace("$wave", customArenasConfigFields.getWaveCount() + ""), ArenasConfig.getVictorySubtitle().replace("$wave", customArenasConfigFields.getWaveCount() + ""), 20, 20 * 10, 20));
             StringBuilder playerNames = new StringBuilder();
             for (Player player : participants)

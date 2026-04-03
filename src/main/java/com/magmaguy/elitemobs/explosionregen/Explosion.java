@@ -36,7 +36,6 @@ public class Explosion {
 
     private static final HashSet<Explosion> explosions = new HashSet<>();
     public final List<BlockState> detonatedBlocks = new ArrayList<>();
-    private final int delayBeforeRegen = 1;
     private UUID worldUUID;
 
     public Explosion(List<BlockState> detonatedBlocks) {
@@ -49,7 +48,7 @@ public class Explosion {
         unsortedBlocks.entrySet().stream().sorted(Map.Entry.comparingByValue())
                 .forEachOrdered(x -> this.detonatedBlocks.add(x.getKey()));
 
-        worldUUID = detonatedBlocks.get(0).getWorld().getUID();
+        worldUUID = detonatedBlocks.getFirst().getWorld().getUID();
 
         explosions.add(this);
         regenerate();
@@ -88,7 +87,7 @@ public class Explosion {
 
         for (Block block : blockList) {
             if (block.getType().isAir() ||
-                    block.getType().equals(Material.FIRE) ||
+                block.getType() == Material.FIRE ||
                     block.isLiquid() ||
                     EntityTracker.isTemporaryBlock(block))
                 continue;
@@ -215,35 +214,12 @@ public class Explosion {
         }
 
         //Generic getter for codependent blocks, blocks that would break if the adjacent block breaks
-        switch (blockState.getType()) {
-            case PAINTING:
-            case LADDER:
-            case LANTERN:
-            case VINE:
-            case SOUL_LANTERN:
-
-            case TRIPWIRE:
-            case TRIPWIRE_HOOK:
-
-            case REDSTONE_WALL_TORCH:
-            case WALL_TORCH:
-
-            case ACACIA_TRAPDOOR:
-            case BIRCH_TRAPDOOR:
-            case CRIMSON_TRAPDOOR:
-            case DARK_OAK_TRAPDOOR:
-            case IRON_TRAPDOOR:
-            case JUNGLE_TRAPDOOR:
-            case OAK_TRAPDOOR:
-            case SPRUCE_TRAPDOOR:
-            case WARPED_TRAPDOOR:
-
-            case COCOA_BEANS:
-                return true;
-
-            default:
-                return false;
-        }
+        return switch (blockState.getType()) {
+            case PAINTING, LADDER, LANTERN, VINE, SOUL_LANTERN, TRIPWIRE, TRIPWIRE_HOOK, REDSTONE_WALL_TORCH,
+                 WALL_TORCH, ACACIA_TRAPDOOR, BIRCH_TRAPDOOR, CRIMSON_TRAPDOOR, DARK_OAK_TRAPDOOR, IRON_TRAPDOOR,
+                 JUNGLE_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, WARPED_TRAPDOOR, COCOA_BEANS -> true;
+            default -> false;
+        };
     }
 
     private static void queueBlock(ArrayList<BlockState> blockStates, BlockState blockState) {
@@ -267,6 +243,7 @@ public class Explosion {
 
         Explosion explosion = this;
 
+        int delayBeforeRegen = 1;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -276,7 +253,7 @@ public class Explosion {
                     return;
                 }
 
-                BlockState firstBlock = detonatedBlocks.get(0);
+                BlockState firstBlock = detonatedBlocks.getFirst();
                 fullBlockRestore(firstBlock, false);
 
             }

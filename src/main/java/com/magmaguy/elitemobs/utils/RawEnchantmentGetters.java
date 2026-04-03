@@ -17,13 +17,13 @@ public class RawEnchantmentGetters {
      */
     public static Map<Enchantment, Integer> vanillaEnchantmentsList(ItemStack itemStack) {
 
-        return vanillaEnchantmentsList(itemStack.getEnchantments(), itemStack.getItemMeta().getLore().get(0));
+        return vanillaEnchantmentsList(itemStack.getEnchantments(), itemStack.getItemMeta().getLore().getFirst());
 
     }
 
     public static Map<Enchantment, Integer> vanillaEnchantmentsList(Map<Enchantment, Integer> actualEnchantmentsList, String obfuscatedLore) {
 
-        Map<Enchantment, Integer> enchantmentsMap = new HashMap();
+        Map<Enchantment, Integer> enchantmentsMap = new HashMap<>();
 
         if (actualEnchantmentsList.isEmpty())
             return enchantmentsMap;

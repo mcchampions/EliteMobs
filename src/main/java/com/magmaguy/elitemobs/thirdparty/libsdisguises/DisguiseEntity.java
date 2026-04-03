@@ -90,16 +90,14 @@ public class DisguiseEntity {
 
     private static void scheduleDisguise(Disguise disguise, Entity entity) {
         applyDisguise(disguise, entity);
-        Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> {
-            applyDisguise(disguise, entity);
-        }, 20);
+        Bukkit.getScheduler().runTaskLater(MetadataHandler.PLUGIN, () -> applyDisguise(disguise, entity), 20);
     }
 
     private static void applyDisguise(Disguise disguise, Entity entity) {
         disguise.setEntity(entity);
         disguise.setDisguiseName(entity.getCustomName());
         disguise.setDynamicName(true);
-        if ((DefaultConfig.isAlwaysShowNametags() || entity.getType().equals(EntityType.VILLAGER))
+        if ((DefaultConfig.isAlwaysShowNametags() || entity.getType() == EntityType.VILLAGER)
                 && disguise instanceof PlayerDisguise) {
             ((PlayerDisguise) disguise).setNameVisible(true);
         } else if (disguise instanceof PlayerDisguise) {

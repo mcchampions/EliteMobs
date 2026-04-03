@@ -141,7 +141,7 @@ public class BlackjackGame {
         }
 
         // Dealer total (hidden during play)
-        int dealerVisible = showDealerHand ? calculateHandValue(session.dealerHand) : session.dealerHand.get(0).getBlackjackValue();
+        int dealerVisible = showDealerHand ? calculateHandValue(session.dealerHand) : session.dealerHand.getFirst().getBlackjackValue();
         String dealerTotalText = showDealerHand ? String.valueOf(calculateHandValue(session.dealerHand)) : dealerVisible + " + ?";
         ItemStack dealerTotal = ItemStackGenerator.generateItemStack(
                 Material.RED_BANNER,
@@ -302,7 +302,7 @@ public class BlackjackGame {
             return;
         }
 
-        session.betAmount *= 2;
+        session.betAmount <<= 1;
         session.canDoubleDown = false;
 
         // Draw exactly one card
@@ -492,8 +492,7 @@ public class BlackjackGame {
 
         int getBlackjackValue() {
             if (value == 1) return 11; // Ace (handled specially)
-            if (value >= 10) return 10; // Face cards
-            return value;
+            return Math.min(value, 10); // Face cards
         }
     }
 

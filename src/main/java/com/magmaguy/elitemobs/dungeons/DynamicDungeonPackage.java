@@ -12,10 +12,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 public class DynamicDungeonPackage extends EMPackage implements CombatContent {
     private static final int MIN_LEVEL = 5;
     private static final int MAX_LEVEL = 200;
+    private static final Pattern PATTERN = Pattern.compile(".*_\\d{1,2}$");
 
     public DynamicDungeonPackage(ContentPackagesConfigFields contentPackagesConfigFields) {
         super(contentPackagesConfigFields);
@@ -52,7 +54,7 @@ public class DynamicDungeonPackage extends EMPackage implements CombatContent {
             return;
         } else {
             for (File worldFile : Bukkit.getWorldContainer().listFiles()) {
-                if (worldFile.getName().contains(file.getName()) && worldFile.getName().matches(".*_\\d{1,2}$")) {
+                if (worldFile.getName().contains(file.getName()) && PATTERN.matcher(worldFile.getName()).matches()) {
                     try {
                         FileUtils.deleteDirectory(worldFile);
                         Logger.info("Removing previously instanced world " + worldFile.getName());

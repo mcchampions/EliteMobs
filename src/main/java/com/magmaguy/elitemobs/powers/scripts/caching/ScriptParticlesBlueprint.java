@@ -56,9 +56,9 @@ public class ScriptParticlesBlueprint {
         @Getter
         private ScriptFloat speed = new ScriptFloat(0.01f);
         @Getter
-        private Boolean moveToTarget = null;
+        private Boolean moveToTarget;
         @Getter
-        private ScriptRelativeVectorBlueprint relativeVectorBlueprint = null;
+        private ScriptRelativeVectorBlueprint relativeVectorBlueprint;
 
         public ScriptParticleBlueprint(Map<?, ?> entry, String scriptName, String filename) {
             this.filename = filename;

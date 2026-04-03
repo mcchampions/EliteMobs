@@ -47,7 +47,7 @@ public class FlamethrowerEnchantment extends CustomEnchantment {
             try {
                 for (Entity entity : location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5))
                     if (entity instanceof LivingEntity) {
-                        if (entity.getType().equals(EntityType.PLAYER)) continue;
+                        if (entity.getType() == EntityType.PLAYER) continue;
                         if (((LivingEntity) entity).hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) continue;
                         BossCustomAttackDamage.dealCustomDamage(player, (LivingEntity) entity, ElitePlayerInventory.playerInventories.get(player.getUniqueId()).getWeaponLevel(false));
                     }
@@ -70,7 +70,7 @@ public class FlamethrowerEnchantment extends CustomEnchantment {
 
             Player player = event.getPlayer();
 
-            if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)))
+            if (!(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR))
                 return;
 
             if (playersUsingFlamethrower.contains(player.getUniqueId())) return;
@@ -95,7 +95,7 @@ public class FlamethrowerEnchantment extends CustomEnchantment {
         private void doFlamethrowerPhase1(Player player, Location targetLocation) {
 
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {
@@ -134,7 +134,7 @@ public class FlamethrowerEnchantment extends CustomEnchantment {
         private void doFlamethrowerPhase2(Player player, Location target) {
             List<Location> damagePoints = generateDamagePoints(player, target);
             new BukkitRunnable() {
-                int timer = 0;
+                int timer;
 
                 @Override
                 public void run() {
@@ -160,7 +160,7 @@ public class FlamethrowerEnchantment extends CustomEnchantment {
          */
         private void doFlamethrowerPhase3(Player player, Location fixedPlayerLocation) {
             new BukkitRunnable() {
-                int timer = 0;
+                int timer;
 
                 @Override
                 public void run() {

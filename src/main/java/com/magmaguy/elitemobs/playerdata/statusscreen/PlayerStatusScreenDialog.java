@@ -105,7 +105,7 @@ public class PlayerStatusScreenDialog {
             statsText.append(processText(line)).append("\n");
         }
 
-        if (statsText.length() > 0) {
+        if (!statsText.isEmpty()) {
             builder.addBody(DialogManager.PlainMessageBody.of(statsText.toString().trim()).width(DIALOG_WIDTH));
         }
 
@@ -148,7 +148,7 @@ public class PlayerStatusScreenDialog {
             gearText.append(processText(line)).append("\n");
         }
 
-        if (gearText.length() > 0) {
+        if (!gearText.isEmpty()) {
             builder.addBody(DialogManager.PlainMessageBody.of(gearText.toString().trim()).width(DIALOG_WIDTH));
         }
 
@@ -172,11 +172,11 @@ public class PlayerStatusScreenDialog {
         // Add config text lines
         StringBuilder teleportText = new StringBuilder();
         for (String line : PlayerStatusMenuConfig.getTeleportTextLines()) {
-            if (line == null || line.equals("null")) continue;
+            if (line == null || "null".equals(line)) continue;
             teleportText.append(processText(line)).append("\n");
         }
 
-        if (teleportText.length() > 0) {
+        if (!teleportText.isEmpty()) {
             builder.addBody(DialogManager.PlainMessageBody.of(teleportText.toString().trim()).width(DIALOG_WIDTH));
         }
 
@@ -238,7 +238,7 @@ public class PlayerStatusScreenDialog {
             commandsText.append(processText(line)).append("\n");
         }
 
-        if (commandsText.length() > 0) {
+        if (!commandsText.isEmpty()) {
             builder.addBody(DialogManager.PlainMessageBody.of(commandsText.toString().trim()).width(DIALOG_WIDTH));
         }
 
@@ -321,7 +321,7 @@ public class PlayerStatusScreenDialog {
             trackingText.append(processText(PlayerStatusMenuConfig.getBossTrackerTextLines()[i])).append("\n");
         }
 
-        if (trackingText.length() > 0) {
+        if (!trackingText.isEmpty()) {
             builder.addBody(DialogManager.PlainMessageBody.of(trackingText.toString().trim()).width(DIALOG_WIDTH));
         }
 
@@ -408,13 +408,9 @@ public class PlayerStatusScreenDialog {
         int emptyBars = totalBars - filledBars;
 
         StringBuilder bar = new StringBuilder("\u00A7a");
-        for (int i = 0; i < filledBars; i++) {
-            bar.append("|");
-        }
+        bar.append("|".repeat(Math.max(0, filledBars)));
         bar.append("\u00A77");
-        for (int i = 0; i < emptyBars; i++) {
-            bar.append("|");
-        }
+        bar.append("|".repeat(Math.max(0, emptyBars)));
 
         return bar.toString();
     }
@@ -440,37 +436,37 @@ public class PlayerStatusScreenDialog {
     private static void addEquippedItems(DialogManager.MultiActionDialogBuilder builder, Player player) {
         // Helmet
         ItemStack helmet = player.getInventory().getHelmet();
-        if (helmet != null && EliteItemManager.isEliteMobsItem(helmet)) {
+        if (EliteItemManager.isEliteMobsItem(helmet)) {
             addItemBody(builder, helmet, "Helmet");
         }
 
         // Chestplate
         ItemStack chestplate = player.getInventory().getChestplate();
-        if (chestplate != null && EliteItemManager.isEliteMobsItem(chestplate)) {
+        if (EliteItemManager.isEliteMobsItem(chestplate)) {
             addItemBody(builder, chestplate, "Chestplate");
         }
 
         // Leggings
         ItemStack leggings = player.getInventory().getLeggings();
-        if (leggings != null && EliteItemManager.isEliteMobsItem(leggings)) {
+        if (EliteItemManager.isEliteMobsItem(leggings)) {
             addItemBody(builder, leggings, "Leggings");
         }
 
         // Boots
         ItemStack boots = player.getInventory().getBoots();
-        if (boots != null && EliteItemManager.isEliteMobsItem(boots)) {
+        if (EliteItemManager.isEliteMobsItem(boots)) {
             addItemBody(builder, boots, "Boots");
         }
 
         // Main hand
         ItemStack mainHand = player.getInventory().getItemInMainHand();
-        if (mainHand != null && EliteItemManager.isEliteMobsItem(mainHand)) {
+        if (EliteItemManager.isEliteMobsItem(mainHand)) {
             addItemBody(builder, mainHand, "Main Hand");
         }
 
         // Off hand
         ItemStack offHand = player.getInventory().getItemInOffHand();
-        if (offHand != null && EliteItemManager.isEliteMobsItem(offHand)) {
+        if (EliteItemManager.isEliteMobsItem(offHand)) {
             addItemBody(builder, offHand, "Off Hand");
         }
     }

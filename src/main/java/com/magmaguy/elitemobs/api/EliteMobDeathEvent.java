@@ -16,7 +16,7 @@ public class EliteMobDeathEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Entity entity;
     private final EliteEntity eliteEntity;
-    private EntityDeathEvent entityDeathEvent = null;
+    private EntityDeathEvent entityDeathEvent;
 
     public EliteMobDeathEvent(EliteEntity eliteEntity, EntityDeathEvent entityDeathEvent) {
         this.entity = eliteEntity.getUnsyncedLivingEntity();

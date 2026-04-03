@@ -155,7 +155,7 @@ public class ScriptAction {
         if (blueprint.getRepeatEvery().getValue() > 0) {
             // If it's a repeating task, schedule it accordingly.
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {
@@ -249,7 +249,7 @@ public class ScriptAction {
                     + blueprint.getScriptName() + "' for file '" + blueprint.getScriptFilename() + "'");
         }
 
-        if (!blueprint.getActionType().equals(ActionType.RUN_SCRIPT)) {
+        if (blueprint.getActionType() != ActionType.RUN_SCRIPT) {
             runAdditionalScripts(scriptActionData);
         }
     }
@@ -426,7 +426,7 @@ public class ScriptAction {
      */
     private void runAdditionalScripts(ScriptActionData scriptActionData) {
         if (blueprint.getScripts() == null || blueprint.getScripts().isEmpty()) {
-            if (blueprint.getActionType().equals(ActionType.RUN_SCRIPT)) {
+            if (blueprint.getActionType() == ActionType.RUN_SCRIPT) {
                 Logger.warn("No scripts found to run in RUN_SCRIPT action in script '" + blueprint.getScriptName() + "' in file '" + blueprint.getScriptFilename() + "'");
             }
             return;
@@ -490,17 +490,11 @@ public class ScriptAction {
                 if (target instanceof Player) {
                     PlayerDamagedByEliteMobEvent.PlayerDamagedByEliteMobEventFilter.setSpecialMultiplier(multiplier);
 
-                    if (scriptActionData.getEliteEntity().getLivingEntity() != null) {
-                        target.damage(damageAmount, scriptActionData.getEliteEntity().getLivingEntity());
-                    } else {
-                        target.damage(damageAmount);
-                    }
+                }
+                if (scriptActionData.getEliteEntity().getLivingEntity() != null) {
+                    target.damage(damageAmount, scriptActionData.getEliteEntity().getLivingEntity());
                 } else {
-                    if (scriptActionData.getEliteEntity().getLivingEntity() != null) {
-                        target.damage(damageAmount, scriptActionData.getEliteEntity().getLivingEntity());
-                    } else {
-                        target.damage(damageAmount);
-                    }
+                    target.damage(damageAmount);
                 }
             });
         } finally {
@@ -604,13 +598,13 @@ public class ScriptAction {
         // Get player from direct target (the entity that triggered the event, e.g., player who hit the boss)
         Player player = (directTarget instanceof Player) ? (Player) directTarget : null;
         String playerName = player != null ? player.getName() : "Unknown";
-        Location playerLocation = player != null ? player.getLocation() : new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+        Location playerLocation = player != null ? player.getLocation() : new Location(Bukkit.getWorlds().getFirst(), 0, 0, 0);
 
         // Get boss info
         String bossName = eliteEntity != null ? eliteEntity.getName() : "Unknown";
         Location bossLocation = eliteEntity != null && eliteEntity.getLocation() != null
                 ? eliteEntity.getLocation()
-                : new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+                : new Location(Bukkit.getWorlds().getFirst(), 0, 0, 0);
         int bossLevel = eliteEntity != null ? eliteEntity.getLevel() : 0;
         String bossWorldName = bossLocation.getWorld() != null ? bossLocation.getWorld().getName() : "Unknown";
 
@@ -731,12 +725,11 @@ public class ScriptAction {
         new BukkitRunnable() {
             @Override
             public void run() {
-                Vector finalVelocity = localFinalVelocity;
                 getTargets(scriptActionData).forEach(target -> {
                     if (additive) {
-                        target.setVelocity(target.getVelocity().add(finalVelocity));
+                        target.setVelocity(target.getVelocity().add(localFinalVelocity));
                     } else {
-                        target.setVelocity(finalVelocity);
+                        target.setVelocity(localFinalVelocity);
                     }
                 });
             }
@@ -800,7 +793,7 @@ public class ScriptAction {
 
                 for (int i = 0; i < types.size(); i++) {
                     FireworkEffect.Type type = types.get(i);
-                    List<Color> colors = i < colorsList.size() ? colorsList.get(i) : colorsList.get(colorsList.size() - 1);
+                    List<Color> colors = i < colorsList.size() ? colorsList.get(i) : colorsList.getLast();
                     FireworkEffect effect = FireworkEffect.builder()
                             .with(type)
                             .withColor(colors)
@@ -1109,7 +1102,7 @@ public class ScriptAction {
                     FallingEntityDataPair dataPair = new FallingEntityDataPair(this, scriptActionData);
                     new BukkitRunnable() {
                         final int maxTicks = 20 * 60 * 5;
-                        int counter = 0;
+                        int counter;
 
                         @Override
                         public void run() {
@@ -1180,7 +1173,7 @@ public class ScriptAction {
                 : blueprint.getVValue();
 
         if (direction == null) {
-            Logger.warn("Tried to set direction in " + getBlueprint().getScriptFilename() + " but no configuration for vvalue or relative vector are set in " + blueprint.getScriptName() + " !");
+            Logger.warn("Tried to set direction in " + blueprint.getScriptFilename() + " but no configuration for vvalue or relative vector are set in " + blueprint.getScriptName() + " !");
             return;
         }
 

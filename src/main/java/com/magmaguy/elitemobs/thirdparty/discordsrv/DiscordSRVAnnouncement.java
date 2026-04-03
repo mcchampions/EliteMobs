@@ -10,8 +10,8 @@ import org.bukkit.ChatColor;
 
 public class DiscordSRVAnnouncement {
 
-    private static TextChannel textChannel = null;
-    private static boolean isInitialized = false;
+    private static TextChannel textChannel;
+    private static boolean isInitialized;
 
     public DiscordSRVAnnouncement(String announcement) {
 

@@ -25,7 +25,7 @@ public class TimedEvent extends CustomEvent implements Listener {
     @Getter
     protected static List<TimedEvent> blueprintEvents = new ArrayList<>();
     protected static List<TimedEvent> timedEvents = new ArrayList<>();
-    private static BukkitTask eventPickerTask = null;
+    private static BukkitTask eventPickerTask;
     //stores the time of the last global trigger
     @Getter
     private static double nextEventTrigger = System.currentTimeMillis() + 5D * 60D * 1000D;
@@ -35,9 +35,9 @@ public class TimedEvent extends CustomEvent implements Listener {
     private final double globalCooldown;
     private final double weight;
     private final String filename;
-    private double nextLocalEventTrigger = 0;
+    private double nextLocalEventTrigger;
     private CustomSpawn customSpawn;
-    private boolean silentRetry = false;
+    private boolean silentRetry;
 
     public TimedEvent(CustomEventsConfigFields customEventsConfigFields) {
         super(customEventsConfigFields);

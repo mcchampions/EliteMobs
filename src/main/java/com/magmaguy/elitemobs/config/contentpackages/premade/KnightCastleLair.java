@@ -20,9 +20,10 @@ public class KnightCastleLair extends ContentPackagesConfigFields {
                 "em_knight_castle,-33.5,3.5,48.5,-17,0",
                 "em_knight_castle,-20.5,6.2,55.5,-120,0",
                 0,
-                "Difficulty: &chard\n" +
-                        "$bossCount level $lowestTier Big Boss!\n" +
-                        "&6Face an honorable duel!",
+                """
+                        Difficulty: &chard
+                        $bossCount level $lowestTier Big Boss!
+                        &6Face an honorable duel!""",
                 "&fAssault the castle!",
                 "&fNow leaving the castle!",
                 List.of("filename=the_castle_charlemagne_p1.yml"),

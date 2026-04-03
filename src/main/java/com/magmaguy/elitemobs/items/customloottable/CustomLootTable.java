@@ -20,7 +20,7 @@ public class CustomLootTable implements Serializable {
 
     @Getter
     private final List<CustomLootEntry> entries = new ArrayList<>();
-    private final Map<Integer, List<CustomLootEntry>> waveRewards = new HashMap();
+    private final Map<Integer, List<CustomLootEntry>> waveRewards = new HashMap<>();
 
     public CustomLootTable() {
     }
@@ -49,23 +49,21 @@ public class CustomLootTable implements Serializable {
         if (lootTable == null) return;
         for (Object object : lootTable)
             if (object instanceof String rawString) {
-                switch (rawString.split(":")[0].toLowerCase(Locale.ROOT)) {
-                    case "minecraft":
+                if (rawString.split(":")[0].toLowerCase(Locale.ROOT).equals("minecraft")) {
+                    new VanillaCustomLootEntry(entries, rawString, filename);
+                } else {
+                    if (rawString.toLowerCase(Locale.ROOT).contains("currencyamount="))
+                        new CurrencyCustomLootEntry(entries, rawString, filename);
+                    else if (rawString.contains("material="))
                         new VanillaCustomLootEntry(entries, rawString, filename);
-                        break;
-                    default:
-                        if (rawString.toLowerCase(Locale.ROOT).contains("currencyamount="))
-                            new CurrencyCustomLootEntry(entries, rawString, filename);
-                        else if (rawString.contains("material="))
-                            new VanillaCustomLootEntry(entries, rawString, filename);
-                        else if (rawString.contains("command=")) new CommandLootTable(entries, rawString, filename);
-                        else new EliteCustomLootEntry(entries, rawString, filename);
+                    else if (rawString.contains("command=")) new CommandLootTable(entries, rawString, filename);
+                    else new EliteCustomLootEntry(entries, rawString, filename);
                 }
             }
             else if (object instanceof Map<?, ?> configMap) {
                 //This is used for the instanced loot
-                if (((Map<?, ?>) object).containsKey("currencyAmount") ||
-                        ((Map<?, ?>) object).containsKey("currencyamount")) {
+                if (configMap.containsKey("currencyAmount") ||
+                    configMap.containsKey("currencyamount")) {
                     new CurrencyCustomLootEntry(entries, configMap, filename);
                 } else if (((Map<?, ?>) object).containsKey("material")) {
                     new VanillaCustomLootEntry(entries, (Map<String, Object>) configMap, filename);

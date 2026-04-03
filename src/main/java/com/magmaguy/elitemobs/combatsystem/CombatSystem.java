@@ -51,10 +51,10 @@ public class CombatSystem {
             case TURTLE_HELMET:
                 return GOLD_WOOD_LEATHER_TIER_LEVEL;
             default:
-                if (material.equals(Material.NETHERITE_HELMET) ||
-                        material.equals(Material.NETHERITE_CHESTPLATE) ||
-                        material.equals(Material.NETHERITE_LEGGINGS) ||
-                        material.equals(Material.NETHERITE_BOOTS))
+                if (material == Material.NETHERITE_HELMET ||
+                    material == Material.NETHERITE_CHESTPLATE ||
+                    material == Material.NETHERITE_LEGGINGS ||
+                    material == Material.NETHERITE_BOOTS)
                     return CombatSystem.NETHERITE_TIER_LEVEL;
         }
         return 0;

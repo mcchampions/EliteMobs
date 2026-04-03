@@ -34,7 +34,7 @@ public class DynamicDungeonInstance extends DungeonInstance {
         // Recalculate level sync for dynamic dungeons based on the player-selected level
         recalculateLevelSyncForDynamicLevel(selectedLevel);
 
-        new SetBossLevelsTask(this, selectedLevel).runTaskLater(MetadataHandler.PLUGIN, 20 * 4L);
+        new SetBossLevelsTask(this, selectedLevel).runTaskLater(MetadataHandler.PLUGIN, 20 << 2);
     }
 
     public static void setupDynamicDungeon(Player player, String dungeonConfigFieldsString, String difficultyName, int selectedLevel) {
@@ -112,8 +112,7 @@ public class DynamicDungeonInstance extends DungeonInstance {
             getWorld().getEntities().forEach(entity -> {
                 if (entity instanceof org.bukkit.entity.LivingEntity) {
                     Object eliteEntity = com.magmaguy.elitemobs.entitytracker.EntityTracker.getEliteMobEntity(entity);
-                    if (eliteEntity instanceof InstancedBossEntity) {
-                        InstancedBossEntity boss = (InstancedBossEntity) eliteEntity;
+                    if (eliteEntity instanceof InstancedBossEntity boss) {
                         if (boss.getDungeonInstance() == dynamicDungeonInstance) {
                             boss.setEntityLevel(level);
                         }

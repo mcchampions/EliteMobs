@@ -17,7 +17,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 import com.magmaguy.shaded.luaj.vm2.LuaFunction;
 import com.magmaguy.shaded.luaj.vm2.LuaTable;
@@ -238,10 +237,9 @@ final class LuaWorldTableBuilder {
             }
             int duration = options.get("duration").optint(0);
             if (duration > 0) {
-                Entity spawnedEntity = entity;
                 com.magmaguy.elitemobs.utils.GameClock.scheduleLater(duration, () -> {
-                    if (spawnedEntity.isValid()) {
-                        spawnedEntity.remove();
+                    if (entity.isValid()) {
+                        entity.remove();
                     }
                 });
             }
@@ -388,7 +386,7 @@ final class LuaWorldTableBuilder {
     private void monitorEntityLanding(Entity entity, LuaFunction callback, int maxTicks) {
         final int[] taskId = new int[1];
         taskId[0] = taskController.runRepeating(1, 1, new Runnable() {
-            private int counter = 0;
+            private int counter;
 
             @Override
             public void run() {

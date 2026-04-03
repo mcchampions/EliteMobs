@@ -31,7 +31,7 @@ public class TransitiveBossBlock implements Listener {
         }
 
         //Minor optimization, does not replace blocks that are already identical
-        if (!location.getBlock().getBlockData().getMaterial().equals(blockData.getMaterial()))
+        if (location.getBlock().getBlockData().getMaterial() != blockData.getMaterial())
             location.getBlock().setBlockData(blockData, blockData.getMaterial() == Material.WATER || blockData.getMaterial() == Material.LAVA);
 
     }
@@ -43,35 +43,29 @@ public class TransitiveBossBlock implements Listener {
     4 = west
      */
     private static int blockFaceToInt(BlockFace blockFace) {
-        switch (blockFace) {
-            case NORTH:
-                return 1;
-            case EAST:
-                return 2;
-            case SOUTH:
-                return 3;
-            case WEST:
-                return 4;
-            default:
+        return switch (blockFace) {
+            case NORTH -> 1;
+            case EAST -> 2;
+            case SOUTH -> 3;
+            case WEST -> 4;
+            default -> {
                 Logger.warn("Attempted to rotate a block through the transitive block system that does not have a north / south / east / west face. This is not currently supported.");
-                return 1;
-        }
+                yield 1;
+            }
+        };
     }
 
     private static BlockFace intToBlockFace(int blockFaceValue) {
-        switch (blockFaceValue) {
-            case 1:
-                return BlockFace.NORTH;
-            case 2:
-                return BlockFace.EAST;
-            case 3:
-                return BlockFace.SOUTH;
-            case 4:
-                return BlockFace.WEST;
-            default:
+        return switch (blockFaceValue) {
+            case 1 -> BlockFace.NORTH;
+            case 2 -> BlockFace.EAST;
+            case 3 -> BlockFace.SOUTH;
+            case 4 -> BlockFace.WEST;
+            default -> {
                 Logger.warn("Attempted to rotate a block through the transitive block system that does not have a north / south / east / west face. This is not currently supported.");
-                return BlockFace.NORTH;
-        }
+                yield BlockFace.NORTH;
+            }
+        };
     }
 
     private static BlockFace rotateBlockFace(BlockFace blockFace, double rotation) {

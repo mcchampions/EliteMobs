@@ -12,7 +12,7 @@ import static com.magmaguy.elitemobs.utils.MapListInterpreter.*;
 
 public class EliteScriptBlueprint {
     @Getter
-    private static final HashMap<CustomConfigFields, EliteScriptBlueprint> blueprints = new HashMap();
+    private static final HashMap<CustomConfigFields, EliteScriptBlueprint> blueprints = new HashMap<>();
 
     @Getter
     private final CustomConfigFields customConfigFields;
@@ -26,7 +26,6 @@ public class EliteScriptBlueprint {
     private final ScriptEventsBlueprint scriptEventsBlueprint;
     @Getter
     private final ScriptCooldownsBlueprint scriptCooldownsBlueprint;
-    private final String filename;
     @Getter
     private final String scriptName;
 
@@ -34,7 +33,7 @@ public class EliteScriptBlueprint {
     public EliteScriptBlueprint(CustomConfigFields customConfigFields,
                                 Map<String, Object> configurationValues,
                                 String scriptName) {
-        this.filename = customConfigFields.getFilename();
+        String filename = customConfigFields.getFilename();
         this.scriptName = scriptName;
         this.customConfigFields = customConfigFields;
         this.scriptEventsBlueprint = new ScriptEventsBlueprint(configurationValues, scriptName, filename);
@@ -84,21 +83,21 @@ public class EliteScriptBlueprint {
             String[] splitKeys = key.split("\\.");
             if (splitKeys.length < 1) continue;
             String truncatedKey = splitKeys[splitKeys.length - 1];
-            if (truncatedKey.equalsIgnoreCase("target") && configurationSection.get(key) instanceof String) {
+            if ("target".equalsIgnoreCase(truncatedKey) && configurationSection.get(key) instanceof String) {
                 updated = true;
                 String overallKey = key.replace(".target", "");
                 new OldDataContainer(overallKey, configurationSection, overallKey);
             }
             //Actions are specific because they have "anonymous" keys since they are just in a list
-            if (truncatedKey.equalsIgnoreCase("Actions")) {
+            if ("Actions".equalsIgnoreCase(truncatedKey)) {
                 List<Map<?, ?>> immutableMapList = new ArrayList<>(configurationSection.getMapList(key));
                 List<Map<?, ?>> mutableMapList = new ArrayList<>();
                 immutableMapList.forEach(map -> mutableMapList.add(new HashMap<>(map)));
                 for (Map<?, ?> map : mutableMapList) {
                     Map<?, ?> clonedMap = new HashMap<>(map);
                     for (Map.Entry<?, ?> entry : clonedMap.entrySet()) {
-                        if (((String) entry.getKey()).equalsIgnoreCase("target") &&
-                                !(entry.getValue() instanceof Map)) {
+                        if ("target".equalsIgnoreCase((String) entry.getKey()) &&
+                            !(entry.getValue() instanceof Map)) {
                             updated = true;
                             new OldDataContainer(map, customConfigFields.getFilename());
                         }
@@ -118,10 +117,10 @@ public class EliteScriptBlueprint {
     }
 
     private static class OldDataContainer {
-        String location = null, targetType = null, offset = null;
-        List<String> locations = null;
-        Double range = null;
-        Boolean track = null;
+        String location, targetType, offset;
+        List<String> locations;
+        Double range;
+        Boolean track;
         String newKey;
         String scriptName;
 
@@ -159,7 +158,7 @@ public class EliteScriptBlueprint {
 
         private void updateKey(String key, Object value, Map<String, Object> oldMap, Map<String, Object> newMap) {
             oldMap.remove(key);
-            if (key.equals("targetType")) oldMap.remove("target");
+            if ("targetType".equals(key)) oldMap.remove("target");
             newMap.put(key, value);
         }
 

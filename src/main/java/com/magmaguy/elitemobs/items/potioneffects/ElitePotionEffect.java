@@ -45,7 +45,7 @@ public class ElitePotionEffect {
 
             this.applicationMethod = ApplicationMethod.valueOf(stringObject[3].toUpperCase(Locale.ROOT));
 
-            if (this.applicationMethod.equals(ApplicationMethod.ONHIT))
+            if (this.applicationMethod == ApplicationMethod.ONHIT)
                 this.potionEffect = new PotionEffect(potionEffectType,
                         PotionEffectsConfig.getPotionEffect(potionEffect.getType().getKey().getKey()).getOnHitDuration() * 20,
                         Integer.parseInt(stringObject[1]));

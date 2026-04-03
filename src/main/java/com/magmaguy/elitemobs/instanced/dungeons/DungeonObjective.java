@@ -7,7 +7,7 @@ import java.util.Locale;
 public class DungeonObjective {
 
     @Getter
-    protected boolean completed = false;
+    protected boolean completed;
     @Getter
     protected DungeonInstance dungeonInstance;
 

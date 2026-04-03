@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class PaperMC {
     @Getter
-    private static boolean paperMC = false;
+    private static boolean paperMC;
 
     public static void initialize() {
         try {

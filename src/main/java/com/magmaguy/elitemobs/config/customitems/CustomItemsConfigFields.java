@@ -39,19 +39,19 @@ public class CustomItemsConfigFields extends CustomConfigFields {
     private CustomItem.ItemType itemType = CustomItem.ItemType.CUSTOM;
     @Getter
     @Setter
-    private String customModelID = null;
+    private String customModelID;
     @Getter
     @Setter
-    private String equipmentModelID = null;
+    private String equipmentModelID;
     @Getter
     @Setter
-    private String scriptedItem = null;
+    private String scriptedItem;
     @Getter
     @Setter
     private String permission = "";
     @Getter
     @Setter
-    private int level = 0;
+    private int level;
     @Getter
     @Setter
     private boolean soulbound = true;
@@ -136,7 +136,7 @@ public class CustomItemsConfigFields extends CustomConfigFields {
             if (result.equals(split[0])) newPotionEffects.add(potionEffect);
             else {
                 StringBuilder newString = new StringBuilder();
-                newString.append(result + ",");
+                newString.append(result).append(",");
 
                 for (int i = 1; i < split.length; i++) {
                     newString.append(split[i]);

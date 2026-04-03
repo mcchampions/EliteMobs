@@ -36,20 +36,20 @@ public class DamageBreakdown {
     private static final Map<UUID, DamageBreakdown> activeBreakdowns = new ConcurrentHashMap<>();
 
     // Formula components
-    @Getter @Setter private double baseDamage = 0;
+    @Getter @Setter private double baseDamage;
     @Getter @Setter private double attackSpeedFactor = 1.0;
     @Getter @Setter private double skillAdjustment = 1.0;
     @Getter @Setter private double weaponAdjustment = 1.0;
     @Getter @Setter private double cooldownOrVelocity = 1.0;
     @Getter @Setter private double sweepMultiplier = 1.0;
     @Getter @Setter private double potionMultiplier = 1.0;
-    @Getter @Setter private double thornsDamage = 0;
+    @Getter @Setter private double thornsDamage;
     @Getter @Setter private double enchantmentMultiplier = 1.0;
     @Getter @Setter private double arrowDamageMultiplier = 1.0;
 
     // Levels
     @Getter @Setter private int playerSkillLevel = 1;
-    @Getter @Setter private int itemLevel = 0;
+    @Getter @Setter private int itemLevel;
     @Getter @Setter private int eliteLevel = 1;
 
     // Multipliers
@@ -59,14 +59,14 @@ public class DamageBreakdown {
     @Getter @Setter private double critMultiplier = 1.0;
 
     // Computed values
-    @Getter private double formulaDamage = 0;
-    @Getter private double finalDamage = 0;
+    @Getter private double formulaDamage;
+    @Getter private double finalDamage;
 
     // Metadata
-    @Getter @Setter private boolean isCriticalHit = false;
-    @Getter @Setter private boolean isRangedAttack = false;
-    @Getter @Setter private boolean isSweepAttack = false;
-    @Getter @Setter private boolean isThornsAttack = false;
+    @Getter @Setter private boolean isCriticalHit;
+    @Getter @Setter private boolean isRangedAttack;
+    @Getter @Setter private boolean isSweepAttack;
+    @Getter @Setter private boolean isThornsAttack;
     @Getter @Setter private String weaponType = "UNKNOWN";
 
     /**

@@ -97,8 +97,8 @@ public class QuestMenu {
                 body.add(new TextComponent(ChatColorConverter.convert(splitString)));
         else if (quest instanceof DynamicQuest)
             body.add(new TextComponent(DynamicQuestMenuConfig.getDefaultLoreTextLines()
-                    .replace("$amount", quest.getQuestObjectives().getObjectives().get(0).getTargetAmount() + "")
-                    .replace("$name", EliteMobProperties.getPluginData(((DynamicKillObjective) quest.getQuestObjectives().getObjectives().get(0)).getEntityType()).getName(((DynamicKillObjective) quest.getQuestObjectives().getObjectives().get(0)).getMinMobLevel()))));
+                    .replace("$amount", quest.getQuestObjectives().getObjectives().getFirst().getTargetAmount() + "")
+                    .replace("$name", EliteMobProperties.getPluginData(((DynamicKillObjective) quest.getQuestObjectives().getObjectives().getFirst()).getEntityType()).getName(((DynamicKillObjective) quest.getQuestObjectives().getObjectives().getFirst()).getMinMobLevel()))));
         return body;
     }
 

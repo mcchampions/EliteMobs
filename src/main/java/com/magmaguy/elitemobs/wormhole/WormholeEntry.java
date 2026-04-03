@@ -80,29 +80,28 @@ public class WormholeEntry implements PersistentObject {
     @Getter
     private String armorStandText;
     // Use real TextDisplay entity - Minecraft handles visibility automatically
-    private TextDisplay textDisplay = null;
+    private TextDisplay textDisplay;
     // Custom model for this entry point (FreeMinecraftModels only)
-    private StaticEntity staticModel = null;
+    private StaticEntity staticModel;
     private String worldName;
     @Getter
     @Setter
-    private String portalMissingMessage = null;
+    private String portalMissingMessage;
     @Getter
     @Setter
-    private String opMessage = null;
+    private String opMessage;
     @Getter
-    private boolean showDownloadHint = false;
-    private PersistentObjectHandler persistentObjectHandler = null;
-    private long[] cachedEdges = null; // Cache edges as long array (p1 << 32 | p2)
-    private Material concreteColor = null; // Cache the concrete color
-    private boolean linesInitialized = false;
-    private int rotationIndex = 0;
+    private boolean showDownloadHint;
+    private PersistentObjectHandler persistentObjectHandler;
+    private long[] cachedEdges; // Cache edges as long array (p1 << 32 | p2)
+    private boolean linesInitialized;
+    private int rotationIndex;
     private static final long LINES_RECREATION_COOLDOWN_MS = 500; // 500ms cooldown after clearing
     private static final int TICKS_WITHOUT_LOS_BEFORE_CLEAR = 100; // Clear lines after ~5 seconds without LOS
-    private volatile boolean isProcessingChunkEvent = false; // Prevent race conditions during chunk events
-    private long lastLinesClearTime = 0; // Cooldown to prevent rapid recreation
-    private int particleTickCounter = 0; // Counter for particle spawn rate
-    private int ticksWithoutLOS = 0; // Track how long no player has had LOS
+    private volatile boolean isProcessingChunkEvent; // Prevent race conditions during chunk events
+    private long lastLinesClearTime; // Cooldown to prevent rapid recreation
+    private int particleTickCounter; // Counter for particle spawn rate
+    private int ticksWithoutLOS; // Track how long no player has had LOS
     private final Set<UUID> playersViewingLines = new HashSet<>(); // Track which players are viewing lines
 
     public WormholeEntry(Wormhole wormhole, String locationString, int wormholeNumber) {
@@ -208,7 +207,7 @@ public class WormholeEntry implements PersistentObject {
                     setupMsg = setupMsg
                             .replace("$filename", filename)
                             .replace("$number", String.valueOf(wormholeNumber));
-                    if (filename.equals("adventurers_guild_wormhole")) {
+                    if ("adventurers_guild_wormhole".equals(filename)) {
                         String agMsg = CommandMessagesConfig.getWormholeAgSpawnRecommendation();
                         if (agMsg != null) setupMsg += "\n" + agMsg;
                     }
@@ -534,7 +533,8 @@ public class WormholeEntry implements PersistentObject {
             cachedEdges = null;
 
             // Get concrete color that matches the wormhole's particle color (only once)
-            concreteColor = getConcreteColorForWormhole();
+            // Cache the concrete color
+            Material concreteColor = getConcreteColorForWormhole();
 
             // Get edges from shape (connect points based on shape type) - cache this
             cachedEdges = getEdgesForShape(currentFrame);
@@ -573,7 +573,6 @@ public class WormholeEntry implements PersistentObject {
                 lineDataList.addAll(oldLines);
                 linesInitialized = !lineDataList.isEmpty();
                 lastLinesClearTime = System.currentTimeMillis();
-                return;
             }
         } else {
             // Update existing line positions instead of recreating
@@ -681,16 +680,12 @@ public class WormholeEntry implements PersistentObject {
         double sizeMultiplier = wormhole.getWormholeConfigFields().getSizeMultiplier();
 
         // Generate edges based on shape type, matching the trace() calls in VisualEffects
-        switch (style) {
-            case CUBE:
-                return getCubeEdges(allPoints, sizeMultiplier);
-            case CRYSTAL:
-                return getCrystalEdges(allPoints, sizeMultiplier);
-            case ICOSAHEDRON:
-                return getIcosahedronEdges(allPoints, sizeMultiplier);
-            default:
-                return new long[0];
-        }
+        return switch (style) {
+            case CUBE -> getCubeEdges(allPoints, sizeMultiplier);
+            case CRYSTAL -> getCrystalEdges(allPoints, sizeMultiplier);
+            case ICOSAHEDRON -> getIcosahedronEdges(allPoints, sizeMultiplier);
+            default -> new long[0];
+        };
     }
 
     /**
@@ -848,7 +843,7 @@ public class WormholeEntry implements PersistentObject {
         }
         // Connect first top to last bottom
         if (!topPentagonIndices.isEmpty() && !bottomPentagonIndices.isEmpty()) {
-            edgeSet.add(encodeEdge(topPentagonIndices.get(0), bottomPentagonIndices.get(4 % bottomPentagonIndices.size())));
+            edgeSet.add(encodeEdge(topPentagonIndices.getFirst(), bottomPentagonIndices.get(4 % bottomPentagonIndices.size())));
         }
 
         return edgeSet.stream().mapToLong(Long::longValue).toArray();

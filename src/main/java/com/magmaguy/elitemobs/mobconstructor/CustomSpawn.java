@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -40,12 +41,12 @@ public class CustomSpawn {
     private final ArrayList<CustomBossEntity> customBossEntities = new ArrayList<>();
     @Getter
     @Setter
-    private boolean isEvent = false;
+    private boolean isEvent;
     @Getter
     @Setter
     private World world;
     private TimedEvent timedEvent;
-    private int allTries = 0;
+    private int allTries;
     @Getter
     @Setter
     private Location spawnLocation;
@@ -158,7 +159,7 @@ public class CustomSpawn {
                     return;
 
                 if (customSpawnConfigFields.getMoonPhase() != null)
-                    if (!MoonPhaseDetector.detectMoonPhase(spawnLocation.getWorld()).equals(customSpawnConfigFields.getMoonPhase()))
+                    if (MoonPhaseDetector.detectMoonPhase(spawnLocation.getWorld()) != customSpawnConfigFields.getMoonPhase())
                         return;
 
                 if (spawnLocation == null) {
@@ -168,7 +169,7 @@ public class CustomSpawn {
                 }
                 //One last check
                 //Last line of defense - spawn a test mob. If some unknown protection system prevents spawning it should prevent this
-                LivingEntity testEntity = spawnLocation.getWorld().spawn(spawnLocation, Zombie.class, spawnEntity -> spawnEntity.setAdult());
+                LivingEntity testEntity = spawnLocation.getWorld().spawn(spawnLocation, Zombie.class, Ageable::setAdult);
                 if (!testEntity.isValid()) {
                     spawnLocation = null;
                     //Run 1 tick later to make sure it doesn't get stuck trying over and over again in the same tick
@@ -243,7 +244,7 @@ public class CustomSpawn {
         if (customSpawnConfigFields == null) {
             Logger.warn("Something tried to spawn but has invalid custom spawn config fields! This isn't good.", true);
             Logger.warn("Bosses: ");
-            getCustomBossEntities().forEach((customBossEntity) -> {
+            customBossEntities.forEach((customBossEntity) -> {
                 if (customBossEntity != null)
                     if (customBossEntity.getName() != null)
                         Logger.warn(customBossEntity.getCustomBossesConfigFields().getName());
@@ -332,7 +333,7 @@ public class CustomSpawn {
                 for (int y = (int) location.getY(); y > -64; y--) {
                     Location tempLocation = location.clone();
                     tempLocation.setY(y);
-                    if (location.getBlock().getType().equals(Material.VOID_AIR)) return null;
+                    if (location.getBlock().getType() == Material.VOID_AIR) return null;
                     if (y < customSpawnConfigFields.getLowestYLevel()) return null;
                     Block groundBlock = location.clone().subtract(new Vector(0, 1, 0)).getBlock();
                     if (!groundBlock.getType().isSolid()) continue;
@@ -347,7 +348,7 @@ public class CustomSpawn {
                 for (int y = (int) location.getY(); y < highestBlockYAt; y++) {
                     Location tempLocation = location.clone();
                     tempLocation.setY(y);
-                    if (location.getBlock().getType().equals(Material.VOID_AIR)) return null;
+                    if (location.getBlock().getType() == Material.VOID_AIR) return null;
                     if (y < customSpawnConfigFields.getLowestYLevel()) return null;
                     Block groundBlock = location.clone().subtract(new Vector(0, 1, 0)).getBlock();
                     if (!groundBlock.getType().isSolid()) continue;
@@ -370,7 +371,7 @@ public class CustomSpawn {
                 return null;
 
         //Nether ceiling check
-        if (location.getY() > 127 && world.getEnvironment().equals(World.Environment.NETHER))
+        if (location.getY() > 127 && world.getEnvironment() == World.Environment.NETHER)
             return null;
 
         //Custom height check

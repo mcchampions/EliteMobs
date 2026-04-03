@@ -13,12 +13,11 @@ public class DialogArmorStand {
     public static FakeText createDialogArmorStand(Entity sourceEntity, String dialog, Vector offset) {
 
         offset.add(getDisplacementVector(sourceEntity).subtract(new Vector(0, 1, 0)));
-        Vector finalOffset = offset;
-        FakeText fakeText = VisualDisplay.generateFakeText(sourceEntity.getLocation().clone().add(finalOffset), dialog, 30);
+        FakeText fakeText = VisualDisplay.generateFakeText(sourceEntity.getLocation().clone().add(offset), dialog, 30);
         if (fakeText == null) return null;
 
         new BukkitRunnable() {
-            int taskTimer = 0;
+            int taskTimer;
 
             @Override
             public void run() {
@@ -29,7 +28,7 @@ public class DialogArmorStand {
                     cancel();
                     return;
                 }
-                Location newLoc = sourceEntity.getLocation().clone().add(finalOffset).add(new Vector(0, taskTimer * 0.05, 0));
+                Location newLoc = sourceEntity.getLocation().clone().add(offset).add(new Vector(0, taskTimer * 0.05, 0));
                 fakeText.teleport(newLoc);
             }
 
@@ -53,7 +52,7 @@ public class DialogArmorStand {
         if (fakeText == null) return null;
 
         new BukkitRunnable() {
-            int taskTimer = 0;
+            int taskTimer;
 
             @Override
             public void run() {

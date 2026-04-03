@@ -42,16 +42,16 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
     public final NPCsConfigFields npCsConfigFields;
     @Getter
     private final UUID uuid = UUID.randomUUID();
-    private boolean isInstancedDuplicate = false;
+    private boolean isInstancedDuplicate;
     private PersistentObjectHandler persistentObjectHandler;
-    private Villager villager = null;
+    private Villager villager;
     private Location spawnLocation;
-    private boolean isTalking = false;
+    private boolean isTalking;
     private TextDisplay roleDisplay;
-    private boolean isDisguised = false;
+    private boolean isDisguised;
     private String locationString;
     @Getter
-    private CustomModel customModel = null;
+    private CustomModel customModel;
 
     /**
      * Spawns NPC based off of the values in the NPCsConfig config file. Runs at startup and on reload.
@@ -68,7 +68,7 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
         }
         //this is how the wandering trader works
         if (locationString == null ||
-                locationString.equalsIgnoreCase("null"))
+                "null".equalsIgnoreCase(locationString))
             return;
         setSpawnLocation();
         spawn();
@@ -114,7 +114,7 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
         for (InstancedNPCContainer instancedNPCContainer : rawNPCs) {
             Location newLocation = instancedNPCContainer.getLocation();
             newLocation.setWorld(newWorld);
-            new NPCEntity(instancedNPCContainer.getNpcEntity().getNPCsConfigFields(), newLocation);
+            new NPCEntity(instancedNPCContainer.getNpcEntity().npCsConfigFields, newLocation);
         }
     }
 
@@ -140,24 +140,23 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
             this.villager = null;
         }
 
-        if (removalReason.equals(RemovalReason.WORLD_UNLOAD) && isInstancedDuplicate) {
+        if (removalReason == RemovalReason.WORLD_UNLOAD && isInstancedDuplicate) {
             persistentObjectHandler.remove();
             return;
         }
 
-        if (removalReason.equals(RemovalReason.REMOVE_COMMAND)) {
+        if (removalReason == RemovalReason.REMOVE_COMMAND) {
             if (npCsConfigFields.getLocations() != null && !npCsConfigFields.getLocations().isEmpty()) {
                 npCsConfigFields.removeNPC(locationString);
                 locationString = null;
-                spawnLocation = null;
             } else {
                 npCsConfigFields.setEnabled(false);
-                spawnLocation = null;
             }
+            spawnLocation = null;
             if (persistentObjectHandler != null)
                 persistentObjectHandler.remove();
         } else if (persistentObjectHandler != null)
-            if (!removalReason.equals(RemovalReason.SHUTDOWN))
+            if (removalReason != RemovalReason.SHUTDOWN)
                 persistentObjectHandler.updatePersistentLocation(getPersistentLocation());
             else
                 persistentObjectHandler.remove();
@@ -168,8 +167,8 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
                 spawnLocation.getWorld() == null ||
                 !ChunkLocationChecker.chunkAtLocationIsLoaded(spawnLocation)) return;
         if (villager != null && villager.isValid()) return;
-        if (npCsConfigFields.getInteractionType().equals(NPCInteractions.NPCInteractionType.SCROLL_APPLIER) &&
-                !ItemSettingsConfig.isUseEliteItemScrolls()) return;
+        if (npCsConfigFields.getInteractionType() == NPCInteractions.NPCInteractionType.SCROLL_APPLIER &&
+            !ItemSettingsConfig.isUseEliteItemScrolls()) return;
         if (EliteMobs.worldGuardIsEnabled)
             WorldGuardSpawnEventBypasser.forceSpawn();
         villager = spawnLocation.getWorld().spawn(spawnLocation, Villager.class, villagerInstance -> {
@@ -183,9 +182,9 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
         });
         // Apply custom model or disguise after spawn completes (not inside consumer)
         if (CustomModel.customModelsEnabled() &&
-                getNPCsConfigFields().getCustomModel() != null &&
-                !getNPCsConfigFields().getCustomModel().isEmpty() &&
-                CustomModel.modelExists(getNPCsConfigFields().getCustomModel()))
+            npCsConfigFields.getCustomModel() != null &&
+            !npCsConfigFields.getCustomModel().isEmpty() &&
+            CustomModel.modelExists(npCsConfigFields.getCustomModel()))
             setCustomModel(villager);
         else
             setDisguise(villager);
@@ -211,11 +210,11 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
     }
 
     private void setCustomModel(LivingEntity livingEntity) {
-        customModel = CustomModel.generateCustomModel(livingEntity, getNPCsConfigFields().getCustomModel(), ChatColorConverter.convert(getNPCsConfigFields().getName()),
+        customModel = CustomModel.generateCustomModel(livingEntity, npCsConfigFields.getCustomModel(), ChatColorConverter.convert(npCsConfigFields.getName()),
                 (player, modeledEntity) -> NPCInteractions.handleNPCInteraction(player, this),
                 (player, modeledEntity) -> NPCInteractions.handleNPCInteraction(player, this));
         if (customModel != null)
-            customModel.setSyncMovement(getNPCsConfigFields().isSyncMovement());
+            customModel.setSyncMovement(npCsConfigFields.isSyncMovement());
     }
 
     public Villager getVillager() {
@@ -271,13 +270,13 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
 
     @Override
     public Location getPersistentLocation() {
-        return getSpawnLocation();
+        return spawnLocation;
     }
 
     @Override
     public String getWorldName() {
-        if (getSpawnLocation() != null && getSpawnLocation().getWorld() != null)
-            return getSpawnLocation().getWorld().getName();
+        if (spawnLocation != null && spawnLocation.getWorld() != null)
+            return spawnLocation.getWorld().getName();
         String world = null;
         if (locationString != null && !locationString.isEmpty())
             world = locationString.split(",")[0];

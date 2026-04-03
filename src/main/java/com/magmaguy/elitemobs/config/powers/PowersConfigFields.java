@@ -1,6 +1,5 @@
 package com.magmaguy.elitemobs.config.powers;
 
-import com.magmaguy.elitemobs.config.DefaultConfig;
 import com.magmaguy.elitemobs.config.CustomConfigFields;
 import com.magmaguy.elitemobs.powers.meta.ElitePower;
 import com.magmaguy.elitemobs.powers.scripts.caching.EliteScriptBlueprint;
@@ -22,13 +21,13 @@ public class PowersConfigFields extends CustomConfigFields {
     private String effect;
     @Getter
     @Setter
-    private int powerCooldown = 0;
+    private int powerCooldown;
     @Getter
     @Setter
-    private int globalCooldown = 0;
+    private int globalCooldown;
     @Getter
     @Setter
-    private ConfigurationSection scripts = null;
+    private ConfigurationSection scripts;
     @Getter
     @Setter
     private Map<String, Object> rawScripts = new HashMap<>();
@@ -36,7 +35,7 @@ public class PowersConfigFields extends CustomConfigFields {
     @Setter
     private List<EliteScriptBlueprint> eliteScriptBlueprints = new ArrayList<>();
     @Getter
-    private Class<? extends ElitePower> elitePowerClass = null;
+    private Class<? extends ElitePower> elitePowerClass;
 
     @Getter
     @Setter

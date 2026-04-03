@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemStackSerializer {
 
@@ -24,7 +25,7 @@ public class ItemStackSerializer {
             fileConfiguration.addDefault(identifier + ".name", itemStack.getItemMeta().getDisplayName());
         if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore())
             fileConfiguration.addDefault(identifier + ".lore", itemStack.getItemMeta().getLore());
-        if (itemStack.getType().equals(Material.PLAYER_HEAD))
+        if (itemStack.getType() == Material.PLAYER_HEAD)
             fileConfiguration.addDefault(identifier + ".owner", ((SkullMeta) itemStack.getItemMeta()).getOwner());
         if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && itemStack.getItemMeta().getCustomModelData() != 0)
             fileConfiguration.addDefault(identifier + ".customModelID", itemStack.getItemMeta().getCustomModelData());
@@ -76,7 +77,7 @@ public class ItemStackSerializer {
             }
         }
 
-        if (material.equals(Material.PLAYER_HEAD)) {
+        if (material == Material.PLAYER_HEAD) {
             String owner = fileConfiguration.getString(fullId + "owner");
             return ItemStackGenerator.generateSkullItemStack(owner, name, lore);
         }
@@ -104,9 +105,9 @@ public class ItemStackSerializer {
         //Replace placeholders in name
         if (newMeta.hasDisplayName()) {
             String newName = newMeta.getDisplayName();
-            for (String placeholder : placeholderReplacementPairs.keySet())
-                if (newMeta.getDisplayName().contains(placeholder))
-                    newName = newName.replace(placeholder, placeholderReplacementPairs.get(placeholder));
+            for (Map.Entry<String, String> entry : placeholderReplacementPairs.entrySet())
+                if (newMeta.getDisplayName().contains(entry.getKey()))
+                    newName = newName.replace(entry.getKey(), entry.getValue());
             newMeta.setDisplayName(newName);
         }
 
@@ -114,9 +115,9 @@ public class ItemStackSerializer {
         if (newMeta.hasLore()) {
             for (String loreString : newMeta.getLore()) {
                 String newLoreString = loreString;
-                for (String placeholder : placeholderReplacementPairs.keySet())
-                    if (loreString.contains(placeholder))
-                        newLoreString = newLoreString.replace(placeholder, placeholderReplacementPairs.get(placeholder));
+                for (Map.Entry<String, String> entry : placeholderReplacementPairs.entrySet())
+                    if (loreString.contains(entry.getKey()))
+                        newLoreString = newLoreString.replace(entry.getKey(), entry.getValue());
                 newLore.add(newLoreString);
             }
             newMeta.setLore(newLore);

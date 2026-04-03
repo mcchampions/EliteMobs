@@ -33,7 +33,7 @@ public class CustomFetchObjective extends Objective {
     /**
      * This sets when a boss has been detected as having dropped the relevant item for the quest after the quest has been slated to begin.
      */
-    private boolean readyToPickUp = false;
+    private boolean readyToPickUp;
     /**
      * This sets whether the items are lost upon turning the quest in
      */

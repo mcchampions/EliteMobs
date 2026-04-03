@@ -110,7 +110,7 @@ public class MapListInterpreter {
             else if (value instanceof Double dbl)
                 return new ScriptDouble(dbl);
             else if (value instanceof String string) {
-                if (((String) value).contains("~")) {
+                if (string.contains("~")) {
                     String[] strings = ((String) value).split("~");
                     return new ScriptDouble(Double.parseDouble(strings[0]), Double.parseDouble(strings[1]));
                 }
@@ -148,7 +148,7 @@ public class MapListInterpreter {
             else if (value instanceof Float flt)
                 return new ScriptFloat(flt);
             else if (value instanceof String string) {
-                if (((String) value).contains("~")) {
+                if (string.contains("~")) {
                     String[] strings = ((String) value).split("~");
                     return new ScriptFloat(Float.parseFloat(strings[0]), Float.parseFloat(strings[1]));
                 }

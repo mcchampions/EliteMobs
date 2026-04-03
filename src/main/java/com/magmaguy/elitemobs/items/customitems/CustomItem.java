@@ -51,7 +51,7 @@ public class CustomItem {
     @Getter
     private List<String> potionEffects = new ArrayList<>();
     @Getter
-    private double dropWeight = 0;
+    private double dropWeight;
     @Getter
     private Scalability scalability;
     @Getter
@@ -104,19 +104,19 @@ public class CustomItem {
     // Adds custom items to the list used by the getloot GUI
     private static void addCustomItem(CustomItem customItem) {
         customItemStackList.add(customItem.generateDefaultsItemStack(null, false, null));
-        if (customItem.getItemType().equals(ItemType.UNIQUE)) return;
+        if (customItem.itemType == ItemType.UNIQUE) return;
         customItemStackShopList.add(customItem.generateDefaultsItemStack(null, true, null));
     }
 
     // Adds weighed static items
     private static void addWeighedFixedItems(CustomItem customItem) {
         ItemStack itemStack = customItem.generateDefaultsItemStack(null, false, null);
-        weighedFixedItems.put(itemStack, customItem.getDropWeight());
+        weighedFixedItems.put(itemStack, customItem.dropWeight);
     }
 
     public static void addTieredLoot(CustomItem customItem) {
         ItemStack itemStack = customItem.generateDefaultsItemStack(null, false, null);
-        int itemTier = customItem.getItemLevel();
+        int itemTier = customItem.itemLevel;
 
         if (tieredLoot.get(itemTier) == null)
             tieredLoot.put(itemTier, new ArrayList<>(Collections.singletonList(itemStack)));
@@ -129,17 +129,17 @@ public class CustomItem {
     }
 
     private static void addFixedItem(CustomItem customItem) {
-        if (fixedItems.get(customItem.getItemLevel()) == null || fixedItems.get(customItem.getItemLevel()).isEmpty())
-            fixedItems.put(customItem.getItemLevel(), new ArrayList<>(Collections.singletonList(customItem)));
+        if (fixedItems.get(customItem.itemLevel) == null || fixedItems.get(customItem.itemLevel).isEmpty())
+            fixedItems.put(customItem.itemLevel, new ArrayList<>(Collections.singletonList(customItem)));
         else
-            fixedItems.get(customItem.getItemLevel()).add(customItem);
+            fixedItems.get(customItem.itemLevel).add(customItem);
     }
 
     private static void addLimitedItem(CustomItem customItem) {
-        if (limitedItems.get(customItem.getItemLevel()) == null || limitedItems.get(customItem.getItemLevel()).isEmpty())
-            limitedItems.put(customItem.getItemLevel(), new ArrayList<>(Collections.singletonList(customItem)));
+        if (limitedItems.get(customItem.itemLevel) == null || limitedItems.get(customItem.itemLevel).isEmpty())
+            limitedItems.put(customItem.itemLevel, new ArrayList<>(Collections.singletonList(customItem)));
         else
-            limitedItems.get(customItem.getItemLevel()).add(customItem);
+            limitedItems.get(customItem.itemLevel).add(customItem);
     }
 
     /**
@@ -170,27 +170,27 @@ public class CustomItem {
 
         // Regenerate all cached ItemStacks with proper skins
         for (CustomItem customItem : customItems.values()) {
-            if (customItem.getCustomItemsConfigFields() == null || !customItem.getCustomItemsConfigFields().isEnabled())
+            if (customItem.customItemsConfigFields == null || !customItem.customItemsConfigFields.isEnabled())
                 continue;
-            if (customItem.getCustomItemsConfigFields().getMaterial() == null) continue;
+            if (customItem.customItemsConfigFields.getMaterial() == null) continue;
 
             // Regenerate loot menu items
             customItemStackList.add(customItem.generateDefaultsItemStack(null, false, null));
-            if (!customItem.getItemType().equals(ItemType.UNIQUE))
+            if (customItem.getItemType() != ItemType.UNIQUE)
                 customItemStackShopList.add(customItem.generateDefaultsItemStack(null, true, null));
 
             // Regenerate tiered loot
             ItemStack itemStack = customItem.generateDefaultsItemStack(null, false, null);
-            int itemTier = customItem.getItemLevel();
+            int itemTier = customItem.itemLevel;
             if (tieredLoot.get(itemTier) == null)
                 tieredLoot.put(itemTier, new ArrayList<>(Collections.singletonList(itemStack)));
             else
                 tieredLoot.get(itemTier).add(itemStack);
 
             // Regenerate weighed fixed items
-            if (customItem.getScalability() == Scalability.FIXED && customItem.getDropWeight() > 0) {
+            if (customItem.scalability == Scalability.FIXED && customItem.dropWeight > 0) {
                 ItemStack weighedStack = customItem.generateDefaultsItemStack(null, false, null);
-                weighedFixedItems.put(weighedStack, customItem.getDropWeight());
+                weighedFixedItems.put(weighedStack, customItem.dropWeight);
             }
         }
     }
@@ -206,7 +206,7 @@ public class CustomItem {
         Item loot = null;
         int itemTier = limitItemLevel(player, tier);
 
-        switch (getScalability()) {
+        switch (scalability) {
             case LIMITED:
                 loot = location.getWorld().dropItem(location,
                         ScalableItemConstructor.constructLimitedItem(itemTier, this, player, eliteEntity));
@@ -294,7 +294,7 @@ public class CustomItem {
 
     private boolean parseDropWeight() {
         if (this.customItemsConfigFields.getDropWeight() == null) return false;
-        if (this.customItemsConfigFields.getDropWeight().equalsIgnoreCase("dynamic")) return false;
+        if ("dynamic".equalsIgnoreCase(this.customItemsConfigFields.getDropWeight())) return false;
         try {
             this.dropWeight = Double.parseDouble(this.customItemsConfigFields.getDropWeight());
             return true;
@@ -312,20 +312,20 @@ public class CustomItem {
         this.scalability = customItemsConfigFields.getScalability();
         switch (this.customItemsConfigFields.getScalability()) {
             case FIXED:
-                if (!itemType.equals(ItemType.UNIQUE))
+                if (itemType != ItemType.UNIQUE)
                     addFixedItem(this);
                 break;
             case LIMITED:
-                if (!itemType.equals(ItemType.UNIQUE))
+                if (itemType != ItemType.UNIQUE)
                     addLimitedItem(this);
                 break;
             case SCALABLE:
-                if (!itemType.equals(ItemType.UNIQUE))
+                if (itemType != ItemType.UNIQUE)
                     scalableItems.add(this);
                 break;
             default:
                 this.scalability = Scalability.SCALABLE;
-                if (!itemType.equals(ItemType.UNIQUE))
+                if (itemType != ItemType.UNIQUE)
                     scalableItems.add(this);
                 Logger.warn("Item " + customItemsConfigFields.getFilename() + " does not have a valid scalability type! Defaulting to scalable.");
 
@@ -347,9 +347,9 @@ public class CustomItem {
                         itemLevel,
                         customItemsConfigFields.getName(),
                         customItemsConfigFields.getMaterial(),
-                        getEnchantments(),
-                        getCustomEnchantments(),
-                        getPotionEffects(),
+                        enchantments,
+                        customEnchantments,
+                        potionEffects,
                         customItemsConfigFields.getLore(),
                         eliteEntity,
                         player,
@@ -357,7 +357,7 @@ public class CustomItem {
                         customItemsConfigFields.getCustomModelID(),
                         customItemsConfigFields.getEquipmentModelID(),
                         customItemsConfigFields.isSoulbound(),
-                        getCustomItemsConfigFields().getFilename(),
+                        customItemsConfigFields.getFilename(),
                         customItemsConfigFields.getScriptedItem()
                 );
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -372,31 +372,20 @@ public class CustomItem {
         //This can happen when doing drop tables, the loot is not yet assigned to anyone
         if (player != null)
             itemTier = limitItemLevel(player, itemTier);
-        switch (this.scalability) {
-            case FIXED:
-                itemStack = generateDefaultsItemStack(player, false, eliteEntity);
-                break;
-            case LIMITED:
-                itemStack = ScalableItemConstructor.constructLimitedItem(itemTier, this, player, eliteEntity);
-                break;
-            case SCALABLE:
-                itemStack = ScalableItemConstructor.constructScalableItem(itemTier, this, player, eliteEntity);
-        }
+        itemStack = switch (this.scalability) {
+            case FIXED -> generateDefaultsItemStack(player, false, eliteEntity);
+            case LIMITED -> ScalableItemConstructor.constructLimitedItem(itemTier, this, player, eliteEntity);
+            case SCALABLE -> ScalableItemConstructor.constructScalableItem(itemTier, this, player, eliteEntity);
+        };
         return itemStack;
     }
 
     public ItemStack generateItemStackExact(int itemTier, Player player, EliteEntity eliteEntity) {
-        ItemStack itemStack = null;
-        switch (this.scalability) {
-            case FIXED:
-                itemStack = generateDefaultsItemStack(player, false, eliteEntity);
-                break;
-            case LIMITED:
-                itemStack = ScalableItemConstructor.constructLimitedItem(itemTier, this, player, eliteEntity);
-                break;
-            case SCALABLE:
-                itemStack = ScalableItemConstructor.constructScalableItem(itemTier, this, player, eliteEntity);
-        }
+        ItemStack itemStack = switch (this.scalability) {
+            case FIXED -> generateDefaultsItemStack(player, false, eliteEntity);
+            case LIMITED -> ScalableItemConstructor.constructLimitedItem(itemTier, this, player, eliteEntity);
+            case SCALABLE -> ScalableItemConstructor.constructScalableItem(itemTier, this, player, eliteEntity);
+        };
         return itemStack;
     }
 

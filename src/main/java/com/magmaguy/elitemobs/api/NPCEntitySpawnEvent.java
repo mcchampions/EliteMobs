@@ -10,7 +10,7 @@ public class NPCEntitySpawnEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final LivingEntity livingEntity;
     private final NPCEntity npcEntity;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     /**
      * Cancelling this event will prevent the NPC from being constructed by removing it and the entity it would've converted

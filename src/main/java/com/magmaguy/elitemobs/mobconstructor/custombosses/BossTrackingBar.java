@@ -165,7 +165,7 @@ public class BossTrackingBar {
                 //nearby player check
                 if (customBossEntity.isValid())
                     for (Entity entity : customBossEntity.getLivingEntity().getNearbyEntities(30, 30, 30))
-                        if (entity.getType().equals(EntityType.PLAYER))
+                        if (entity.getType() == EntityType.PLAYER)
                             if (!freshIteration.contains((Player) entity))
                                 createBossBar((Player) entity);
 

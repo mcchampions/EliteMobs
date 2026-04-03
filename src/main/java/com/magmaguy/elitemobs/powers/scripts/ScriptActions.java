@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ScriptActions {
     @Getter
-    private final List<ScriptAction> scriptActionsList = new ArrayList();
+    private final List<ScriptAction> scriptActionsList = new ArrayList<>();
 
     public ScriptActions(ScriptActionsBlueprint scriptActionsBlueprint, Map<String, ScriptExecutable> eliteScriptMap, ScriptRuntimeOwner runtimeOwner) {
         scriptActionsBlueprint.getScriptActionsBlueprintList().forEach(scriptActionBlueprint -> scriptActionsList.add(new ScriptAction(scriptActionBlueprint, eliteScriptMap, runtimeOwner)));

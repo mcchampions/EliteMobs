@@ -12,7 +12,6 @@ public class ItemStackCustomLootEntry extends CustomLootEntry implements Seriali
     private final String serializedItemStack;
 
     public ItemStackCustomLootEntry(List<CustomLootEntry> entries, ItemStack itemStack) {
-        super();
         this.serializedItemStack = ObjectSerializer.itemStackArrayToBase64(itemStack);
         entries.add(this);
     }

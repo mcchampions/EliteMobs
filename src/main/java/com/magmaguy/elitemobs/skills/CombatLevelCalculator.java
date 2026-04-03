@@ -43,10 +43,10 @@ public class CombatLevelCalculator {
         }
 
         // Sort descending to get highest first
-        Collections.sort(weaponLevels, Collections.reverseOrder());
+        weaponLevels.sort(Collections.reverseOrder());
 
         // Get the two highest weapon levels (default to 1 if not enough weapons leveled)
-        int highestWeapon = weaponLevels.size() > 0 ? weaponLevels.get(0) : 1;
+        int highestWeapon = !weaponLevels.isEmpty() ? weaponLevels.get(0) : 1;
         int secondHighestWeapon = weaponLevels.size() > 1 ? weaponLevels.get(1) : 1;
 
         // Get armor level

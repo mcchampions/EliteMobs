@@ -14,7 +14,7 @@ public class SetupToggleCommand extends AdvancedCommand {
     public SetupToggleCommand() {
         super(List.of("setup"));
         addLiteral("toggle");
-        addArgument("empackages", new ListStringCommandArgument(EMPackage.getEmPackages().values().stream().map(emPackage -> emPackage.getContentPackagesConfigFields().getFilename()).collect(Collectors.toUnmodifiableList()),"empackages"));
+        addArgument("empackages", new ListStringCommandArgument(EMPackage.getEmPackages().values().stream().map(emPackage -> emPackage.getContentPackagesConfigFields().getFilename()).toList(),"empackages"));
         setUsage("/em setup toggle <dungeonConfig>");
         setPermission("elitemobs.setup");
         setDescription("Allows you to toggle the installation of specified EliteMobs content.");

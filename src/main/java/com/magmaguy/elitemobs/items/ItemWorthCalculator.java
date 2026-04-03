@@ -16,7 +16,7 @@ public class ItemWorthCalculator {
 
     public static double determineItemWorth(ItemStack itemStack, Player player) {
 
-        if (itemStack == null || itemStack.getItemMeta() == null || itemStack.getType().equals(Material.AIR)) return 0;
+        if (itemStack == null || itemStack.getItemMeta() == null || itemStack.getType() == Material.AIR) return 0;
 
         //Check if value's already been written into the item. If it hasn't, the value will be -1
         // double value = ItemTagger.getItemValue(itemStack);
@@ -46,7 +46,6 @@ public class ItemWorthCalculator {
             if (EliteEnchantments.isPotentialEliteEnchantment(enchantment)) {
                 if (ItemTagger.getEnchantment(itemStack.getItemMeta(), enchantment.getKey()) != 0) {
                     value += EnchantmentsConfig.getEnchantment(enchantment).getValue() * ItemTagger.getEnchantment(itemStack.getItemMeta(), enchantment.getKey());
-                    continue;
                 }
             } else
                 value += EnchantmentsConfig.getEnchantment(enchantment).getValue() * itemStack.getEnchantments().get(enchantment);

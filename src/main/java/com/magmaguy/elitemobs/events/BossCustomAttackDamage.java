@@ -14,8 +14,8 @@ public class BossCustomAttackDamage {
         if (damagee.isInvulnerable() || damagee.getHealth() <= 0) return 0;
 
         if (damagee instanceof Player)
-            if (!(((Player) damagee).getGameMode().equals(GameMode.SURVIVAL) ||
-                    ((Player) damagee).getGameMode().equals(GameMode.ADVENTURE))) return 0;
+            if (!(((Player) damagee).getGameMode() == GameMode.SURVIVAL ||
+                  ((Player) damagee).getGameMode() == GameMode.ADVENTURE)) return 0;
 
         PlayerDamagedByEliteMobEvent.PlayerDamagedByEliteMobEventFilter.setBypass(true);
         damagee.damage(damage, damager);

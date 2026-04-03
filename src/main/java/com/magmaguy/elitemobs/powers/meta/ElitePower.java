@@ -41,24 +41,24 @@ public class ElitePower {
     @Getter
     private final CustomConfigFields powersConfigFields;
     @Getter
-    private String trail = null;
+    private String trail;
     @Getter
     @Setter
-    private int powerCooldownTime = 0;
+    private int powerCooldownTime;
     @Getter
     @Setter
-    private int globalCooldownTime = 0;
+    private int globalCooldownTime;
     @Getter
     @Setter
-    private boolean inGlobalCooldown = false;
+    private boolean inGlobalCooldown;
     @Getter
-    private boolean powerCooldownActive = false;
-    @Getter
-    @Setter
-    private boolean isFiring = false;
+    private boolean powerCooldownActive;
     @Getter
     @Setter
-    private EliteEntity ownerEntity = null;
+    private boolean isFiring;
+    @Getter
+    @Setter
+    private EliteEntity ownerEntity;
 
 
     //Constructor for scripts
@@ -97,7 +97,7 @@ public class ElitePower {
         else {
             eliteEntity.getElitePowers().addAll(EliteScript.generateBossScripts(configFields.getEliteScriptBlueprints(), eliteEntity));
             eliteEntity.getElitePowers().forEach(power -> {
-                if (power.getOwnerEntity() == null) {
+                if (power.ownerEntity == null) {
                     power.setOwnerEntity(eliteEntity);
                 }
             });
@@ -119,14 +119,14 @@ public class ElitePower {
         reflections.getSubTypesOf(ElitePower.class).forEach(power -> {
             try {
                 ElitePower thisPower = power.newInstance();
-                switch (((PowersConfigFields) thisPower.getPowersConfigFields()).getPowerType()) {
-                    case DEFENSIVE -> defensivePowers.add(thisPower.getPowersConfigFields());
-                    case OFFENSIVE -> offensivePowers.add(thisPower.getPowersConfigFields());
+                switch (((PowersConfigFields) thisPower.powersConfigFields).getPowerType()) {
+                    case DEFENSIVE -> defensivePowers.add(thisPower.powersConfigFields);
+                    case OFFENSIVE -> offensivePowers.add(thisPower.powersConfigFields);
                     case MAJOR_BLAZE, MAJOR_ENDERMAN, MAJOR_SKELETON, MAJOR_GHAST, MAJOR_ZOMBIE ->
-                            majorPowers.add(thisPower.getPowersConfigFields());
-                    case MISCELLANEOUS -> miscellaneousPowers.add(thisPower.getPowersConfigFields());
+                            majorPowers.add(thisPower.powersConfigFields);
+                    case MISCELLANEOUS -> miscellaneousPowers.add(thisPower.powersConfigFields);
                 }
-                elitePowers.put(thisPower.getFileName(), thisPower.getPowersConfigFields());
+                elitePowers.put(thisPower.fileName, thisPower.powersConfigFields);
             } catch (Exception ex) {
                 //Not sure why stuff in the meta package is getting scanned, seems like the package scan isn't working as intended
                 //todo: figure out why package scanning is getting more than what is in the packages here
@@ -140,7 +140,7 @@ public class ElitePower {
         if (event.getEliteMobEntity().getLivingEntity() == null) return false;
         if (!event.getEliteMobEntity().getLivingEntity().hasAI()) return false;
         if (!ignoreGlobalCooldown)
-            if (elitePower.isInGlobalCooldown()) return false;
+            if (elitePower.inGlobalCooldown) return false;
         return !event.getEliteMobEntity().isInCooldown();
     }
 
@@ -148,7 +148,7 @@ public class ElitePower {
         if (event.isCancelled()) return false;
         if (event.getEliteMobEntity().getLivingEntity() == null) return false;
         if (!event.getEliteMobEntity().getLivingEntity().hasAI()) return false;
-        if (elitePower.isInGlobalCooldown()) return false;
+        if (elitePower.inGlobalCooldown) return false;
         if (elitePower.isInCooldown(event.getEliteMobEntity())) return false;
         return !event.getEliteMobEntity().isInCooldown();
     }
@@ -157,7 +157,7 @@ public class ElitePower {
         if (event.isCancelled()) return false;
         if (event.getEliteMobEntity().getLivingEntity() == null) return false;
         if (!event.getEliteMobEntity().getLivingEntity().hasAI()) return false;
-        if (elitePower.isInGlobalCooldown()) return false;
+        if (elitePower.inGlobalCooldown) return false;
         return !event.getEliteMobEntity().isInCooldown();
     }
 

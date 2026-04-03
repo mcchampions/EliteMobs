@@ -17,7 +17,7 @@ public class QuestAcceptEvent extends Event implements Cancellable {
     private final Player player;
     @Getter
     private final Quest quest;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     public QuestAcceptEvent(Player player, Quest quest) {
         this.player = player;

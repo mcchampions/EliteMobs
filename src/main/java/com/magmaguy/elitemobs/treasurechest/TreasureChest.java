@@ -53,7 +53,7 @@ public class TreasureChest implements PersistentObject {
     private long restockTime;
     @Getter
     @Setter
-    private EMPackage emPackage = null;
+    private EMPackage emPackage;
 
     public TreasureChest(CustomTreasureChestConfigFields customTreasureChestConfigFields, String locationString, long restockTime) {
         this.customTreasureChestConfigFields = customTreasureChestConfigFields;
@@ -98,7 +98,7 @@ public class TreasureChest implements PersistentObject {
     }
 
     public static TreasureChest getTreasureChest(Location location) {
-        return getTreasureChestHashMap().get(location);
+        return treasureChestHashMap.get(location);
     }
 
     private void initializeChest() {
@@ -114,8 +114,8 @@ public class TreasureChest implements PersistentObject {
 
     private void generateChest() {
         try {
-            if (!location.getWorld()
-                    .getBlockAt(location).getType().equals(customTreasureChestConfigFields.getChestMaterial()))
+            if (location.getWorld()
+                        .getBlockAt(location).getType() != customTreasureChestConfigFields.getChestMaterial())
                 location.getWorld().getBlockAt(location).setType(customTreasureChestConfigFields.getChestMaterial());
         } catch (Exception ex) {
             Logger.warn("Custom Treasure Chest " + customTreasureChestConfigFields.getFilename() + " has an invalid location and can not be placed.");
@@ -134,7 +134,7 @@ public class TreasureChest implements PersistentObject {
 
     public void doInteraction(Player player) {
 
-        if (customTreasureChestConfigFields.getDropStyle().equals(DropStyle.GROUP))
+        if (customTreasureChestConfigFields.getDropStyle() == DropStyle.GROUP)
             if (playerIsInCooldown(player)) {
                 if (!customTreasureChestConfigFields.isInstanced())
                     groupTimerCooldownMessage(player, getPlayerCooldown(player));
@@ -143,7 +143,7 @@ public class TreasureChest implements PersistentObject {
                 return;
 
         // Add player to cooldown BEFORE giving loot to prevent spam clicking exploits
-        if (customTreasureChestConfigFields.getDropStyle().equals(DropStyle.GROUP)) {
+        if (customTreasureChestConfigFields.getDropStyle() == DropStyle.GROUP) {
             if (customTreasureChestConfigFields.isInstanced()) {
                 blacklistedPlayersInstance.add(player.getUniqueId());
             } else if (customTreasureChestConfigFields.getRestockTimers() != null) {
@@ -179,7 +179,7 @@ public class TreasureChest implements PersistentObject {
 
         player.playSound(player.getLocation(), SoundsConfig.treasureChestOpenSound, 1, 1);
 
-        if (customTreasureChestConfigFields.getDropStyle().equals(DropStyle.GROUP)) {
+        if (customTreasureChestConfigFields.getDropStyle() == DropStyle.GROUP) {
             return;
         }
 
@@ -344,7 +344,7 @@ public class TreasureChest implements PersistentObject {
 
     private String timeConverter(long seconds) {
         if (seconds < 0) seconds = 0;
-        if (seconds < 60 * 2)
+        if (seconds < 60 << 1)
             return seconds + " seconds";
         if (seconds < 60 * 60 * 2)
             return Round.twoDecimalPlaces(seconds / 60D) + "minutes";
@@ -394,7 +394,7 @@ public class TreasureChest implements PersistentObject {
 
     @Override
     public Location getPersistentLocation() {
-        return getLocation();
+        return location;
     }
 
     @Override

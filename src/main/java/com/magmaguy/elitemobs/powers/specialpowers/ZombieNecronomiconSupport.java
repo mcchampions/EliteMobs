@@ -59,7 +59,7 @@ public class ZombieNecronomiconSupport {
 
         new BukkitRunnable() {
             final HashMap<Integer, List<Item>> fourTrack = new HashMap<>();
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -104,12 +104,12 @@ public class ZombieNecronomiconSupport {
         double x = 0;
         double y = 0;
 
-        for (int trackNumber : xTrack.keySet()) {
-            List<Item> itemList = xTrack.get(trackNumber);
+        for (Map.Entry<Integer, List<Item>> entry : xTrack.entrySet()) {
+            List<Item> itemList = entry.getValue();
 
             for (Item item : itemList) {
                 double z = itemList.indexOf(item) + 1;
-                int newCounter = (int) (counter + trackNumber * (numberOfPointsPerFullRotation / 8));
+                int newCounter = (int) (counter + entry.getKey() * (numberOfPointsPerFullRotation / 8));
                 Location currentLocation = item.getLocation();
                 Location centerLocationFixed = entity.getLocation().add(0, 3, 0);
                 Vector vector = GenericRotationMatrixMath.applyRotation(a, b, c, numberOfPointsPerFullRotation, x, y, z, newCounter);
@@ -227,8 +227,8 @@ public class ZombieNecronomiconSupport {
     }
 
     private static final class State {
-        private int chantIndex = 0;
+        private int chantIndex;
         private final ArrayList<CustomBossEntity> entityList = new ArrayList<>();
-        private boolean firing = false;
+        private boolean firing;
     }
 }

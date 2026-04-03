@@ -14,7 +14,7 @@ public class DungeonUninstallEvent extends Event implements Cancellable {
     private final String dungeonName;
     @Getter
     private final String dungeonFilename;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     public DungeonUninstallEvent(ContentPackagesConfigFields contentPackagesConfigFields) {
         this.contentPackagesConfigFields = contentPackagesConfigFields;

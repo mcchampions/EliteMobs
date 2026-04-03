@@ -55,8 +55,8 @@ public class ConfigurationLocation {
 
                 world = Bukkit.getWorld(slicedString[0]);
                 if (world == null &&
-                        !slicedString[0].equalsIgnoreCase("same_as_boss") &&
-                        !notLoadedWorldNames.contains(slicedString[0]) && !silent) {
+                    !"same_as_boss".equalsIgnoreCase(slicedString[0]) &&
+                    !notLoadedWorldNames.contains(slicedString[0]) && !silent) {
                     notLoadedWorldNames.add(slicedString[0]);
                 }
                 x = Double.parseDouble(slicedString[1]);
@@ -77,7 +77,7 @@ public class ConfigurationLocation {
                 pitch = Float.parseFloat(slicedString[4]);
             } else throw new Exception();
         } catch (Exception ex) {
-            if (locationString.equals("null"))
+            if ("null".equals(locationString))
                 return null;
             Logger.warn("Attempted to deserialize an invalid location!");
             Logger.warn("Expected location format: worldname,x,y,z,pitch,yaw");
@@ -127,7 +127,7 @@ public class ConfigurationLocation {
                 pitch = Float.parseFloat(slicedString[4]);
             } else throw new Exception();
         } catch (Exception ex) {
-            if (locationString.equals("null"))
+            if ("null".equals(locationString))
                 return null;
             Logger.warn("Attempted to deserialize an invalid location!");
             Logger.warn("Expected location format: worldname,x,y,z,pitch,yaw");

@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
 public class LightningSpawnBypass implements Listener {
-    private static boolean bypass = false;
+    private static boolean bypass;
 
     public static void strikeLightningIgnoreProtections(Location location) {
         if (location == null || location.getWorld() == null) return;
@@ -24,7 +24,7 @@ public class LightningSpawnBypass implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLightningSpawn(EntitySpawnEvent event) {
         if (!bypass) return;
-        if (!event.getEntity().getType().equals(EntityType.LIGHTNING_BOLT)) return;
+        if (event.getEntity().getType() != EntityType.LIGHTNING_BOLT) return;
         bypass = true;
         event.setCancelled(false);
     }

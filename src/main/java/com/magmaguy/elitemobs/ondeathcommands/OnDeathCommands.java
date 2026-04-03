@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 public class OnDeathCommands implements Listener {
 
@@ -123,6 +124,7 @@ public class OnDeathCommands implements Listener {
     }
 
     public static class RunChance {
+        private static final Pattern PATTERN = Pattern.compile("\\$chance=");
         @Getter
         private double chance = 1;
         @Getter
@@ -132,7 +134,7 @@ public class OnDeathCommands implements Listener {
             this.string = commandString;
             if (string.contains("$chance=")) {
                 try {
-                    String chanceString = string.split("\\$chance=")[1];
+                    String chanceString = PATTERN.split(string)[1];
                     chanceString = chanceString.split("\\$")[0];
                     chance = Double.parseDouble(chanceString);
                     String fullString = "$chance=" + chanceString + "$";

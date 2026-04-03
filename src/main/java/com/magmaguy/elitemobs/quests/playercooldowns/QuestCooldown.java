@@ -18,9 +18,9 @@ public class QuestCooldown implements Serializable {
     private final String permission;
     private final boolean permanent;
     @Getter
-    private long targetUnixTime = 0;
+    private long targetUnixTime;
     @Getter
-    private transient BukkitTask bukkitTask = null;
+    private transient BukkitTask bukkitTask;
 
     public QuestCooldown(int delayInMinutes, String permission, UUID player) {
         this.permanent = delayInMinutes < 1;

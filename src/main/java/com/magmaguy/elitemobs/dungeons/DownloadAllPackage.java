@@ -31,7 +31,6 @@ public class DownloadAllPackage extends ContentPackage {
     private final ItemStack displayIcon;
 
     public DownloadAllPackage(List<EMPackage> allPackages) {
-        super();
         this.displayIcon = buildIcon(allPackages);
     }
 

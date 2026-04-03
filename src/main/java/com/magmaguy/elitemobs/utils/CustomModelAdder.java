@@ -83,9 +83,9 @@ public class CustomModelAdder {
      */
     private static EquipmentSlot getArmorSlot(Material material) {
         String name = material.name();
-        if (name.endsWith("_HELMET") || name.equals("CARVED_PUMPKIN") || name.endsWith("_HEAD") || name.endsWith("_SKULL"))
+        if (name.endsWith("_HELMET") || "CARVED_PUMPKIN".equals(name) || name.endsWith("_HEAD") || name.endsWith("_SKULL"))
             return EquipmentSlot.HEAD;
-        if (name.endsWith("_CHESTPLATE") || name.equals("ELYTRA"))
+        if (name.endsWith("_CHESTPLATE") || "ELYTRA".equals(name))
             return EquipmentSlot.CHEST;
         if (name.endsWith("_LEGGINGS"))
             return EquipmentSlot.LEGS;

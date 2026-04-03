@@ -245,17 +245,17 @@ public class CustomSummonPower extends ElitePower implements Listener {
          */
 
         //this is now considered to be legacy
-        if (powerString.split(":")[0].equalsIgnoreCase("summon")) {
-            if (powerString.split(":")[1].equalsIgnoreCase("once")) {
+        if ("summon".equalsIgnoreCase(powerString.split(":")[0])) {
+            if ("once".equalsIgnoreCase(powerString.split(":")[1])) {
                 newMap.put("summonType", "ONCE");
                 parseOnce(powerString);
-            } else if (powerString.split(":")[1].equalsIgnoreCase("onHit")) {
+            } else if ("onHit".equalsIgnoreCase(powerString.split(":")[1])) {
                 newMap.put("summonType", "ON_HIT");
                 parseOnHit(powerString);
-            } else if (powerString.split(":")[1].equalsIgnoreCase("onCombatEnter")) {
+            } else if ("onCombatEnter".equalsIgnoreCase(powerString.split(":")[1])) {
                 newMap.put("summonType", "ON_COMBAT_ENTER");
                 parseOnCombatEnter(powerString);
-            } else if (powerString.split(":")[1].equalsIgnoreCase("onCombatEnterPlaceCrystal")) {
+            } else if ("onCombatEnterPlaceCrystal".equalsIgnoreCase(powerString.split(":")[1])) {
                 newMap.put("summonType", "ON_COMBAT_ENTER_PLACE_CRYSTAL");
                 parseOnCombatEnterPlaceCrystal(powerString);
             }
@@ -265,7 +265,7 @@ public class CustomSummonPower extends ElitePower implements Listener {
         }
 
         //this is the new recommended format for reinforcements
-        if (powerString.split(":")[0].equalsIgnoreCase("summonable")) {
+        if ("summonable".equalsIgnoreCase(powerString.split(":")[0])) {
             SummonType summonType = null;
             String filename = null;
             Vector location = null;
@@ -544,17 +544,17 @@ public class CustomSummonPower extends ElitePower implements Listener {
 
     private void onHitSummonReinforcement(EliteEntity spawningEntity) {
         for (CustomBossReinforcement customBossReinforcement : customBossReinforcements) {
-            if (customBossReinforcement.summonType.equals(SummonType.ONCE) && !customBossReinforcement.isSummoned)
+            if (customBossReinforcement.summonType == SummonType.ONCE && !customBossReinforcement.isSummoned)
                 summonReinforcement(spawningEntity, customBossReinforcement);
 
-            if (customBossReinforcement.summonType.equals(SummonType.ON_HIT))
+            if (customBossReinforcement.summonType == SummonType.ON_HIT)
                 summonReinforcement(spawningEntity, customBossReinforcement);
         }
     }
 
     private void onCombatEnterSummonReinforcement(EliteEntity spawningEntity) {
         for (CustomBossReinforcement customBossReinforcement : customBossReinforcements) {
-            if (!customBossReinforcement.summonType.equals(SummonType.ON_COMBAT_ENTER)) continue;
+            if (customBossReinforcement.summonType != SummonType.ON_COMBAT_ENTER) continue;
             if (customBossReinforcement.bossFileName != null) {
                 summonReinforcement(spawningEntity, customBossReinforcement);
             } else {
@@ -592,7 +592,7 @@ public class CustomSummonPower extends ElitePower implements Listener {
 
     private void onDeathSummonReinforcement(EliteEntity spawningEntity) {
         for (CustomBossReinforcement customBossReinforcement : customBossReinforcements)
-            if (customBossReinforcement.summonType.equals(SummonType.ON_DEATH))
+            if (customBossReinforcement.summonType == SummonType.ON_DEATH)
                 summonReinforcement(spawningEntity, customBossReinforcement);
     }
 
@@ -626,7 +626,7 @@ public class CustomSummonPower extends ElitePower implements Listener {
                     regionalBossEntity.setNormalizedCombat();
                 if (customBossReinforcement.inheritLevel)
                     regionalBossEntity.setLevel(eliteEntity.getLevel());
-                if (!customBossReinforcement.summonType.equals(SummonType.ON_DEATH))
+                if (customBossReinforcement.summonType != SummonType.ON_DEATH)
                     eliteEntity.addReinforcement(regionalBossEntity);
                 customBossReinforcement.isSummoned = true;
                 regionalBossEntity.setSummoningEntity(eliteEntity);
@@ -646,7 +646,7 @@ public class CustomSummonPower extends ElitePower implements Listener {
                 customBossEntity.spawn(false);
                 if (customBossEntity.getLivingEntity() != null)
                     customBossEntity.getLivingEntity().setVelocity(new Vector(ThreadLocalRandom.current().nextDouble(0.2), 0.2, ThreadLocalRandom.current().nextDouble(0.2)));
-                if (!customBossReinforcement.summonType.equals(SummonType.ON_DEATH))
+                if (customBossReinforcement.summonType != SummonType.ON_DEATH)
                     eliteEntity.addReinforcement(customBossEntity);
                 customBossReinforcement.isSummoned = true;
                 customBossEntity.setSummoningEntity(eliteEntity);
@@ -702,16 +702,16 @@ public class CustomSummonPower extends ElitePower implements Listener {
     public class CustomBossReinforcement {
         public final SummonType summonType;
         public Double summonChance;
-        public String bossFileName = null;
+        public String bossFileName;
         public Vector spawnLocationOffset;
         public EntityType entityType;
         public boolean isLightningRod;
-        public boolean inheritAggro = false;
+        public boolean inheritAggro;
         public int amount = 1;
-        public boolean inheritLevel = false;
-        public boolean spawnNearby = false;
+        public boolean inheritLevel;
+        public boolean spawnNearby;
         public String customSpawn;
-        private boolean isSummoned = false;
+        private boolean isSummoned;
 
         public CustomBossReinforcement(SummonType summonType, String bossFileName) {
             this.summonType = summonType;

@@ -36,9 +36,9 @@ public class ElitePotionEffectContainer {
             }
         }
 
-        if (onHit.length() > 0)
+        if (!onHit.isEmpty())
             itemMeta.getPersistentDataContainer().set(ItemTagger.onHitPotionEffectKey, PersistentDataType.STRING, onHit.toString());
-        if (continuous.length() > 0)
+        if (!continuous.isEmpty())
             itemMeta.getPersistentDataContainer().set(ItemTagger.continuousPotionEffectKey, PersistentDataType.STRING, continuous.toString());
 
     }
@@ -49,7 +49,7 @@ public class ElitePotionEffectContainer {
             return new ArrayList<>();
         ArrayList<ElitePotionEffect> elitePotionEffects = new ArrayList<>();
         for (String string : itemMeta.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING).split(":"))
-            if (string.length() > 0)
+            if (!string.isEmpty())
                 elitePotionEffects.add(new ElitePotionEffect(string));
 
         return elitePotionEffects;

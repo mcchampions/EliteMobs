@@ -69,7 +69,7 @@ public class SpiritWalkSupport {
         eliteEntity.setCombatGracePeriod(20 * 20);
 
         new BukkitRunnable() {
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {
@@ -113,7 +113,7 @@ public class SpiritWalkSupport {
 
             new BukkitRunnable() {
                 final Entity finalVehicle = eliteEntity.getLivingEntity().getVehicle();
-                int counter = 0;
+                int counter;
 
                 @Override
                 public void run() {

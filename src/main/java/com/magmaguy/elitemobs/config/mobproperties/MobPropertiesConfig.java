@@ -13,7 +13,7 @@ import java.util.List;
 public class MobPropertiesConfig {
 
     private static final HashMap<EntityType, MobPropertiesConfigFields> mobProperties = new HashMap<>();
-    private static final ArrayList<MobPropertiesConfigFields> mobPropertiesConfigFieldsList = new ArrayList<MobPropertiesConfigFields>(new ArrayList<>(List.of(
+    private static final ArrayList<MobPropertiesConfigFields> mobPropertiesConfigFieldsList = new ArrayList<>(new ArrayList<>(List.of(
             new EliteBlazeConfig(),
             new EliteCaveSpiderConfig(),
             new EliteCreeperConfig(),

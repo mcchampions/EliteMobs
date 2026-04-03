@@ -40,22 +40,22 @@ public abstract class MatchInstance {
     protected final Map<Player, Location> previousPlayerLocations = new HashMap<>();
     @Getter
     protected HashSet<Player> players = new HashSet<>();
-    protected HashMap<Player, Integer> playerLives = new HashMap();
+    protected HashMap<Player, Integer> playerLives = new HashMap<>();
     @Getter
     protected HashSet<Player> participants = new HashSet<>();
     protected HashSet<Player> spectators = new HashSet<>();
     @Getter
     protected InstancedRegionState state = InstancedRegionState.WAITING;
-    protected Location lobbyLocation = null;
+    protected Location lobbyLocation;
     protected Location startLocation;
     protected Location exitLocation;
     protected int minPlayers;
     protected int maxPlayers;
     protected World world;
     @Getter
-    protected String permission = null;
+    protected String permission;
     @Getter
-    protected boolean cancelled = false;
+    protected boolean cancelled;
 
 
     public MatchInstance(Location startLocation, Location exitLocation, int minPlayers, int maxPlayers) {
@@ -211,7 +211,7 @@ public abstract class MatchInstance {
     }
 
     private class CountdownTask extends BukkitRunnable {
-        int counter = 0;
+        int counter;
 
         @Override
         public void run() {
@@ -290,7 +290,7 @@ public abstract class MatchInstance {
     }
 
     public static class MatchInstanceEvents implements Listener {
-        public static boolean teleportBypass = false;
+        public static boolean teleportBypass;
 
         @EventHandler
         public void onPlayerLeave(PlayerQuitEvent event) {
@@ -301,7 +301,7 @@ public abstract class MatchInstance {
         @EventHandler
         public void onPlayerBreakBlockEvent(BlockBreakEvent event) {
             for (MatchInstance matchInstance : instances)
-                if (matchInstance.state.equals(InstancedRegionState.ONGOING))
+                if (matchInstance.state == InstancedRegionState.ONGOING)
                     if (matchInstance.getDeathBanners().get(event.getBlock()) != null)
                         matchInstance.getDeathBanners().get(event.getBlock()).clear(true);
         }
@@ -309,7 +309,7 @@ public abstract class MatchInstance {
         @EventHandler
         public void onPlayerHitFlagEvent(BlockDamageEvent event) {
             for (MatchInstance matchInstance : instances)
-                if (matchInstance.state.equals(InstancedRegionState.ONGOING))
+                if (matchInstance.state == InstancedRegionState.ONGOING)
                     if (matchInstance.getDeathBanners().get(event.getBlock()) != null)
                         matchInstance.getDeathBanners().get(event.getBlock()).clear(true);
         }
@@ -321,7 +321,7 @@ public abstract class MatchInstance {
          */
         @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
         public void onPlayerDamage(EntityDamageEvent event) {
-            if (!event.getEntityType().equals(EntityType.PLAYER)) return;
+            if (event.getEntityType() != EntityType.PLAYER) return;
             Player player = (Player) event.getEntity();
             if (event.getFinalDamage() < player.getHealth()) return;
             MatchInstance matchInstance = PlayerData.getMatchInstance(player);

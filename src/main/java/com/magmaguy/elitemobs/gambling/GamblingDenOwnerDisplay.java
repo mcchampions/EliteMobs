@@ -44,7 +44,7 @@ public class GamblingDenOwnerDisplay {
      */
     public static void createDisplay(NPCEntity npcEntity) {
         if (npcEntity == null || npcEntity.getVillager() == null) return;
-        if (!npcEntity.getNPCsConfigFields().getFilename().equals("gambling_den_owner.yml")) return;
+        if (!"gambling_den_owner.yml".equals(npcEntity.getNPCsConfigFields().getFilename())) return;
 
         // Check if display already exists
         if (earningsDisplays.containsKey(npcEntity.getUuid())) return;

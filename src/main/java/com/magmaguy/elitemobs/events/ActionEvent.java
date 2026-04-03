@@ -123,8 +123,8 @@ public class ActionEvent extends CustomEvent {
             if (playerCooldowns.contains(event.getPlayer().getUniqueId())) return;
             if (!CustomEvent.isLocationValid(event.getBlock().getLocation())) return;
             for (ActionEvent actionEvent : blueprintEvents)
-                if (actionEvent.eventType.equals(EventType.BREAK_BLOCK) &&
-                        actionEvent.checkBlockBreakStartConditions(event.getBlock().getType()))
+                if (actionEvent.eventType == EventType.BREAK_BLOCK &&
+                    actionEvent.checkBlockBreakStartConditions(event.getBlock().getType()))
                     actionEvent.instantiateEvent(event.getBlock().getLocation().clone().add(new Vector(0.5, 0, 0.5)), event.getPlayer());
         }
 
@@ -135,28 +135,28 @@ public class ActionEvent extends CustomEvent {
             if (playerCooldowns.contains(event.getPlayer().getUniqueId())) return;
             if (!CustomEvent.isLocationValid(event.getCaught().getLocation())) return;
             for (ActionEvent actionEvent : blueprintEvents)
-                if (actionEvent.eventType.equals(EventType.FISH) && actionEvent.checkFishStartConditions())
+                if (actionEvent.eventType == EventType.FISH && actionEvent.checkFishStartConditions())
                     actionEvent.instantiateEvent(event.getCaught().getLocation(), event.getPlayer());
         }
 
         @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
         public void onTillSoil(PlayerInteractEvent event) {
-            if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+            if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
             if (event.getClickedBlock() == null) return;
             if (playerCooldowns.contains(event.getPlayer().getUniqueId())) return;
             Location location = event.getClickedBlock().getLocation().clone().add(new Vector(0.5, 1, 0.5));
             if (!CustomEvent.isLocationValid(location)) return;
-            if (!(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE) ||
-                    event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.IRON_HOE) ||
-                    event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_HOE) ||
-                    event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.STONE_HOE) ||
-                    event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.WOODEN_HOE) ||
-                    event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.NETHERITE_HOE)))
+            if (!(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE ||
+                  event.getPlayer().getInventory().getItemInMainHand().getType() == Material.IRON_HOE ||
+                  event.getPlayer().getInventory().getItemInMainHand().getType() == Material.GOLDEN_HOE ||
+                  event.getPlayer().getInventory().getItemInMainHand().getType() == Material.STONE_HOE ||
+                  event.getPlayer().getInventory().getItemInMainHand().getType() == Material.WOODEN_HOE ||
+                  event.getPlayer().getInventory().getItemInMainHand().getType() == Material.NETHERITE_HOE))
                 return;
-            if (!(event.getClickedBlock().getType().equals(Material.DIRT) ||
-                    event.getClickedBlock().getType().equals(Material.GRASS_BLOCK))) return;
+            if (!(event.getClickedBlock().getType() == Material.DIRT ||
+                  event.getClickedBlock().getType() == Material.GRASS_BLOCK)) return;
             for (ActionEvent actionEvent : blueprintEvents)
-                if (actionEvent.eventType.equals(EventType.TILL_SOIL) && actionEvent.checkTillSoilStartConditions())
+                if (actionEvent.eventType == EventType.TILL_SOIL && actionEvent.checkTillSoilStartConditions())
                     actionEvent.instantiateEvent(location, event.getPlayer());
         }
     }

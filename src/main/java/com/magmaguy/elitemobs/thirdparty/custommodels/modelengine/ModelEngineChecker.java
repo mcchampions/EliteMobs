@@ -3,7 +3,7 @@ package com.magmaguy.elitemobs.thirdparty.custommodels.modelengine;
 import org.bukkit.Bukkit;
 
 public class ModelEngineChecker {
-    private static Boolean isInstalled = null;
+    private static Boolean isInstalled;
 
     private ModelEngineChecker() {
     }

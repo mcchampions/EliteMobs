@@ -103,7 +103,7 @@ public class SpectralScytheSkill extends SkillBonus implements CooldownSkill {
 
         new BukkitRunnable() {
             Location currentLoc = startLoc.clone();
-            double distance = 0;
+            double distance;
 
             @Override
             public void run() {

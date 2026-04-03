@@ -135,7 +135,7 @@ public class CustomShopMenu {
                     public void run() {
                         cooldownPlayers.remove(event.getWhoClicked().getUniqueId());
                     }
-                }.runTaskLater(MetadataHandler.PLUGIN, 20 * 2L);
+                }.runTaskLater(MetadataHandler.PLUGIN, 20 << 1);
 
                 populateShop(event.getInventory(), Bukkit.getPlayer(event.getWhoClicked().getUniqueId()));
                 event.setCancelled(true);

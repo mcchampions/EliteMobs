@@ -21,12 +21,9 @@ import java.util.Collection;
  */
 final class LuaPowerContextTables {
 
-    private final LuaPowerDefinition definition;
     private final EliteEntity eliteEntity;
     private final LuaPowerSupport support;
     private final LuaPowerEntityTables entityTables;
-    private final LuaPowerScriptApi.OwnedTaskController taskController;
-    private final LuaPowerScriptApi.CallbackInvoker callbackInvoker;
     private final LuaWorldTableBuilder worldTableBuilder;
 
     LuaPowerContextTables(LuaPowerDefinition definition,
@@ -35,12 +32,9 @@ final class LuaPowerContextTables {
                           LuaPowerEntityTables entityTables,
                           LuaPowerScriptApi.OwnedTaskController taskController,
                           LuaPowerScriptApi.CallbackInvoker callbackInvoker) {
-        this.definition = definition;
         this.eliteEntity = eliteEntity;
         this.support = support;
         this.entityTables = entityTables;
-        this.taskController = taskController;
-        this.callbackInvoker = callbackInvoker;
         this.worldTableBuilder = new LuaWorldTableBuilder(definition, eliteEntity, support, entityTables, taskController, callbackInvoker);
     }
 

@@ -49,7 +49,7 @@ public class Quest implements Serializable {
     private int questLevel;
     @Getter
     @Setter
-    private boolean accepted = false;
+    private boolean accepted;
 
     public Quest(Player player, QuestObjectives questObjectives, int questLevel) {
         this.playerUUID = player.getUniqueId();
@@ -79,8 +79,8 @@ public class Quest implements Serializable {
     public static Quest completeQuest(UUID questUUID, Player player) {
         Quest quest = PlayerData.getQuest(player.getUniqueId(), questUUID);
         if (quest == null) return null;
-        if (!quest.getQuestID().equals(questUUID)) return null;
-        if (!quest.getQuestObjectives().isOver()) return null;
+        if (!quest.questID.equals(questUUID)) return null;
+        if (!quest.questObjectives.isOver()) return null;
         QuestCompleteEvent questCompleteEvent = new QuestCompleteEvent(player, quest);
         new EventCaller(questCompleteEvent);
         return quest;

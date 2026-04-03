@@ -56,11 +56,8 @@ import java.util.Objects;
  */
 final class LuaPowerEntityTables {
 
-    private final LuaPowerDefinition definition;
     private final EliteEntity eliteEntity;
     private final LuaPowerSupport support;
-    private final LuaPowerScriptApi.OwnedTaskController taskController;
-    private final LuaPowerScriptApi.CallbackInvoker callbackInvoker;
     private final LuaBossTableBuilder bossTableBuilder;
 
     LuaPowerEntityTables(LuaPowerDefinition definition,
@@ -68,11 +65,8 @@ final class LuaPowerEntityTables {
                          LuaPowerSupport support,
                          LuaPowerScriptApi.OwnedTaskController taskController,
                          LuaPowerScriptApi.CallbackInvoker callbackInvoker) {
-        this.definition = definition;
         this.eliteEntity = eliteEntity;
         this.support = support;
-        this.taskController = taskController;
-        this.callbackInvoker = callbackInvoker;
         this.bossTableBuilder = new LuaBossTableBuilder(definition, eliteEntity, support, this, taskController, callbackInvoker);
     }
 
@@ -88,14 +82,17 @@ final class LuaPowerEntityTables {
         LuaTable eventTable = new LuaTable();
         if (event instanceof EliteDamageEvent eliteDamageEvent) {
             eventTable.set("damage_amount", LuaValue.valueOf(eliteDamageEvent.getDamage()));
-            if (event instanceof EliteMobDamagedEvent eliteMobDamagedEvent) {
-                eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedEvent.getEntityDamageEvent().getCause().name()));
-            } else if (event instanceof EliteMobDamagedByPlayerEvent eliteMobDamagedByPlayerEvent) {
-                eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedByPlayerEvent.getEntityDamageByEntityEvent().getCause().name()));
-            } else if (event instanceof EliteMobDamagedByEliteMobEvent eliteMobDamagedByEliteMobEvent) {
-                eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedByEliteMobEvent.getEntityDamageByEntityEvent().getCause().name()));
-            } else if (event instanceof PlayerDamagedByEliteMobEvent playerDamagedByEliteMobEvent) {
-                eventTable.set("damage_cause", LuaValue.valueOf(playerDamagedByEliteMobEvent.getEntityDamageByEntityEvent().getCause().name()));
+            switch (event) {
+                case EliteMobDamagedEvent eliteMobDamagedEvent ->
+                        eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedEvent.getEntityDamageEvent().getCause().name()));
+                case EliteMobDamagedByPlayerEvent eliteMobDamagedByPlayerEvent ->
+                        eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedByPlayerEvent.getEntityDamageByEntityEvent().getCause().name()));
+                case EliteMobDamagedByEliteMobEvent eliteMobDamagedByEliteMobEvent ->
+                        eventTable.set("damage_cause", LuaValue.valueOf(eliteMobDamagedByEliteMobEvent.getEntityDamageByEntityEvent().getCause().name()));
+                case PlayerDamagedByEliteMobEvent playerDamagedByEliteMobEvent ->
+                        eventTable.set("damage_cause", LuaValue.valueOf(playerDamagedByEliteMobEvent.getEntityDamageByEntityEvent().getCause().name()));
+                default -> {
+                }
             }
             eventTable.set("cancel_event", new VarArgFunction() {
                 @Override
@@ -119,15 +116,17 @@ final class LuaPowerEntityTables {
                 }
             });
             EntityDamageByEntityEvent entityDamageByEntityEvent = null;
-            if (event instanceof EliteMobDamagedEvent eliteMobDamagedEvent
-                    && eliteMobDamagedEvent.getEntityDamageEvent() instanceof EntityDamageByEntityEvent damageByEntityEvent) {
-                entityDamageByEntityEvent = damageByEntityEvent;
-            } else if (event instanceof EliteMobDamagedByPlayerEvent eliteMobDamagedByPlayerEvent) {
-                entityDamageByEntityEvent = eliteMobDamagedByPlayerEvent.getEntityDamageByEntityEvent();
-            } else if (event instanceof EliteMobDamagedByEliteMobEvent eliteMobDamagedByEliteMobEvent) {
-                entityDamageByEntityEvent = eliteMobDamagedByEliteMobEvent.getEntityDamageByEntityEvent();
-            } else if (event instanceof PlayerDamagedByEliteMobEvent playerDamagedByEliteMobEvent) {
-                entityDamageByEntityEvent = playerDamagedByEliteMobEvent.getEntityDamageByEntityEvent();
+            switch (event) {
+                case EliteMobDamagedEvent eliteMobDamagedEvent when eliteMobDamagedEvent.getEntityDamageEvent() instanceof EntityDamageByEntityEvent damageByEntityEvent ->
+                        entityDamageByEntityEvent = damageByEntityEvent;
+                case EliteMobDamagedByPlayerEvent eliteMobDamagedByPlayerEvent ->
+                        entityDamageByEntityEvent = eliteMobDamagedByPlayerEvent.getEntityDamageByEntityEvent();
+                case EliteMobDamagedByEliteMobEvent eliteMobDamagedByEliteMobEvent ->
+                        entityDamageByEntityEvent = eliteMobDamagedByEliteMobEvent.getEntityDamageByEntityEvent();
+                case PlayerDamagedByEliteMobEvent playerDamagedByEliteMobEvent ->
+                        entityDamageByEntityEvent = playerDamagedByEliteMobEvent.getEntityDamageByEntityEvent();
+                default -> {
+                }
             }
             if (entityDamageByEntityEvent != null) {
                 Entity damager = entityDamageByEntityEvent.getDamager();

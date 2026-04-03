@@ -42,7 +42,7 @@ public class QuestInventoryMenu {
 
     public static void generateInventoryQuestEntries(List<? extends Quest> quests, Player player, NPCEntity npcEntity) {
         if (quests.size() == 1)
-            QuestInventoryMenu.generateInventoryQuestEntry(quests.get(0), player, npcEntity);
+            QuestInventoryMenu.generateInventoryQuestEntry(quests.getFirst(), player, npcEntity);
         else
             QuestInventoryMenu.generateInventoryQuestDirectory(quests, player, npcEntity);
     }
@@ -89,10 +89,10 @@ public class QuestInventoryMenu {
         Material rewardsMaterial = Material.GOLD_INGOT;
         Material acceptMaterial = Material.EMERALD;
 
-        questInventory.setItem(titleEntry, generateItemStackEntry(questText.getHeader(), new TextComponent(), titleMaterial).get(0));
+        questInventory.setItem(titleEntry, generateItemStackEntry(questText.getHeader(), new TextComponent(), titleMaterial).getFirst());
         if (quest instanceof CustomQuest && quest.isAccepted())
-            questInventory.setItem(trackEntry, generateItemStackEntry(questText.getTrack(), new TextComponent(), trackingMaterial).get(0));
-        questInventory.setItem(acceptEntry, generateItemStackEntry(questText.getAccept(), new TextComponent(), acceptMaterial).get(0));
+            questInventory.setItem(trackEntry, generateItemStackEntry(questText.getTrack(), new TextComponent(), trackingMaterial).getFirst());
+        questInventory.setItem(acceptEntry, generateItemStackEntry(questText.getAccept(), new TextComponent(), acceptMaterial).getFirst());
         if (quest instanceof CustomQuest)
             fillItemSlotLists(questInventory, loreEntries, new TextComponent(" "), questText.getBody(), loreMaterial);
         fillItemSlotLists(questInventory, objectivesEntries, questText.getFixedSummary(), questText.getSummary(), objectivesMaterial);
@@ -146,12 +146,11 @@ public class QuestInventoryMenu {
                 currentCharacterCount = 0;
             }
             if (entry.length() > maxCharactersPerLine) {
-                int size = maxCharactersPerLine;
                 //for languages that have no spaces
                 if (!entry.contains(" ")) {
-                    List<String> substrings = new ArrayList<>((entry.length() + size - 1) / size);
-                    for (int start = 0; start < entry.length(); start += size)
-                        substrings.add(ChatColor.WHITE + entry.substring(start, Math.min(entry.length(), start + size)));
+                    List<String> substrings = new ArrayList<>((entry.length() + maxCharactersPerLine - 1) / maxCharactersPerLine);
+                    for (int start = 0; start < entry.length(); start += maxCharactersPerLine)
+                        substrings.add(ChatColor.WHITE + entry.substring(start, Math.min(entry.length(), start + maxCharactersPerLine)));
                     currentList.addAll(substrings);
                     //for other languages
                 } else {
@@ -161,7 +160,7 @@ public class QuestInventoryMenu {
                     currentString.append(ChatColor.WHITE);
                     for (String string : splitBySpaces) {
                         string += " ";
-                        if (currentString.length() + string.length() > size) {
+                        if (currentString.length() + string.length() > maxCharactersPerLine) {
                             substrings.add(currentString.toString());
                             currentString = new StringBuilder();
                             currentString.append(ChatColor.WHITE);

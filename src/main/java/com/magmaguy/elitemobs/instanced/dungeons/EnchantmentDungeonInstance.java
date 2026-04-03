@@ -49,7 +49,7 @@ public class EnchantmentDungeonInstance extends DungeonInstance {
 
     public static boolean setupRandomEnchantedChallengeDungeon(Player player, ItemStack upgradedItem, ItemStack itemFromInventory) {
         List<ContentPackagesConfigFields> contentPackagesConfigFieldsList = new ArrayList<>();
-        WorldDungeonPackage.getEmPackages().values().stream().forEach(emPackage -> {if (emPackage.isInstalled() && emPackage.getContentPackagesConfigFields().isEnchantmentChallenge()) contentPackagesConfigFieldsList.add(emPackage.getContentPackagesConfigFields());});
+        WorldDungeonPackage.getEmPackages().values().forEach(emPackage -> {if (emPackage.isInstalled() && emPackage.getContentPackagesConfigFields().isEnchantmentChallenge()) contentPackagesConfigFieldsList.add(emPackage.getContentPackagesConfigFields());});
         if (contentPackagesConfigFieldsList.isEmpty()) {
             player.sendMessage(DungeonsConfig.getEnchantNoChallengeMessage());
             return false;
@@ -67,7 +67,7 @@ public class EnchantmentDungeonInstance extends DungeonInstance {
                 player,
                 () -> cloneWorldFiles(contentPackagesConfigFields, instancedWordName, player) != null,
                 () -> {
-                    DungeonInstance dungeonInstance = initializeInstancedWorld(contentPackagesConfigFields, instancedWordName, player, (String) contentPackagesConfigFields.getDifficulties().get(0).get("name"));
+                    DungeonInstance dungeonInstance = initializeInstancedWorld(contentPackagesConfigFields, instancedWordName, player, (String) contentPackagesConfigFields.getDifficulties().getFirst().get("name"));
                     if (dungeonInstance instanceof EnchantmentDungeonInstance enchantmentDungeonInstance) {
                         enchantmentDungeonInstance.setUpgradedItem(upgradedItemClone);
                         enchantmentDungeonInstance.setCurrentItem(currentItemClone);

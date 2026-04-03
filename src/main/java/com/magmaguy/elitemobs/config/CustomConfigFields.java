@@ -68,7 +68,7 @@ public class CustomConfigFields extends com.magmaguy.magmacore.config.CustomConf
         if (newValue == null) return null;
 
         for (String key : newValue.getKeys(true))
-            if (key.equalsIgnoreCase("message"))
+            if ("message".equalsIgnoreCase(key))
                 newValue.set(key, TranslationsConfig.add(filename, key, (String) newValue.get(key)));
         return newValue;
     }

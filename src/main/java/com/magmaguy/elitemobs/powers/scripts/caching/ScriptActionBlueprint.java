@@ -30,7 +30,7 @@ public class ScriptActionBlueprint {
     @Getter
     private final String scriptFilename;
     @Getter
-    private ActionType actionType = null;
+    private ActionType actionType;
     @Getter
     private ScriptInteger duration = new ScriptInteger(0);
     @Getter
@@ -58,15 +58,15 @@ public class ScriptActionBlueprint {
     @Getter
     private ScriptFloat amount = new ScriptFloat(1f);
     @Getter
-    private Boolean bValue = null;
+    private Boolean bValue;
     @Getter
     private String sValue = "";
     @Getter
-    private Vector vValue = null;
+    private Vector vValue;
     @Getter
     private ScriptTargetsBlueprint scriptTargets;
     @Getter
-    private ScriptTargetsBlueprint finalTarget = null;
+    private ScriptTargetsBlueprint finalTarget;
     @Getter
     private String title = "";
     @Getter
@@ -87,7 +87,7 @@ public class ScriptActionBlueprint {
     @Getter
     private FireworkEffect.Type fireworkEffectType = FireworkEffect.Type.BALL_LARGE;
     @Getter
-    private List<FireworkEffect.Type> fireworkEffectTypes = null;
+    private List<FireworkEffect.Type> fireworkEffectTypes;
     @Getter
     private List<List<FireworkColor>> fireworkEffects = new ArrayList<>();
     @Getter
@@ -103,9 +103,9 @@ public class ScriptActionBlueprint {
     @Getter
     private WeatherType weatherType = WeatherType.CLEAR;
     @Getter
-    private boolean onlyRunOneScript = false;
+    private boolean onlyRunOneScript;
     @Getter
-    private ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint = null;
+    private ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint;
     @Getter
     private ScriptFloat volume = new ScriptFloat(1f);
     @Getter
@@ -115,7 +115,7 @@ public class ScriptActionBlueprint {
     @Getter
     private ScriptFloat scale = new ScriptFloat(1f);
     @Getter
-    private boolean debug = false;
+    private boolean debug;
 
 
     public ScriptActionBlueprint(Map<?, ?> entry, String scriptName, String scriptFilename) {

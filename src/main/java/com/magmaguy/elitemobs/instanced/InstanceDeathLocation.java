@@ -19,7 +19,7 @@ public class InstanceDeathLocation {
     private Block bannerBlock;
     @Getter
     private Player deadPlayer;
-    private Location deathLocation = null;
+    private Location deathLocation;
     private FakeText nameTag;
     private FakeText livesLeft;
     private FakeText instructions;
@@ -77,7 +77,7 @@ public class InstanceDeathLocation {
                     cancel();
                     return;
                 }
-                if (bannerBlock.getType().equals(Material.RED_BANNER)) return;
+                if (bannerBlock.getType() == Material.RED_BANNER) return;
                 if (nameTag != null) nameTag.remove();
                 if (instructions != null) instructions.remove();
                 if (livesLeft != null) livesLeft.remove();

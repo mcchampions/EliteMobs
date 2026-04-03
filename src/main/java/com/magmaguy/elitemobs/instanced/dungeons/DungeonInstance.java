@@ -41,7 +41,7 @@ public class DungeonInstance extends MatchInstance {
     }
 
     private final List<DungeonObjective> dungeonObjectives = new ArrayList<>();
-    private boolean instanceRemovalScheduled = false;
+    private boolean instanceRemovalScheduled;
     @Getter
     private World world;
     @Getter
@@ -51,10 +51,10 @@ public class DungeonInstance extends MatchInstance {
     private List<InstancedBossEntity> instancedBossEntities = new ArrayList<>();
     @Getter
     private int levelSync = -1;
-    private String rawLevelSync = null; // Stores the original config value (e.g., "+5", "-3", or "70")
-    private String difficultyName = null;
+    private String rawLevelSync; // Stores the original config value (e.g., "+5", "-3", or "70")
+    private String difficultyName;
     @Getter
-    private String difficultyID = null;
+    private String difficultyID;
 
     public DungeonInstance(ContentPackagesConfigFields contentPackagesConfigFields,
                            Location lobbyLocation,
@@ -175,13 +175,11 @@ public class DungeonInstance extends MatchInstance {
 
     //Runs when the instance starts, adjusting boss health to the amount of players in the instance
     private void updateBossHealth() {
-        instancedBossEntities.forEach(instancedBossEntity -> {
-            instancedBossEntity.setNormalizedMaxHealth(players.size());
-        });
+        instancedBossEntities.forEach(instancedBossEntity -> instancedBossEntity.setNormalizedMaxHealth(players.size()));
     }
 
     public boolean checkCompletionStatus() {
-        if (!super.state.equals(InstancedRegionState.ONGOING)) return false;
+        if (super.state != InstancedRegionState.ONGOING) return false;
         for (DungeonObjective dungeonObjective : dungeonObjectives)
             if (!dungeonObjective.isCompleted())
                 return false;
@@ -278,7 +276,7 @@ public class DungeonInstance extends MatchInstance {
         rawValue = rawValue.trim();
 
         // Check for relative values (+N or -N)
-        if (rawValue.startsWith("+") || rawValue.startsWith("-")) {
+        if (!rawValue.isEmpty() && rawValue.charAt(0) == '+' || !rawValue.isEmpty() && rawValue.charAt(0) == '-') {
             int offset;
             try {
                 offset = Integer.parseInt(rawValue);
@@ -314,7 +312,7 @@ public class DungeonInstance extends MatchInstance {
         String trimmed = rawLevelSync.trim();
 
         // Check for relative values (+N or -N)
-        if (trimmed.startsWith("+") || trimmed.startsWith("-")) {
+        if (!trimmed.isEmpty() && trimmed.charAt(0) == '+' || !trimmed.isEmpty() && trimmed.charAt(0) == '-') {
             try {
                 int offset = Integer.parseInt(trimmed);
                 this.levelSync = Math.max(1, dynamicLevel + offset);
@@ -332,7 +330,7 @@ public class DungeonInstance extends MatchInstance {
     protected boolean isRelativeLevelSync() {
         if (rawLevelSync == null || rawLevelSync.isEmpty()) return false;
         String trimmed = rawLevelSync.trim();
-        return trimmed.startsWith("+") || trimmed.startsWith("-");
+        return !trimmed.isEmpty() && trimmed.charAt(0) == '+' || !trimmed.isEmpty() && trimmed.charAt(0) == '-';
     }
 
     @Override

@@ -18,14 +18,12 @@ import java.util.HashMap;
 public class CustomProjectileData implements Listener {
     @Getter
     private static final HashMap<Projectile, CustomProjectileData> customProjectileDataHashMap = new HashMap<>();
-    private final Player player;
     @Getter
-    private ItemStack projectileShooter = null;
+    private ItemStack projectileShooter;
     @Getter
-    private Material projectileShooterMaterial = null;
+    private Material projectileShooterMaterial;
 
     private CustomProjectileData(Player player, Projectile projectile) {
-        this.player = player;
         if (projectile instanceof Trident trident) {
             projectileShooter = trident.getItem();
             projectileShooterMaterial = Material.TRIDENT;

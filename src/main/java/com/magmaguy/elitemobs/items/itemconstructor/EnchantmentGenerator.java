@@ -52,7 +52,7 @@ public class EnchantmentGenerator {
          */
         if (itemTier < 1) return enchantmentMap;
 
-        HashMap<Enchantment, Integer> validEnchantments = new HashMap();
+        HashMap<Enchantment, Integer> validEnchantments = new HashMap<>();
 
         /*
         Primary enchantments get instantly validated and applies since there is only one per item type
@@ -284,7 +284,7 @@ public class EnchantmentGenerator {
         int maxSecondaryEnchantmentLevel = (secondaryEnchantmentTotalParsedLevel < itemTier - 2) ? secondaryEnchantmentTotalParsedLevel : (int) itemTier;
         int secondaryEnchantmentCount = ThreadLocalRandom.current().nextInt(maxSecondaryEnchantmentLevel + 1);
 
-        if (itemTier < 2 || secondaryEnchantmentCount < 1 || validEnchantments.size() == 0) {
+        if (itemTier < 2 || secondaryEnchantmentCount < 1 || validEnchantments.isEmpty()) {
             generateEnchantments(itemMeta, enchantmentMap);
             return enchantmentMap;
         }
@@ -293,15 +293,14 @@ public class EnchantmentGenerator {
 
         while (ThreadLocalRandom.current().nextBoolean()) {
 
-            if (validEnchantments.size() < 1)
+            if (validEnchantments.isEmpty())
                 break;
 
             int randomIndex = ThreadLocalRandom.current().nextInt(validEnchantments.size());
 
-            List<Enchantment> enchantmentList = new ArrayList();
+            List<Enchantment> enchantmentList = new ArrayList<>();
 
-            for (Enchantment enchantment : validEnchantments.keySet())
-                enchantmentList.add(enchantment);
+            enchantmentList.addAll(validEnchantments.keySet());
 
             Enchantment enchantment = enchantmentList.get(randomIndex);
 
@@ -334,7 +333,7 @@ public class EnchantmentGenerator {
          */
         if (itemTier < 1) return enchantmentMap;
 
-        HashMap<String, Integer> validSecondaryEnchantments = new HashMap();
+        HashMap<String, Integer> validSecondaryEnchantments = new HashMap<>();
 
         /*
         Primary enchantments get instantly validated and applies since there is only one per item type
@@ -346,78 +345,25 @@ public class EnchantmentGenerator {
             case IRON_SWORD:
             case STONE_SWORD:
             case WOODEN_SWORD:
-            case TRIDENT:
-                validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(CriticalStrikesEnchantment.key));
-                break;
-            case BOW:
-            case CROSSBOW:
+            case TRIDENT, DIAMOND_AXE, GOLDEN_AXE, IRON_AXE, STONE_AXE, WOODEN_AXE, MACE, DIAMOND_SPEAR, IRON_SPEAR,
+                 GOLDEN_SPEAR, STONE_SPEAR, WOODEN_SPEAR, COPPER_SPEAR, NETHERITE_SPEAR, BOW, CROSSBOW:
                 validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(CriticalStrikesEnchantment.key));
                 break;
             case DIAMOND_PICKAXE:
             case GOLDEN_PICKAXE:
             case IRON_PICKAXE:
             case STONE_PICKAXE:
-            case WOODEN_PICKAXE:
-                break;
-            case DIAMOND_SHOVEL:
-            case GOLDEN_SHOVEL:
-            case IRON_SHOVEL:
-            case STONE_SHOVEL:
-            case WOODEN_SHOVEL:
-                break;
-            case DIAMOND_HOE:
-            case GOLDEN_HOE:
-            case IRON_HOE:
-            case STONE_HOE:
-            case WOODEN_HOE:
-            case SHIELD:
-                break;
-            case DIAMOND_AXE:
-            case GOLDEN_AXE:
-            case IRON_AXE:
-            case STONE_AXE:
-            case WOODEN_AXE:
-            case MACE:
-            case DIAMOND_SPEAR:
-            case IRON_SPEAR:
-            case GOLDEN_SPEAR:
-            case STONE_SPEAR:
-            case WOODEN_SPEAR:
-            case COPPER_SPEAR:
-            case NETHERITE_SPEAR:
-                validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(CriticalStrikesEnchantment.key));
+            case WOODEN_PICKAXE, SHEARS, FISHING_ROD, DIAMOND_HOE, GOLDEN_HOE, IRON_HOE, STONE_HOE, WOODEN_HOE, SHIELD,
+                 DIAMOND_SHOVEL, GOLDEN_SHOVEL, IRON_SHOVEL, STONE_SHOVEL, WOODEN_SHOVEL:
                 break;
             case CHAINMAIL_HELMET:
             case DIAMOND_HELMET:
             case GOLDEN_HELMET:
             case IRON_HELMET:
-            case LEATHER_HELMET:
+            case LEATHER_HELMET, CHAINMAIL_BOOTS, DIAMOND_BOOTS, GOLDEN_BOOTS, IRON_BOOTS, LEATHER_BOOTS,
+                 CHAINMAIL_LEGGINGS, DIAMOND_LEGGINGS, GOLDEN_LEGGINGS, IRON_LEGGINGS, LEATHER_LEGGINGS,
+                 CHAINMAIL_CHESTPLATE, DIAMOND_CHESTPLATE, GOLDEN_CHESTPLATE, IRON_CHESTPLATE, LEATHER_CHESTPLATE:
                 validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(HunterEnchantment.key));
-                break;
-            case CHAINMAIL_CHESTPLATE:
-            case DIAMOND_CHESTPLATE:
-            case GOLDEN_CHESTPLATE:
-            case IRON_CHESTPLATE:
-            case LEATHER_CHESTPLATE:
-                validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(HunterEnchantment.key));
-                break;
-            case CHAINMAIL_LEGGINGS:
-            case DIAMOND_LEGGINGS:
-            case GOLDEN_LEGGINGS:
-            case IRON_LEGGINGS:
-            case LEATHER_LEGGINGS:
-                validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(HunterEnchantment.key));
-                break;
-            case CHAINMAIL_BOOTS:
-            case DIAMOND_BOOTS:
-            case GOLDEN_BOOTS:
-            case IRON_BOOTS:
-            case LEATHER_BOOTS:
-                validSecondaryEnchantments.putAll(validateSecondaryCustomEnchantments(HunterEnchantment.key));
-                break;
-            case FISHING_ROD:
-                break;
-            case SHEARS:
                 break;
         }
 
@@ -426,7 +372,7 @@ public class EnchantmentGenerator {
          */
         int secondaryEnchantmentTotalParsedLevel = totalEnchantmentCount(validSecondaryEnchantments);
 
-        if (itemTier < 2 || secondaryEnchantmentTotalParsedLevel < 1 || validSecondaryEnchantments.size() == 0)
+        if (itemTier < 2 || secondaryEnchantmentTotalParsedLevel < 1 || validSecondaryEnchantments.isEmpty())
             return enchantmentMap;
 
         if (ThreadLocalRandom.current().nextDouble() > ProceduralItemGenerationSettingsConfig.getCustomEnchantmentChance())
@@ -451,7 +397,7 @@ public class EnchantmentGenerator {
         HashMap<Enchantment, Integer> enchantmentMap = new HashMap<>();
 
         //Make sure vanishing and binding curses aren't always there
-        if (string.equalsIgnoreCase("VANISHING_CURSE") || string.equalsIgnoreCase("BINDING_CURSE"))
+        if ("VANISHING_CURSE".equalsIgnoreCase(string) || "BINDING_CURSE".equalsIgnoreCase(string))
             if (ThreadLocalRandom.current().nextDouble() < 0.5)
                 return enchantmentMap;
 
@@ -486,8 +432,8 @@ public class EnchantmentGenerator {
 
         int totalCount = 0;
 
-        for (Enchantment enchantment : validEnchantments.keySet())
-            totalCount += validEnchantments.get(enchantment);
+        for (Integer i : validEnchantments.values())
+            totalCount += i;
 
         return totalCount;
 
@@ -497,8 +443,8 @@ public class EnchantmentGenerator {
 
         int totalCount = 0;
 
-        for (String enchantment : validEnchantments.keySet())
-            totalCount += validEnchantments.get(enchantment);
+        for (Integer i : validEnchantments.values())
+            totalCount += i;
 
         return totalCount;
 

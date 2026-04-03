@@ -21,10 +21,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class EliteItemLore {
 
@@ -38,16 +35,16 @@ public class EliteItemLore {
     private ItemStack itemStack;
     private ItemMeta itemMeta;
     private List<String> lore;
-    private String soulbindInfo = null;
+    private String soulbindInfo;
     private boolean showItemWorth;
-    private String itemWorth = null;
-    private String itemSource = null;
+    private String itemWorth;
+    private String itemSource;
     private EliteEntity eliteEntity;
-    private Player soulboundPlayer = null;
+    private Player soulboundPlayer;
     private List<String> customLore = new ArrayList<>();
-    private int prestigeLevel = 0;
-    private int enchantmentCount = 0;
-    private List<String> thirdPartyLore = null;
+    private int prestigeLevel;
+    private int enchantmentCount;
+    private List<String> thirdPartyLore;
 
     public EliteItemLore(ItemStack itemStack, boolean showItemWorth) {
         initialize(itemStack, showItemWorth);
@@ -139,11 +136,11 @@ public class EliteItemLore {
     }
 
     private void constructEliteEnchantments() {
-        for (Enchantment enchantment : eliteVanillaEnchantments.keySet())
+        for (Map.Entry<Enchantment, Integer> entry : eliteVanillaEnchantments.entrySet())
             eliteVanillaEnchantmentsLore.add(ChatColorConverter.convert(
                     "&7" + ItemSettingsConfig.getEliteEnchantLoreString() + " "
-                            + EnchantmentsConfig.getEnchantment(enchantment).getName()
-                            + " " + eliteVanillaEnchantments.get(enchantment)));
+                    + EnchantmentsConfig.getEnchantment(entry.getKey()).getName()
+                    + " " + entry.getValue()));
 
     }
 
@@ -161,10 +158,10 @@ public class EliteItemLore {
     }
 
     private void constructCustomEnchantments() {
-        for (CustomEnchantment customEnchantment : customEnchantments.keySet())
+        for (Map.Entry<CustomEnchantment, Integer> entry : customEnchantments.entrySet())
             customEnchantmentLore.add(ChatColorConverter.convert
-                    ("&6" + customEnchantment.getEnchantmentsConfigFields().getName() + " "
-                            + customEnchantments.get(customEnchantment)));
+                    ("&6" + entry.getKey().getEnchantmentsConfigFields().getName() + " "
+                     + entry.getValue()));
     }
 
     private void constructSoulbindEntry() {
@@ -215,7 +212,7 @@ public class EliteItemLore {
                     elitePotionEffect.getPotionEffect().getType().getKey().getKey().toLowerCase(Locale.ROOT) + ".yml").getName()
                     + ItemSettingsConfig.getPotionEffectContinuousLore() + " " + (elitePotionEffect.getPotionEffect().getAmplifier() + 1));
         for (ElitePotionEffect elitePotionEffect : ElitePotionEffectContainer.getElitePotionEffectContainer(itemMeta, ItemTagger.onHitPotionEffectKey))
-            if (elitePotionEffect.getTarget().equals(ElitePotionEffect.Target.SELF))
+            if (elitePotionEffect.getTarget() == ElitePotionEffect.Target.SELF)
                 potionListLore.add(PotionEffectsConfig.getPotionEffect(
                         elitePotionEffect.getPotionEffect().getType().getKey().getKey().toLowerCase(Locale.ROOT) + ".yml").getName()
                         + ItemSettingsConfig.getPotionEffectOnHitSelfLore() + " " + (elitePotionEffect.getPotionEffect().getAmplifier() + 1));

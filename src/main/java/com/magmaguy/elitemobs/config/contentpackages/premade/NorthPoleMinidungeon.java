@@ -22,9 +22,10 @@ public class NorthPoleMinidungeon extends ContentPackagesConfigFields {
                 "em_north_pole,-258.5,41.2,-514.5,47,0",
                 "em_north_pole,-264.5,43.2,-503.5,47,0",
                 0,
-                "Difficulty: &6Medium\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&6Christmas in a snow globe!",
+                """
+                        Difficulty: &6Medium
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &6Christmas in a snow globe!""",
                 "&8[EM] &7You have reached the North Pole! &fHave you been naughty this year?",
                 "&8[EM] &7Come back and visit. &fThere are plenty of sweets and treats for next time!",
                 List.of("filename=northpole_santa_claus.yml"),

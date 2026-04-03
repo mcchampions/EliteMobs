@@ -21,10 +21,11 @@ public class YggdrasilRealm extends ContentPackagesConfigFields {
                 "em_yggdrasil,-321.5,-22.0,102.5,141.5,0.0",
                 "em_yggdrasil,-322.5,-22.0,101.5,141.5,0.0",
                 0,
-                "Difficulty: &6Hard\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&5A mythic journey through Yggdrasil''s roots\n"+
-                        "&5for brave warriors seeking glory!",
+                """
+                        Difficulty: &6Hard
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &5A mythic journey through Yggdrasil''s roots
+                        &5for brave warriors seeking glory!""",
                 "&8[EM] &5Yggdrasil awaits!",
                 "&8[EM] &5You have left Yggdrasil",
                 List.of("filename=em_yggdrasil_final_boss_loki_p1.yml"),

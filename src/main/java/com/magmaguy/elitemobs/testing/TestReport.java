@@ -36,10 +36,10 @@ public class TestReport {
     private final List<SkillTestResult> skippedResults = new ArrayList<>();
 
     // Summary stats
-    private int totalTests = 0;
-    private int passedTests = 0;
-    private int failedTests = 0;
-    private int skippedTests = 0;
+    private int totalTests;
+    private int passedTests;
+    private int failedTests;
+    private int skippedTests;
 
     // Damage validation data
     // Offensive: {type -> {level -> [expected, baseline, avgWithSkills]}}
@@ -145,7 +145,7 @@ public class TestReport {
             for (SkillTestResult result : skippedResults) {
                 skippedLine.append(result.getSkillName());
                 if (!result.getIssues().isEmpty()) {
-                    skippedLine.append("(").append(result.getIssues().get(0)).append(")");
+                    skippedLine.append("(").append(result.getIssues().getFirst()).append(")");
                 }
                 skippedLine.append(", ");
             }
@@ -443,7 +443,7 @@ public class TestReport {
                 page.append(entry);
             }
 
-            if (page.length() > 0) {
+            if (!page.isEmpty()) {
                 bookMeta.addPage(page.toString());
             }
         }
@@ -463,7 +463,7 @@ public class TestReport {
                     StringBuilder entry = new StringBuilder();
                     entry.append("\u00A7c").append(result.getSkillName());
                     if (!result.getIssues().isEmpty()) {
-                        entry.append("\n\u00A77").append(result.getIssues().get(0));
+                        entry.append("\n\u00A77").append(result.getIssues().getFirst());
                     }
                     entry.append("\n");
 
@@ -476,7 +476,7 @@ public class TestReport {
                 }
             }
 
-            if (issuePage.length() > 0) {
+            if (!issuePage.isEmpty()) {
                 bookMeta.addPage(issuePage.toString());
             }
         }

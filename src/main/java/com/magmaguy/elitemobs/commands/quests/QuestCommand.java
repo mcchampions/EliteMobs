@@ -68,7 +68,7 @@ public class QuestCommand {
     }
 
     public static void completeQuest(Player player) {
-        for (Quest quest : new ArrayList<Quest>(PlayerData.getQuests(player.getUniqueId()))) {
+        for (Quest quest : new ArrayList<>(PlayerData.getQuests(player.getUniqueId()))) {
             quest.getQuestObjectives().setForceOver(true);
             Quest.completeQuest(quest.getQuestID(), player);
         }

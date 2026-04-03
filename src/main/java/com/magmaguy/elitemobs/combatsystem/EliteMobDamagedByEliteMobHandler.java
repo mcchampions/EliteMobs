@@ -13,8 +13,8 @@ public class EliteMobDamagedByEliteMobHandler implements Listener {
 
         if (event.getDamager().getLivingEntity() == null || event.getDamagee().getLivingEntity() == null) return;
 
-        if (!(event.getDamager().getLivingEntity().getType().equals(EntityType.IRON_GOLEM) ||
-                event.getDamagee().getLivingEntity().getType().equals(EntityType.IRON_GOLEM))) return;
+        if (!(event.getDamager().getLivingEntity().getType() == EntityType.IRON_GOLEM ||
+              event.getDamagee().getLivingEntity().getType() == EntityType.IRON_GOLEM)) return;
 
         double damage = event.getEntityDamageByEntityEvent().getDamage() * event.getDamager().getLevel() * CombatSystem.PER_LEVEL_POWER_INCREASE;
 

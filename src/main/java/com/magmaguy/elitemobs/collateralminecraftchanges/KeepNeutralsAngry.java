@@ -45,20 +45,20 @@ public class KeepNeutralsAngry {
                     return;
                 //It is possible for entities to change type during combat, in which case they need to be wiped
                 if (!eliteEntity.isValid() ||
-                        !entityType.equals(eliteEntity.getLivingEntity().getType()) ||
-                        entityType.equals(EntityType.WOLF) && ((Wolf) eliteEntity.getLivingEntity()).isTamed()) {
+                    entityType != eliteEntity.getLivingEntity().getType() ||
+                    entityType == EntityType.WOLF && ((Wolf) eliteEntity.getLivingEntity()).isTamed()) {
                     cancel();
                     angryMobTasks.remove(entityUUID);
                     return;
                 }
 
-                if (!eliteEntity.getLivingEntity().getType().equals(EntityType.LLAMA) && !eliteEntity.getLivingEntity().getType().equals(EntityType.RABBIT) &&
+                if (eliteEntity.getLivingEntity().getType() != EntityType.LLAMA && eliteEntity.getLivingEntity().getType() != EntityType.RABBIT &&
                         ((Mob) eliteEntity.getLivingEntity()).getTarget() != null)
                     return;
 
                 for (Player player : Bukkit.getOnlinePlayers())
-                    if (!player.getGameMode().equals(GameMode.SPECTATOR) && !player.getGameMode().equals(GameMode.CREATIVE) &&
-                            Objects.equals(player.getLocation().getWorld(), eliteEntity.getLocation().getWorld()) &&
+                    if (player.getGameMode() != GameMode.SPECTATOR && player.getGameMode() != GameMode.CREATIVE &&
+                        Objects.equals(player.getLocation().getWorld(), eliteEntity.getLocation().getWorld()) &&
                             player.getLocation().distanceSquared(eliteEntity.getLocation()) <
                                     Math.pow(AttributeManager.getAttributeBaseValue(eliteEntity.getLivingEntity(), "generic_follow_range"), 2)) {
                         ((Mob) eliteEntity.getLivingEntity()).setTarget(player);

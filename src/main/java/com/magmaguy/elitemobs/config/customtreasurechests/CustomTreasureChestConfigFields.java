@@ -22,21 +22,21 @@ public class CustomTreasureChestConfigFields extends CustomConfigFields {
     @Getter
     private BlockFace facing = BlockFace.NORTH;
     @Getter
-    private int chestTier = 0;
+    private int chestTier;
     @Getter
     private TreasureChest.DropStyle dropStyle = TreasureChest.DropStyle.SINGLE;
     @Getter
-    private int restockTimer = 0;
+    private int restockTimer;
     @Getter
-    private List<Object> lootList = null;
+    private List<Object> lootList;
     @Getter
-    private double mimicChance = 0;
+    private double mimicChance;
     @Getter
-    private List<String> mimicCustomBossesList = null;
+    private List<String> mimicCustomBossesList;
     @Getter
-    private List<String> restockTimers = null;
+    private List<String> restockTimers;
     @Getter
-    private List<String> effects = null;
+    private List<String> effects;
     @Getter
     private String worldName;
     @Getter
@@ -44,14 +44,14 @@ public class CustomTreasureChestConfigFields extends CustomConfigFields {
     @Getter
     private String locationString;
     @Getter
-    private long restockTime = 0L;
+    private long restockTime;
     @Getter
     private List<String> locationsString = new ArrayList<>();
     @Getter
-    private CustomLootTable customLootTable = null;
+    private CustomLootTable customLootTable;
     @Getter
     @Setter
-    private boolean instanced = false;
+    private boolean instanced;
 
 
     public CustomTreasureChestConfigFields(String filename, boolean isEnabled) {
@@ -162,7 +162,7 @@ public class CustomTreasureChestConfigFields extends CustomConfigFields {
     }
 
     public void setRestockTime(Location location, long newRestockTime) {
-        if (isInstanced()) return;
+        if (instanced) return;
         if (!locationsString.isEmpty()) {
             addTreasureChest(location, newRestockTime);
             return;

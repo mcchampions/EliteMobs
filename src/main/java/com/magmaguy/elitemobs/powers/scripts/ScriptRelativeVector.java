@@ -7,22 +7,22 @@ import org.bukkit.util.Vector;
 
 public class ScriptRelativeVector {
     private final ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint;
-    private ScriptTargets sourceTarget = null;
-    private ScriptTargets destinationTarget = null;
-    private Vector cachedVector = null;
-    private Location actionLocation = null;
-    private boolean sourceIsAction = false;
-    private boolean destinationIsAction = false;
+    private ScriptTargets sourceTarget;
+    private ScriptTargets destinationTarget;
+    private Vector cachedVector;
+    private Location actionLocation;
+    private boolean sourceIsAction;
+    private boolean destinationIsAction;
 
     public ScriptRelativeVector(ScriptRelativeVectorBlueprint scriptRelativeVectorBlueprint, ScriptRuntimeOwner runtimeOwner, Location actionLocation) {
         this.scriptRelativeVectorBlueprint = scriptRelativeVectorBlueprint;
         this.actionLocation = actionLocation;
-        if (!scriptRelativeVectorBlueprint.getSourceTarget().getTargetType().equals(TargetType.ACTION_TARGET)) {
+        if (scriptRelativeVectorBlueprint.getSourceTarget().getTargetType() != TargetType.ACTION_TARGET) {
             sourceTarget = new ScriptTargets(scriptRelativeVectorBlueprint.getSourceTarget(), runtimeOwner);
         } else {
             sourceIsAction = true;
         }
-        if (!scriptRelativeVectorBlueprint.getDestinationTarget().getTargetType().equals(TargetType.ACTION_TARGET))
+        if (scriptRelativeVectorBlueprint.getDestinationTarget().getTargetType() != TargetType.ACTION_TARGET)
             destinationTarget = new ScriptTargets(scriptRelativeVectorBlueprint.getDestinationTarget(), runtimeOwner);
         else
             destinationIsAction = true;

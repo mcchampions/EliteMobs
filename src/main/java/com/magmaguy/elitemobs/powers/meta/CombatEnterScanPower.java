@@ -13,8 +13,8 @@ import java.util.HashSet;
 public abstract class CombatEnterScanPower extends MajorPower implements Listener {
 
     public static HashSet<CombatEnterScanPower> combatEnterScanPowers = new HashSet<>();
-    public BukkitTask bukkitTask = null;
-    private boolean isActive = false;
+    public BukkitTask bukkitTask;
+    private boolean isActive;
 
     public CombatEnterScanPower(PowersConfigFields powersConfigFields) {
         super(powersConfigFields);

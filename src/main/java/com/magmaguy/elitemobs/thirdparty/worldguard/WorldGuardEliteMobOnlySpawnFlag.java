@@ -13,8 +13,8 @@ public class WorldGuardEliteMobOnlySpawnFlag implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSpawn(CreatureSpawnEvent event) {
         if (!EliteMobs.worldGuardIsEnabled) return;
-        if (event.getEntity().getType().equals(EntityType.ARMOR_STAND) ||
-                event.getEntity().getType().equals(EntityType.VILLAGER) && event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM))
+        if (event.getEntity().getType() == EntityType.ARMOR_STAND ||
+            event.getEntity().getType() == EntityType.VILLAGER && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM)
             return;
         if (WorldGuardFlagChecker.checkFlag(event.getLocation(), WorldGuardCompatibility.getELITEMOBS_ONLY_SPAWN_FLAG())) {
             if (EntityTracker.isEliteMob(event.getEntity())) return;

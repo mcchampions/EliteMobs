@@ -31,7 +31,7 @@ public class BossBarUtil {
         List<PlayerBrokenItemBar> arrayList = brokenPlayerItem.get(playerUUID);
         boolean alreadyExists = false;
         for (PlayerBrokenItemBar playerBrokenItemBar : arrayList) {
-            if (playerBrokenItemBar.getEquipmentSlot().equals(equipmentSlot)) {
+            if (playerBrokenItemBar.getEquipmentSlot() == equipmentSlot) {
                 alreadyExists = true;
                 break;
             }
@@ -47,7 +47,7 @@ public class BossBarUtil {
         PlayerBrokenItemBar storedPlayerBrokenItemBar = null;
 
         for (PlayerBrokenItemBar playerBrokenItemBar : arrayList) {
-            if (playerBrokenItemBar.getEquipmentSlot().equals(equipmentSlot)) {
+            if (playerBrokenItemBar.getEquipmentSlot() == equipmentSlot) {
                 storedPlayerBrokenItemBar = playerBrokenItemBar;
                 DestroyBossBar(playerBrokenItemBar.bossBar);
                 break;

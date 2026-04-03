@@ -47,7 +47,7 @@ public class ScriptParticles {
             }
 
 
-            if (particleBlueprint.getParticle().equals(Particle.DUST))
+            if (particleBlueprint.getParticle() == Particle.DUST)
                 location.getWorld().spawnParticle(
                         particleBlueprint.getParticle(),
                         location,
@@ -62,7 +62,7 @@ public class ScriptParticles {
                                         particleBlueprint.getGreen().getValue(),
                                         particleBlueprint.getBlue().getValue()),
                                 1));
-            else if (particleBlueprint.getParticle().equals(Particle.DUST_COLOR_TRANSITION))
+            else if (particleBlueprint.getParticle() == Particle.DUST_COLOR_TRANSITION)
                 location.getWorld().spawnParticle(
                         particleBlueprint.getParticle(),
                         location,
@@ -81,7 +81,7 @@ public class ScriptParticles {
                                         particleBlueprint.getToGreen().getValue(),
                                         particleBlueprint.getToBlue().getValue()),
                                 1));
-            else if (particleBlueprint.getParticle().equals(Particle.WITCH)
+            else if (particleBlueprint.getParticle() == Particle.WITCH
                 //|| particleBlueprint.getParticle().equals(Particle.WITCH_AMBIENT) todo: 1.20.6 changed this name
             ) {
                 location.getWorld().spawnParticle(

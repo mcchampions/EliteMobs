@@ -7,12 +7,14 @@ import lombok.Setter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class CustomQuestsConfigFields extends CustomConfigFields {
 
+    private static final Pattern PATTERN = Pattern.compile("\\n");
     @Getter
     @Setter
-    protected Map<String, Map<String, Object>> customObjectives = new HashMap();
+    protected Map<String, Map<String, Object>> customObjectives = new HashMap<>();
     @Getter
     @Setter
     List<String> temporaryPermissions = new ArrayList<>();
@@ -21,7 +23,7 @@ public class CustomQuestsConfigFields extends CustomConfigFields {
     List<String> questAcceptDialog = new ArrayList<>();
     @Getter
     @Setter
-    private int questLevel = 0;
+    private int questLevel;
     @Getter
     @Setter
     private List<String> customRewardsList = new ArrayList<>();
@@ -31,7 +33,7 @@ public class CustomQuestsConfigFields extends CustomConfigFields {
     private String questAcceptPermission = "";
     @Getter
     @Setter
-    private List<String> questAcceptPermissions = null;
+    private List<String> questAcceptPermissions;
     @Getter
     //Permission which locks players out of a quest
     private String questLockoutPermission = "";
@@ -141,8 +143,8 @@ public class CustomQuestsConfigFields extends CustomConfigFields {
                         default ->
                                 Logger.warn("Failed to correctly parse key " + key + " in " + filename + " while updating the old quest configuration format!");
                     }
-                if (key.equalsIgnoreCase("dialog")) {
-                    value = Arrays.stream(((String) value).split("\\n")).toList();
+                if ("dialog".equalsIgnoreCase(key)) {
+                    value = Arrays.stream(PATTERN.split(((String) value))).toList();
                 }
                 parsedEntry.put(key, value);
                 Logger.info("Converted quest old entry to " + key + ": " + value);
@@ -170,9 +172,9 @@ public class CustomQuestsConfigFields extends CustomConfigFields {
             for (Map.Entry<String, Map<String, Object>> maps : customObjectives.entrySet()) {
                 Map<String, Object> parsedMap = new HashMap<>();
                 for (Map.Entry<String, Object> entry : maps.getValue().entrySet())
-                    if (entry.getKey().equals("dialog"))
+                    if ("dialog".equals(entry.getKey()))
                         parsedMap.put(entry.getKey(), translatable(filename, "customObjectives." + maps.getKey() + "." + entry.getKey(), (List<String>) entry.getValue()));
-                    else if (entry.getKey().equals("npcName") || entry.getKey().equals("location"))
+                    else if ("npcName".equals(entry.getKey()) || "location".equals(entry.getKey()))
                         parsedMap.put(entry.getKey(), translatable(filename, "customObjectives." + maps.getKey() + "." + entry.getKey(), (String) entry.getValue()));
                     else
                         parsedMap.put(entry.getKey(), entry.getValue());

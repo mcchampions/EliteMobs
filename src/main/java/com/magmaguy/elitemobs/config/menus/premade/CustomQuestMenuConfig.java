@@ -58,7 +58,6 @@ public class CustomQuestMenuConfig extends MenusConfigFields {
     private static String objectivesLine;
     @Getter
     private static String rewardsLine;
-    private static String turnedInHoverLines;
     private static String killQuestDefaultSummaryLine;
     private static String fetchQuestDefaultSummaryLine;
     private static String dialogQuestDefaultSummaryLine;
@@ -74,14 +73,15 @@ public class CustomQuestMenuConfig extends MenusConfigFields {
     public static String getObjectiveLine(Objective objective) {
         if (objective == null) return "";
         String newString = "";
-        if (objective instanceof CustomKillObjective)
-            newString = killQuestDefaultSummaryLine;
-        else if (objective instanceof DialogObjective)
-            newString = dialogQuestDefaultSummaryLine.replace("$location", safeString(((DialogObjective) objective).getTargetLocation()));
-        else if (objective instanceof CustomFetchObjective)
-            newString = fetchQuestDefaultSummaryLine;
-        else if (objective instanceof ArenaObjective)
-            newString = arenaQuestDefaultSummaryLine;
+        switch (objective) {
+            case CustomKillObjective customKillObjective -> newString = killQuestDefaultSummaryLine;
+            case DialogObjective dialogObjective ->
+                    newString = dialogQuestDefaultSummaryLine.replace("$location", safeString(dialogObjective.getTargetLocation()));
+            case CustomFetchObjective customFetchObjective -> newString = fetchQuestDefaultSummaryLine;
+            case ArenaObjective arenaObjective -> newString = arenaQuestDefaultSummaryLine;
+            default -> {
+            }
+        }
         newString = newString.replace("$name", safeObjectiveName(objective));
         newString = newString.replace("$current", objective.getCurrentAmount() + "");
         newString = newString.replace("$target", objective.getTargetAmount() + "");
@@ -172,7 +172,7 @@ public class CustomQuestMenuConfig extends MenusConfigFields {
         completedHoverLines = ConfigurationEngine.setString(file, fileConfiguration, "completedHoverLines", "&aClick to turn quest in!", true);
         completedCommandLines = ConfigurationEngine.setString(file, fileConfiguration, "completedCommandLines", "/em quest complete $questID", false);
 
-        turnedInHoverLines = ConfigurationEngine.setString(file, fileConfiguration, "turnedInHoverLines", "&8Already turned in!", true);
+        String turnedInHoverLines = ConfigurationEngine.setString(file, fileConfiguration, "turnedInHoverLines", "&8Already turned in!", true);
 
         objectivesLine = ConfigurationEngine.setString(file, fileConfiguration, "objectivesLine", "&c&lObjectives:", true);
         killQuestDefaultSummaryLine = ConfigurationEngine.setString(file, fileConfiguration, "killQuestDefaultSummaryLine", "&c➤Kill $name:$color$current&0/$color$target", true);

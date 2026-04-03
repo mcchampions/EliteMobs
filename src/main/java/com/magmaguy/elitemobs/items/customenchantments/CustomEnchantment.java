@@ -16,15 +16,13 @@ import java.util.HashMap;
 public abstract class CustomEnchantment {
 
     @Getter
-    private static final HashMap<String, CustomEnchantment> customEnchantmentMap = new HashMap();
+    private static final HashMap<String, CustomEnchantment> customEnchantmentMap = new HashMap<>();
     public final String key;
-    private final boolean dynamic;
     private final EnchantmentsConfigFields enchantmentsConfigFields;
     private final Enchantment originalEnchantment = null;
 
     public CustomEnchantment(String key, boolean dynamic) {
         this.key = key;
-        this.dynamic = dynamic;
         this.enchantmentsConfigFields = EnchantmentsConfig.getEnchantment(key + ".yml");
         customEnchantmentMap.put(enchantmentsConfigFields.getFilename(), this);
     }
@@ -51,7 +49,7 @@ public abstract class CustomEnchantment {
 
     public static boolean isCustomEnchantment(String enchantmentFilename) {
         for (CustomEnchantment customEnchantment : customEnchantmentMap.values())
-            if (customEnchantment.getKey().equalsIgnoreCase(enchantmentFilename))
+            if (customEnchantment.key.equalsIgnoreCase(enchantmentFilename))
                 return true;
         return false;
     }
@@ -60,7 +58,7 @@ public abstract class CustomEnchantment {
     Check an itemstack has this enchantment
      */
     public static boolean hasCustomEnchantment(ItemStack itemStack, String key) {
-        if (itemStack == null || itemStack.getType().equals(Material.AIR)) return false;
+        if (itemStack == null || itemStack.getType() == Material.AIR) return false;
         if (!itemStack.hasItemMeta()) return false;
         if (!itemStack.getItemMeta().hasLore()) return false;
         return hasCustomEnchantment(itemStack.getItemMeta(), key);

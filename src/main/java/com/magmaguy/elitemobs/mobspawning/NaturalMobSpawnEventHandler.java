@@ -82,12 +82,12 @@ public class NaturalMobSpawnEventHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSpawn(CreatureSpawnEvent event) {
 
-        if (event.getSpawnReason().equals(DROWNED) || event.getSpawnReason().equals(BREEDING)) return;
+        if (event.getSpawnReason() == DROWNED || event.getSpawnReason() == BREEDING) return;
 
-        if (event.getEntity().getType().equals(EntityType.BEE))
+        if (event.getEntity().getType() == EntityType.BEE)
             return;
 
-        if (event.getEntity().getType().equals(EntityType.VEX))
+        if (event.getEntity().getType() == EntityType.VEX)
             return;
 
 
@@ -111,8 +111,8 @@ public class NaturalMobSpawnEventHandler implements Listener {
             return;
         if (!ValidWorldsConfig.getInstance().getFileConfiguration().getBoolean("validWorlds." + event.getEntity().getWorld().getName()))
             return;
-        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER) &&
-                !MobCombatSettingsConfig.isDoSpawnersSpawnEliteMobs() ||
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER &&
+            !MobCombatSettingsConfig.isDoSpawnersSpawnEliteMobs() ||
                 event.getSpawnReason() != NATURAL && DefaultConfig.isDoStrictSpawningRules())
             return;
         if (event.getEntity().getCustomName() != null && DefaultConfig.isPreventEliteMobConversionOfNamedMobs())
@@ -160,7 +160,7 @@ public class NaturalMobSpawnEventHandler implements Listener {
         if (DefaultConfig.isUseRandomizedScalingForElites())
             AttributeManager.setAttribute(livingEntity, "generic_scale", ThreadLocalRandom.current().nextDouble(0.8, 1.2));
 
-        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER))
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER)
             eliteEntity.setEliteLoot(false);
 
     }

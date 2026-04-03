@@ -40,7 +40,7 @@ public class CustomQuest extends Quest {
         if (CustomQuestsConfig.getCustomQuests().get(questFilename) == null) return null;
         Quest quest = null;
         for (Quest iteratedQuest : PlayerData.getQuests(player.getUniqueId()))
-            if (iteratedQuest instanceof CustomQuest && ((CustomQuest) iteratedQuest).getConfigurationFilename().equals(questFilename)) {
+            if (iteratedQuest instanceof CustomQuest && ((CustomQuest) iteratedQuest).configurationFilename.equals(questFilename)) {
                 quest = iteratedQuest;
                 break;
             }

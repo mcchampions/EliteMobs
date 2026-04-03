@@ -14,7 +14,7 @@ public class SpecialItemSystemsConfig extends ConfigurationFile {
 
     private static final HashMap<CustomItem, Double> specialValues = new HashMap<>();
     private static final List<PendingSpecialItem> pendingSpecialItems = new ArrayList<>();
-    private static boolean specialValuesResolved = false;
+    private static boolean specialValuesResolved;
     @Getter
     private static boolean dropSpecialLoot;
     @Getter

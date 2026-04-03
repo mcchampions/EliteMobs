@@ -18,9 +18,10 @@ public class IronLeagueArena extends ContentPackagesConfigFields {
                 true,
                 "em_iron_league_arena,46,-41,38,-110,-24",
                 0,
-                "Difficulty: &chard\n" +
-                        "Face 50 waves of the arena, from\n" +
-                        "level 50 to level 100!",
+                """
+                        Difficulty: &chard
+                        Face 50 waves of the arena, from
+                        level 50 to level 100!""",
                 "&fAre you prepared to face the arena?",
                 "&fNow leaving the iron league arena!",
                 "iron_league_arena",

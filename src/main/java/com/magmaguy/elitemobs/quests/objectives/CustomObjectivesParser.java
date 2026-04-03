@@ -73,11 +73,11 @@ public class CustomObjectivesParser {
             return null;
         }
         try {
-            if (objectiveType.equals(ObjectiveType.KILL_CUSTOM))
+            if (objectiveType == ObjectiveType.KILL_CUSTOM)
                 return new CustomKillObjective(filename, amount, customQuest.getQuestLevel());
-            else if (objectiveType.equals(ObjectiveType.FETCH_ITEM))
+            else if (objectiveType == ObjectiveType.FETCH_ITEM)
                 return new CustomFetchObjective(amount, name, filename);
-            else if (objectiveType.equals(ObjectiveType.DIALOG)) {
+            else if (objectiveType == ObjectiveType.DIALOG) {
                 // Resolve NPC name from config if not explicitly set, so it picks up translations
                 if (name == null || name.isEmpty()) {
                     NPCsConfigFields npcConfig = NPCsConfig.getNpcEntities().get(filename);
@@ -86,7 +86,7 @@ public class CustomObjectivesParser {
                 }
                 return new DialogObjective(filename, name, location, dialog);
             }
-            else if (objectiveType.equals(ObjectiveType.ARENA))
+            else if (objectiveType == ObjectiveType.ARENA)
                 return new ArenaObjective(name, filename);
         } catch (Exception ex) {
             Logger.warn("Failed to register objective type for quest " + customQuest.getCustomQuestsConfigFields().getFilename() + " ! This quest will be skipped");

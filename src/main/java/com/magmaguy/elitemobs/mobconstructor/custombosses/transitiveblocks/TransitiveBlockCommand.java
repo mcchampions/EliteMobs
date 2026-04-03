@@ -65,7 +65,7 @@ public class TransitiveBlockCommand {
                 player.sendMessage(CommandMessagesConfig.getTransitiveBlockCancellingMessage());
                 return;
             }
-            this.regionalBossEntity = regionalBossEntities.get(0);
+            this.regionalBossEntity = regionalBossEntities.getFirst();
         }
 
         if (edit)
@@ -89,7 +89,7 @@ public class TransitiveBlockCommand {
     private RegionalBossEntity regionalBossEntity;
     @Getter
     @Setter
-    private boolean regionalSelection = false;
+    private boolean regionalSelection;
     private Location corner1, corner2;
 
     public static void shutdown() {
@@ -258,14 +258,14 @@ public class TransitiveBlockCommand {
             if (!activePlayers.containsKey(playerUUID)) return;
             if (event.getHand() != EquipmentSlot.HAND) return;
             if (event.getClickedBlock() == null) return;
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().isAir()) return;
                 if (activePlayers.get(playerUUID).isRegionalSelection())
                     activePlayers.get(playerUUID).setCorner(false, event.getClickedBlock().getLocation());
                 else
                     activePlayers.get(playerUUID).registerBlock(event.getClickedBlock());
                 event.setCancelled(true);
-            } else if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+            } else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 if (activePlayers.get(playerUUID).isRegionalSelection())
                     activePlayers.get(playerUUID).setCorner(true, event.getClickedBlock().getLocation());
                 else

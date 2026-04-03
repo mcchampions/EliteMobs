@@ -37,12 +37,12 @@ public class QuestObjectives implements Serializable {
     //The CustomQuest this objective belongs to
     @Getter
     private Quest quest;
-    private boolean over = false;
+    private boolean over;
     @Getter
     @Setter
-    private boolean turnedIn = false;
+    private boolean turnedIn;
     @Setter
-    private boolean forceOver = false;
+    private boolean forceOver;
 
     /**
      * Used for dynamic quests
@@ -116,12 +116,12 @@ public class QuestObjectives implements Serializable {
 
     public void displayTemporaryObjectivesScoreboard(Player player) {
         if (!QuestsConfig.isUseQuestScoreboards()) return;
-        SimpleScoreboard.temporaryScoreboard(player, ChatColorConverter.convert(getQuest().getQuestName()), getScoreboardObjectiveText(), 20 * 20);
+        SimpleScoreboard.temporaryScoreboard(player, ChatColorConverter.convert(quest.getQuestName()), getScoreboardObjectiveText(), 20 * 20);
     }
 
     public void displayLazyObjectivesScoreboard(Player player) {
         if (!QuestsConfig.isUseQuestScoreboards()) return;
-        SimpleScoreboard.lazyScoreboard(player, ChatColorConverter.convert(getQuest().getQuestName()), getScoreboardObjectiveText());
+        SimpleScoreboard.lazyScoreboard(player, ChatColorConverter.convert(quest.getQuestName()), getScoreboardObjectiveText());
     }
 
     private List<String> getScoreboardObjectiveText() {

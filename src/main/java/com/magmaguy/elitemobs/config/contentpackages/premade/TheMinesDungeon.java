@@ -23,7 +23,11 @@ public class TheMinesDungeon extends ContentPackagesConfigFields {
                 "em_id_the_mines,250.5,116,-113.5,-42.0,7.0",
                 "em_id_the_mines,256.5,116,-106.5,-29,8",
                 0,
-                "&aDynamic Dungeon\n" + "$bossCount boss encounters\n" + "&3Ready to step up your\n" + "&3dungeon game?",
+                """
+                        &aDynamic Dungeon
+                        $bossCount boss encounters
+                        &3Ready to step up your
+                        &3dungeon game?""",
                 "&bYou''ve been asked to investigate what lurks in the mines. Find your way to the depths of the mine!",
                 "&bYou have left The Mines!",
                 List.of("filename=the_mines_soulweaver_daine_p0.yml",

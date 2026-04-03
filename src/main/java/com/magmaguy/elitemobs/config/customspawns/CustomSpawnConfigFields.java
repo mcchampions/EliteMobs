@@ -18,7 +18,7 @@ public class CustomSpawnConfigFields extends CustomConfigFields {
 
     @Getter
     @Setter
-    int lowestYLevel = 0;
+    int lowestYLevel;
     @Getter
     @Setter
     int highestYLevel = 320;
@@ -36,25 +36,25 @@ public class CustomSpawnConfigFields extends CustomConfigFields {
     List<Biome> validBiomes = new ArrayList<>();
     @Getter
     @Setter
-    private long earliestTime = 0;
+    private long earliestTime;
     @Getter
     @Setter
     private long latestTime = 24000;
     @Getter
     @Setter
-    private MoonPhaseDetector.MoonPhase moonPhase = null;
+    private MoonPhaseDetector.MoonPhase moonPhase;
     @Getter
     @Setter
-    private boolean bypassWorldGuard = false;
+    private boolean bypassWorldGuard;
     @Getter
     @Setter
-    private boolean canSpawnInLight = false;
+    private boolean canSpawnInLight;
     @Getter
     @Setter
-    private boolean isSurfaceSpawn = false;
+    private boolean isSurfaceSpawn;
     @Getter
     @Setter
-    private boolean isUndergroundSpawn = false;
+    private boolean isUndergroundSpawn;
 
     public CustomSpawnConfigFields(String filename, boolean isEnabled) {
         super(filename, isEnabled);
@@ -78,7 +78,6 @@ public class CustomSpawnConfigFields extends CustomConfigFields {
                 }
                 if (biome == null && !validBiomesString.contains("minecraft:custom")) {
                     Logger.warn("Null biome for " + validBiomesString);
-                    continue;
                 }
                 //todo: reimplement this but using the new biome system
 //                List<String> customBiomes = CustomBiomeCompatibility.getCustomBiomes(biome);

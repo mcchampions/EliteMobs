@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -110,7 +111,7 @@ public class ConfigurationExporter {
                 return null;
             }
 
-            if (resourceUrl.getProtocol().equals("jar")) {
+            if ("jar".equals(resourceUrl.getProtocol())) {
                 JarURLConnection jarConnection = (JarURLConnection) resourceUrl.openConnection();
                 try (JarFile jarFile = jarConnection.getJarFile()) {
                     Enumeration<JarEntry> entries = jarFile.entries();
@@ -162,7 +163,7 @@ public class ConfigurationExporter {
             return;
         }
 
-        if (resourceUrl.getProtocol().equals("jar")) {
+        if ("jar".equals(resourceUrl.getProtocol())) {
             // Running from jar
             JarURLConnection jarConnection = (JarURLConnection) resourceUrl.openConnection();
             try (JarFile jarFile = jarConnection.getJarFile()) {
@@ -225,7 +226,7 @@ public class ConfigurationExporter {
     private static void clearDirectoryContents(Path path) throws IOException {
         if (Files.exists(path)) {
             Files.walk(path)
-                    .sorted((a, b) -> b.compareTo(a)) // Reverse order to delete files before directories
+                    .sorted(Comparator.reverseOrder()) // Reverse order to delete files before directories
                     .filter(p -> !p.equals(path)) // Don't delete the root directory
                     .forEach(p -> {
                         try {

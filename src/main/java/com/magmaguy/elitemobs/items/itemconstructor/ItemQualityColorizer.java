@@ -58,11 +58,11 @@ public class ItemQualityColorizer {
             return ItemQuality.LIGHT_BLUE;
         else if (enchantPercentage > 100 / 6 * 5)
             return ItemQuality.GOLD;
-        else if (enchantPercentage > 100 / 6 * 4)
+        else if (enchantPercentage > 100 / 6 << 2)
             return ItemQuality.PURPLE;
         else if (enchantPercentage > 100 / 6 * 3)
             return ItemQuality.BLUE;
-        else if (enchantPercentage > 100 / 6 * 2)
+        else if (enchantPercentage > 100 / 6 << 1)
             return ItemQuality.GREEN;
         else if (enchantPercentage > 100 / 6)
             return ItemQuality.WHITE;
@@ -108,7 +108,7 @@ public class ItemQualityColorizer {
                 // Legendary tier - gold gradient
                 itemMeta = colorizeGradientNameAndLore(LEGENDARY_GRADIENT, LEGENDARY_GRADIENT_END, itemMeta);
 
-            } else if (enchantPercentage > 100 / 6 * 4) {
+            } else if (enchantPercentage > 100 / 6 << 2) {
 
                 // Epic tier - purple gradient
                 itemMeta = colorizeGradientNameAndLore(EPIC_GRADIENT, EPIC_GRADIENT_END, itemMeta);
@@ -118,7 +118,7 @@ public class ItemQualityColorizer {
                 // Rare tier - blue gradient
                 itemMeta = colorizeGradientNameAndLore(RARE_GRADIENT, RARE_GRADIENT_END, itemMeta);
 
-            } else if (enchantPercentage > 100 / 6 * 2) {
+            } else if (enchantPercentage > 100 / 6 << 1) {
 
                 itemMeta = colorizeNameAndLore(ChatColor.GREEN, itemMeta);
 
@@ -364,9 +364,9 @@ public class ItemQualityColorizer {
         }
 
 
-        if (material.equals(Material.CHAINMAIL_LEGGINGS) || material.equals(Material.DIAMOND_LEGGINGS) ||
-                material.equals(Material.GOLDEN_LEGGINGS) || material.equals(Material.IRON_LEGGINGS) ||
-                material.equals(Material.LEATHER_LEGGINGS)) {
+        if (material == Material.CHAINMAIL_LEGGINGS || material == Material.DIAMOND_LEGGINGS ||
+            material == Material.GOLDEN_LEGGINGS || material == Material.IRON_LEGGINGS ||
+            material == Material.LEATHER_LEGGINGS) {
 
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.UNBREAKING).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.MENDING).getMaxLevel();
@@ -376,9 +376,9 @@ public class ItemQualityColorizer {
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.PROJECTILE_PROTECTION).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.THORNS).getMaxLevel();
 
-        } else if (material.equals(Material.CHAINMAIL_BOOTS) || material.equals(Material.DIAMOND_BOOTS) ||
-                material.equals(Material.GOLDEN_BOOTS) || material.equals(Material.IRON_BOOTS) ||
-                material.equals(Material.LEATHER_BOOTS)) {
+        } else if (material == Material.CHAINMAIL_BOOTS || material == Material.DIAMOND_BOOTS ||
+                   material == Material.GOLDEN_BOOTS || material == Material.IRON_BOOTS ||
+                   material == Material.LEATHER_BOOTS) {
 
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.UNBREAKING).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.MENDING).getMaxLevel();
@@ -391,20 +391,20 @@ public class ItemQualityColorizer {
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.DEPTH_STRIDER).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.FROST_WALKER).getMaxLevel();
 
-        } else if (material.equals(Material.SHEARS)) {
+        } else if (material == Material.SHEARS) {
 
             EnchantmentsConfig.getEnchantment(Enchantment.EFFICIENCY).getMaxLevel();
             EnchantmentsConfig.getEnchantment(Enchantment.MENDING).getMaxLevel();
             EnchantmentsConfig.getEnchantment(Enchantment.UNBREAKING).getMaxLevel();
 
-        } else if (material.equals(Material.FISHING_ROD)) {
+        } else if (material == Material.FISHING_ROD) {
 
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.UNBREAKING).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.MENDING).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.LUCK_OF_THE_SEA).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.LURE).getMaxLevel();
 
-        } else if (material.equals(Material.SHIELD)) {
+        } else if (material == Material.SHIELD) {
 
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.UNBREAKING).getMaxLevel();
             maxRank += EnchantmentsConfig.getEnchantment(Enchantment.MENDING).getMaxLevel();

@@ -70,7 +70,7 @@ public class ConfigurationEngine extends com.magmaguy.magmacore.config.Configura
             if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore())
                 fileConfiguration.addDefault(key + ".lore", itemStack.getItemMeta().getLore());
         }
-        if (itemStack.getType().equals(Material.PLAYER_HEAD))
+        if (itemStack.getType() == Material.PLAYER_HEAD)
             fileConfiguration.addDefault(key + ".owner", ((SkullMeta) itemStack.getItemMeta()).getOwner());
         Material material;
         try {

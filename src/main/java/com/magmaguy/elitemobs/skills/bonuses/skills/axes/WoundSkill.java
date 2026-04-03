@@ -66,7 +66,7 @@ public class WoundSkill extends SkillBonus implements ProcSkill {
         }
 
         BukkitRunnable woundTask = new BukkitRunnable() {
-            int ticks = 0;
+            int ticks;
             @Override
             public void run() {
                 if (ticks >= BLEED_DURATION || target.getLivingEntity() == null || target.getLivingEntity().isDead()) {

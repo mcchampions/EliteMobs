@@ -189,7 +189,7 @@ public class CoinFlipGame {
     private static void playCoinFlipAnimation(Player player, CoinFlipSession session, Inventory inventory) {
         new BukkitRunnable() {
             final int totalTicks = 30; // 1.5 seconds of animation
-            int ticks = 0;
+            int ticks;
             boolean showingHeads = true;
 
             @Override
@@ -328,12 +328,12 @@ public class CoinFlipGame {
      * Stores game session data.
      */
     private static class CoinFlipSession extends GamblingSession {
-        boolean hasChosen = false;
+        boolean hasChosen;
         boolean coinResult; // true = heads, false = tails
-        boolean landedOnEdge = false; // 1% chance - 10x payout!
+        boolean landedOnEdge; // 1% chance - 10x payout!
         boolean playerWon;
         double winAmount;
-        boolean gameOver = false;
+        boolean gameOver;
 
         CoinFlipSession(UUID playerUUID, int betAmount) {
             super(playerUUID, betAmount);

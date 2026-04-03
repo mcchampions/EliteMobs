@@ -84,21 +84,21 @@ public class LanguageCommand extends AdvancedCommand {
         language = language.replace(".csv", "").replace(".yml", "");
 
         String finalLanguage = language;
-        if (!suggestions.stream().anyMatch(s -> s.equalsIgnoreCase(finalLanguage))) {
+        if (suggestions.stream().noneMatch(s -> s.equalsIgnoreCase(finalLanguage))) {
             Logger.sendMessage(sender, CommandMessagesConfig.getLanguageNotFoundMessage());
             suggestions.forEach(s -> Logger.sendMessage(sender, CommandMessagesConfig.getLanguageListPrefix() + s));
             return;
         }
 
         // Handle special cases
-        if (language.equals("english")) {
+        if ("english".equals(language)) {
             // English uses plugin defaults directly, no CSV
             DefaultConfig.setLanguage(sender, language);
             Logger.sendMessage(sender, CommandMessagesConfig.getLanguageSetEnglishMessage());
             return;
         }
 
-        if (language.equals("custom")) {
+        if ("custom".equals(language)) {
             // Custom auto-generates if not present
             Path folder = Paths.get(
                     MetadataHandler.PLUGIN.getDataFolder().getAbsolutePath(),

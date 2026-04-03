@@ -23,10 +23,11 @@ public class DarkCathedralLair extends ContentPackagesConfigFields {
                 "em_the_dark_cathedral,47.5,85.2,199.5,163,0",
                 "em_the_dark_cathedral,43.5,84.2,191.5,168,0",
                 0,
-                "Difficulty: &cHard\n" +
-                        "$bossCount level $highestTier Big Boss!\n" +
-                        "&cThe original minidungeon, a challenge for\n" +
-                        "&ca group of players or for veterans!",
+                """
+                        Difficulty: &cHard
+                        $bossCount level $highestTier Big Boss!
+                        &cThe original minidungeon, a challenge for
+                        &ca group of players or for veterans!""",
                 "&8[EM] &1An invasion is in progress. &9Stop the insurrection!",
                 "&8[EM] &1You managed to hold them back. &9For now...",
                 List.of("filename=dark_cathedral_boss.yml"),

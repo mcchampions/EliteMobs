@@ -42,7 +42,7 @@ public class VisualItemProcessor {
         new BukkitRunnable() {
 
             final boolean isObfuscated = eliteEntity.isVisualEffectObfuscated();
-            int counter = 0;
+            int counter;
 
             @Override
             public void run() {

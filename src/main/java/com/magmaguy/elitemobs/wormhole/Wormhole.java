@@ -28,11 +28,11 @@ public class Wormhole {
     public Wormhole(WormholeConfigFields wormholeConfigFields) {
         this.wormholeConfigFields = wormholeConfigFields;
         this.particleColor = Color.fromRGB(wormholeConfigFields.getParticleColor());
-        if (wormholeConfigFields.getStyle() != null && !wormholeConfigFields.getStyle().equals(WormholeStyle.NONE)) {
+        if (wormholeConfigFields.getStyle() != null && wormholeConfigFields.getStyle() != WormholeStyle.NONE) {
             this.cachedRotations = new ArrayList<>(new VisualEffects(wormholeConfigFields).getCachedRotations());
         }
-        wormholeEntry1 = new WormholeEntry(this, getWormholeConfigFields().getLocation1(), 1);
-        wormholeEntry2 = new WormholeEntry(this, getWormholeConfigFields().getLocation2(), 2);
+        wormholeEntry1 = new WormholeEntry(this, this.wormholeConfigFields.getLocation1(), 1);
+        wormholeEntry2 = new WormholeEntry(this, this.wormholeConfigFields.getLocation2(), 2);
         wormholes.add(this);
 
         // Make sure the manager is initialized
@@ -61,22 +61,22 @@ public class Wormhole {
     }
 
     public void onDungeonInstall(String dungeonFilename) {
-        if (getWormholeEntry1() != null &&
-                getWormholeEntry1().getLocationString() != null &&
-                getWormholeEntry1().getLocationString().equals(dungeonFilename)) {
-            getWormholeEntry1().onDungeonInstall();
-        } else if (getWormholeEntry2() != null &&
-                getWormholeEntry2().getLocationString() != null &&
-                getWormholeEntry2().getLocationString().equals(dungeonFilename)) {
-            getWormholeEntry2().onDungeonInstall();
+        if (wormholeEntry1 != null &&
+            wormholeEntry1.getLocationString() != null &&
+            wormholeEntry1.getLocationString().equals(dungeonFilename)) {
+            wormholeEntry1.onDungeonInstall();
+        } else if (wormholeEntry2 != null &&
+                   wormholeEntry2.getLocationString() != null &&
+                   wormholeEntry2.getLocationString().equals(dungeonFilename)) {
+            wormholeEntry2.onDungeonInstall();
         }
     }
 
     public void onDungeonUninstall(String dungeonFilename) {
-        if (getWormholeEntry1().getWormhole() != null && getWormholeEntry1().getLocationString().equals(dungeonFilename)) {
-            getWormholeEntry1().onDungeonUninstall();
-        } else if (getWormholeEntry2().getWormhole() != null && getWormholeEntry2().getLocationString().equals(dungeonFilename)) {
-            getWormholeEntry2().onDungeonUninstall();
+        if (wormholeEntry1.getWormhole() != null && wormholeEntry1.getLocationString().equals(dungeonFilename)) {
+            wormholeEntry1.onDungeonUninstall();
+        } else if (wormholeEntry2.getWormhole() != null && wormholeEntry2.getLocationString().equals(dungeonFilename)) {
+            wormholeEntry2.onDungeonUninstall();
         }
     }
 

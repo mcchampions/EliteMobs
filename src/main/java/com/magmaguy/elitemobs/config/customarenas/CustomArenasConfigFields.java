@@ -56,12 +56,12 @@ public class CustomArenasConfigFields extends CustomConfigFields {
     private List<String> arenaMessages = new ArrayList<>();
     @Getter
     @Setter
-    private boolean cylindricalArena = false;
+    private boolean cylindricalArena;
     @Getter
     @Setter
-    private String permission = null;
+    private String permission;
     @Getter
-    private Location teleportLocation = null;
+    private Location teleportLocation;
     @Getter
     private final List<Integer> intermissionWaves = new ArrayList<>();
     protected List<String> rawIntermissionWaves = new ArrayList<>();

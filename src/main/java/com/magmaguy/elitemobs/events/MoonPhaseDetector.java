@@ -10,29 +10,20 @@ public class MoonPhaseDetector {
         int days = (int) eventWorld.getFullTime() / 24000;
         int phase = Math.abs(days % 8);
 
-        switch (phase) {
-
-            case 0:
-                return MoonPhase.FULL_MOON;
-            case 1:
-                return MoonPhase.WANING_GIBBOUS;
-            case 2:
-                return MoonPhase.LAST_QUARTER;
-            case 3:
-                return MoonPhase.WANING_CRESCENT;
-            case 4:
-                return MoonPhase.NEW_MOON;
-            case 5:
-                return MoonPhase.WAXING_CRESCENT;
-            case 6:
-                return MoonPhase.FIRST_QUARTER;
-            case 7:
-                return MoonPhase.WAXING_GIBBOUS;
-            default:
+        return switch (phase) {
+            case 0 -> MoonPhase.FULL_MOON;
+            case 1 -> MoonPhase.WANING_GIBBOUS;
+            case 2 -> MoonPhase.LAST_QUARTER;
+            case 3 -> MoonPhase.WANING_CRESCENT;
+            case 4 -> MoonPhase.NEW_MOON;
+            case 5 -> MoonPhase.WAXING_CRESCENT;
+            case 6 -> MoonPhase.FIRST_QUARTER;
+            case 7 -> MoonPhase.WAXING_GIBBOUS;
+            default -> {
                 Logger.info("Unhandled moon phase. Phase " + phase + " was " + days + ". Defaulting to full moon...");
-                return MoonPhase.FULL_MOON;
-
-        }
+                yield MoonPhase.FULL_MOON;
+            }
+        };
 
     }
 

@@ -403,7 +403,7 @@ public class LevelScaling {
      * @return true if the player is more than TRIVIAL_LEVEL_RANGE above the content
      */
     public static boolean isTrivialContent(int playerLevel, int contentLevel) {
-        return (playerLevel - contentLevel) >= Math.abs(TRIVIAL_LEVEL_RANGE);
+        return (playerLevel - contentLevel) >= 10;
     }
 
     /**

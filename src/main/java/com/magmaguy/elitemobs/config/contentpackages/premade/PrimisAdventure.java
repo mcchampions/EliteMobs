@@ -20,9 +20,10 @@ public class PrimisAdventure extends ContentPackagesConfigFields {
                 true,
                 "em_primis,1406.5,21.5,357.5,33,0",
                 0,
-                "Difficulty: &2Easy\n" +
-                        "$bossCount bosses, from level $lowestTier to $highestTier\n" +
-                        "&6A tutorial adventure for new players!",
+                """
+                        Difficulty: &2Easy
+                        $bossCount bosses, from level $lowestTier to $highestTier
+                        &6A tutorial adventure for new players!""",
                 "&8[EM] &6Primis awaits, strike the earth!",
                 "&8[EM] &6You have left Primis!",
                 "primis",

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class CurrencyCustomLootEntry extends CustomLootEntry implements Serializable {
     @Getter
-    private int currencyAmount = 0;
+    private int currencyAmount;
 
     public CurrencyCustomLootEntry(List<CustomLootEntry> entries, int currencyAmount) {
         this.currencyAmount = currencyAmount;

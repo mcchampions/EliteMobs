@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class PotionEffectsConfig {
 
-    private static final HashMap<String, PotionEffectsConfigFields> potionEffects = new HashMap();
+    private static final HashMap<String, PotionEffectsConfigFields> potionEffects = new HashMap<>();
     private static final List<PotionEffectsConfigFields> potionEffectsConfigFields = new ArrayList<>(new ArrayList<>(List.of(
             new AbsorptionConfig(),
             new BlindnessConfig(),

@@ -22,11 +22,11 @@ public class IceBreakerEnchantment extends CustomEnchantment {
         if (block == null)
             return false;
         Material material = block.getType();
-        return material.equals(Material.WATER) ||
-                material.equals(Material.ICE) ||
-                material.equals(Material.BLUE_ICE) ||
-                material.equals(Material.FROSTED_ICE) ||
-                material.equals(Material.PACKED_ICE);
+        return material == Material.WATER ||
+               material == Material.ICE ||
+               material == Material.BLUE_ICE ||
+               material == Material.FROSTED_ICE ||
+               material == Material.PACKED_ICE;
     }
 
     private static void freezeBlocks(Block block, ItemStack itemStack) {
@@ -57,7 +57,7 @@ public class IceBreakerEnchantment extends CustomEnchantment {
 
     private static void parseBlock(Block block, int x, int y, int z, ItemStack itemStack) {
         Block newBlock = block.getLocation().clone().add(new Vector(x, y, z)).getBlock();
-        if (!newBlock.getType().equals(Material.WATER))
+        if (newBlock.getType() != Material.WATER)
             return;
 
         newBlock.setType(Material.ICE);

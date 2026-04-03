@@ -67,13 +67,13 @@ public class PortOldData {
                 Statement statement = null;
                 statement = PlayerData.getConnection().createStatement();
                 String sql = "INSERT INTO " + PlayerData.getPLAYER_DATA_TABLE_NAME() +
-                        " (PlayerUUID, DisplayName, Currency) " +
-                        //identifier
-                        "VALUES ('" + uuid.toString() + "'," +
-                        //display name
-                        " '" + displayName + "'," +
-                        //currency
-                        " " + currency + ");";
+                             " (PlayerUUID, DisplayName, Currency) " +
+                             //identifier
+                             "VALUES ('" + uuid + "'," +
+                             //display name
+                             " '" + displayName + "'," +
+                             //currency
+                             " " + currency + ");";
                 statement.executeUpdate(sql);
                 statement.close();
                 PlayerData.getConnection().commit();

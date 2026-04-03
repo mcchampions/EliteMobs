@@ -13,7 +13,7 @@ public class CustomEventStartEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private CustomEvent customEvent;
-    private boolean cancelled = false;
+    private boolean cancelled;
 
     public CustomEventStartEvent(CustomEvent customEvent) {
         this.customEvent = customEvent;

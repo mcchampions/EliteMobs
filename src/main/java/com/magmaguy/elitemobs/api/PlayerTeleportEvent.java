@@ -4,7 +4,6 @@ import com.magmaguy.elitemobs.dungeons.EliteMobsWorld;
 import com.magmaguy.elitemobs.playerdata.database.PlayerData;
 import com.magmaguy.elitemobs.utils.EventCaller;
 import com.magmaguy.elitemobs.wormhole.WormholeManager;
-import com.magmaguy.magmacore.util.Logger;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ public class PlayerTeleportEvent extends Event implements Cancellable {
     private final Location originalLocation;
     @Getter
     private final Player player;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     /**
      * Event fired when players teleport due to EliteMobs. This is used for teleporting to the Adventurer's Guild and to

@@ -24,14 +24,14 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private String name;
     @Getter
     @Setter
-    protected ContentType contentType = null;
+    protected ContentType contentType;
     @Getter
     @Setter
-    private List<String> customInfo = null;
+    private List<String> customInfo;
     @Getter
-    private List<String> relativeBossLocations = null;
+    private List<String> relativeBossLocations;
     @Getter
-    private List<String> relativeTreasureChestLocations = null;
+    private List<String> relativeTreasureChestLocations;
     @Getter
     @Setter
     private String downloadLink = "";
@@ -43,7 +43,7 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     @Setter
     private String wormholeWorldName;
     @Getter
-    private String schematicName = null;
+    private String schematicName;
     @Getter
     private World.Environment environment = World.Environment.NORMAL;
     @Getter
@@ -51,39 +51,39 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     @Getter
     private Location anchorPoint;
     @Getter
-    private String defaultSchematicRotationString = null;
+    private String defaultSchematicRotationString;
     @Getter
     @Setter
     private Integer calculatedRotation = 0;
     @Getter
     private Vector corner1 = new Vector(0, 0, 0), corner2 = new Vector(0, 0, 0);
     @Getter
-    private int dungeonVersion = 0;
+    private int dungeonVersion;
     @Getter
-    private String playerInfo = null;
+    private String playerInfo;
     @Getter
-    private String regionEnterMessage = null;
+    private String regionEnterMessage;
     @Getter
-    private String regionLeaveMessage = null;
-    @Getter
-    @Setter
-    private List<String> worldGuardFlags = null;
+    private String regionLeaveMessage;
     @Getter
     @Setter
-    private boolean hasCustomModels = false;
+    private List<String> worldGuardFlags;
     @Getter
     @Setter
-    private boolean defaultDungeon = false;
+    private boolean hasCustomModels;
     @Getter
-    private Location teleportLocation = null;
+    @Setter
+    private boolean defaultDungeon;
     @Getter
-    private String teleportLocationString = null;
+    private Location teleportLocation;
     @Getter
-    private String teleportLocationOffsetString = null;
+    private String teleportLocationString;
     @Getter
-    private Location teleportLocationOffset = null;
+    private String teleportLocationOffsetString;
     @Getter
-    private String permission = null;
+    private Location teleportLocationOffset;
+    @Getter
+    private String permission;
     @Getter
     @Setter
     private int minPlayerCount = 1;
@@ -92,9 +92,9 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private int maxPlayerCount = 5;
     @Getter
     @Setter
-    private List<String> rawDungeonObjectives = null;
+    private List<String> rawDungeonObjectives;
     @Getter
-    private String startLocationString = null;
+    private String startLocationString;
     @Getter
     private String dungeonConfigFolderName;
     @Getter
@@ -105,7 +105,7 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private List<Map<String, Object>> difficulties;
     @Getter
     @Setter
-    private boolean enchantmentChallenge = false;
+    private boolean enchantmentChallenge;
     @Getter
     @Setter
     private boolean allowExplosions;
@@ -114,7 +114,7 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private boolean listedInTeleports = true;
     @Getter
     @Setter
-    private String song = null;
+    private String song;
     @Getter
     @Setter
     private boolean allowLiquidFlow = true;
@@ -124,7 +124,7 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private List<String> containedPackages;
     @Getter
     @Setter
-    private boolean metaPackage = false;
+    private boolean metaPackage;
     @Getter
     @Setter
     //For item packages
@@ -142,10 +142,10 @@ public class ContentPackagesConfigFields extends CustomConfigFields {
     private List<String> setupMenuDescription = new ArrayList<>();
     @Getter
     @Setter
-    private int dungeonLockoutMinutes = 0; // 0 = no lockout, otherwise lockout duration in minutes
+    private int dungeonLockoutMinutes; // 0 = no lockout, otherwise lockout duration in minutes
     @Getter
     @Setter
-    private String nightbreakSlug = null; // Slug for Nightbreak API version checking
+    private String nightbreakSlug; // Slug for Nightbreak API version checking
 
     public ContentPackagesConfigFields(String fileName, boolean isEnabled) {
         super(fileName, isEnabled);

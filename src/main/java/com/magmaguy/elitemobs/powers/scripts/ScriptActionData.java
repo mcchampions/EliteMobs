@@ -19,21 +19,21 @@ public class ScriptActionData {
     private final ScriptTargets scriptTargets;
     @Getter
     @Setter
-    private Collection<Location> locations = null;
+    private Collection<Location> locations;
     @Getter
     @Setter
     private EliteEntity eliteEntity;
     @Getter
     @Setter
-    private LivingEntity directTarget = null;
+    private LivingEntity directTarget;
     @Getter
     @Setter
-    private Location landingLocation = null;
+    private Location landingLocation;
     @Getter
-    private ScriptZone scriptZone = null;
+    private ScriptZone scriptZone;
     @Getter
     @Setter
-    private ScriptActionData inheritedScriptActionData = null;
+    private ScriptActionData inheritedScriptActionData;
     @Getter
     private Event event;
 
@@ -73,14 +73,14 @@ public class ScriptActionData {
 
     //Used by actions that call scripts
     public ScriptActionData(ScriptTargets scriptTargets, ScriptZone scriptZone, ScriptActionData inheritedScriptActionData) {
-        this.eliteEntity = inheritedScriptActionData.getEliteEntity();
-        this.directTarget = inheritedScriptActionData.getDirectTarget();
+        this.eliteEntity = inheritedScriptActionData.eliteEntity;
+        this.directTarget = inheritedScriptActionData.directTarget;
         this.scriptTargets = scriptTargets;
         //This stores the cache shape
         this.targetType = scriptTargets.getTargetBlueprint().getTargetType();
         this.scriptZone = scriptZone;
         this.inheritedScriptActionData = inheritedScriptActionData;
-        this.landingLocation = inheritedScriptActionData.getLandingLocation();
+        this.landingLocation = inheritedScriptActionData.landingLocation;
     }
 
     //Used for the zone enter and leave, can't use direct targets
@@ -94,8 +94,8 @@ public class ScriptActionData {
 
     //For data with landing locations
     public ScriptActionData(ScriptTargets scriptTargets, ScriptZone scriptZone, ScriptActionData inheritedScriptActionData, Location landingLocation) {
-        this.eliteEntity = inheritedScriptActionData.getEliteEntity();
-        this.directTarget = inheritedScriptActionData.getDirectTarget();
+        this.eliteEntity = inheritedScriptActionData.eliteEntity;
+        this.directTarget = inheritedScriptActionData.directTarget;
         this.scriptTargets = scriptTargets;
         //This stores the cache shape
         this.targetType = scriptTargets.getTargetBlueprint().getTargetType();

@@ -53,7 +53,7 @@ public class EliteEntity {
      */
     @Getter
     protected HashSet<ElitePower> elitePowers = new TrackedElitePowerSet();
-    private transient List<ElitePower> orderedElitePowers = null;
+    private transient List<ElitePower> orderedElitePowers;
     //coming soon - decoupling aggro from damage to allow for tanking mechanics
     protected HashMap<Player, Double> aggro = new HashMap<>();
     /*
@@ -70,15 +70,15 @@ public class EliteEntity {
     @Getter
     protected String name;
     @Getter
-    protected int minorPowerCount = 0;
+    protected int minorPowerCount;
     @Getter
-    protected int majorPowerCount = 0;
-    @Getter
-    @Setter
-    protected boolean minorVisualEffect = false;
+    protected int majorPowerCount;
     @Getter
     @Setter
-    protected boolean majorVisualEffect = false;
+    protected boolean minorVisualEffect;
+    @Getter
+    @Setter
+    protected boolean majorVisualEffect;
     @Getter
     @Setter
     protected boolean visualEffectObfuscated = true;
@@ -117,33 +117,33 @@ public class EliteEntity {
     protected double defaultMaxHealth;
     @Getter
     @Setter
-    protected boolean inCooldown = false;
+    protected boolean inCooldown;
     @Getter
-    protected boolean triggeredAntiExploit = false;
-    protected int antiExploitPoints = 0;
+    protected boolean triggeredAntiExploit;
+    protected int antiExploitPoints;
     @Getter
-    protected boolean inAntiExploitCooldown = false;
+    protected boolean inAntiExploitCooldown;
     @Getter
     @Setter
-    protected boolean inCombat = false;
+    protected boolean inCombat;
     @Getter
-    protected boolean inCombatGracePeriod = false;
+    protected boolean inCombatGracePeriod;
     @Setter
     protected EliteEntity summoningEntity;
     protected List<CustomBossEntity> globalReinforcementEntities = new ArrayList<>();
     protected List<CustomBossEntity> eliteReinforcementEntities = new ArrayList<>();
     //currently used to store ender crystals for the dragon boss fight
     protected List<Entity> nonEliteReinforcementEntities = new ArrayList<>();
-    protected boolean bypassesProtections = false;
-    protected Double health = null;
+    protected boolean bypassesProtections;
+    protected Double health;
     @Setter
     protected Location spawnLocation;
     @Getter
     @Setter
-    private boolean dying = false;
+    private boolean dying;
     @Getter
     @Setter
-    private boolean healing = false;
+    private boolean healing;
     //Used by other plugins to tag bosses with custom data
     private final HashMap<NamespacedKey, Object> customData = new HashMap<>();
     private final HashMap<String, Long> sharedCooldowns = new HashMap<>();
@@ -240,11 +240,11 @@ public class EliteEntity {
 
     public void addDamager(Player player, double damage) {
         if (!damagers.isEmpty())
-            for (Player iteratedPlayer : damagers.keySet())
-                if (iteratedPlayer.getUniqueId().equals(player.getUniqueId())) {
-                    this.damagers.put(iteratedPlayer, this.damagers.get(iteratedPlayer) + damage);
-                    this.aggro.put(iteratedPlayer, this.aggro.get(iteratedPlayer) + damage *
-                            ElitePlayerInventory.getPlayer(player).getLoudStrikesBonusMultiplier(false));
+            for (Map.Entry<Player, Double> entry : damagers.entrySet())
+                if (entry.getKey().getUniqueId().equals(player.getUniqueId())) {
+                    this.damagers.put(entry.getKey(), entry.getValue() + damage);
+                    this.aggro.put(entry.getKey(), this.aggro.get(entry.getKey()) + damage *
+                                                                                    ElitePlayerInventory.getPlayer(player).getLoudStrikesBonusMultiplier(false));
                     return;
                 }
         this.damagers.put(player, damage);
@@ -310,33 +310,33 @@ public class EliteEntity {
             livingEntity.getEquipment().setBootsDropChance(0);
         }
 
-        if (livingEntity.getType().equals(EntityType.RABBIT)) {
+        if (livingEntity.getType() == EntityType.RABBIT) {
             ((Rabbit) livingEntity).setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
         }
 
-        if (entityType.equals(EntityType.WOLF)) {
+        if (entityType == EntityType.WOLF) {
             Wolf wolf = (Wolf) livingEntity;
             wolf.setAngry(true);
             wolf.setBreed(false);
             KeepNeutralsAngry.showMeYouWarFace(this);
         }
 
-        if (entityType.equals(EntityType.POLAR_BEAR)) {
+        if (entityType == EntityType.POLAR_BEAR) {
             KeepNeutralsAngry.showMeYouWarFace(this);
         }
 
-        if (entityType.equals(EntityType.ENDER_DRAGON))
+        if (entityType == EntityType.ENDER_DRAGON)
             if (((EnderDragon) livingEntity).getBossBar() != null)
-                ((EnderDragon) livingEntity).getBossBar().setTitle(getName());
+                ((EnderDragon) livingEntity).getBossBar().setTitle(name);
 
-        if (entityType.equals(EntityType.LLAMA)) {
+        if (entityType == EntityType.LLAMA) {
             KeepNeutralsAngry.showMeYouWarFace(this);
         }
 
-        if (entityType.equals(EntityType.IRON_GOLEM) && this instanceof CustomBossEntity)
+        if (entityType == EntityType.IRON_GOLEM && this instanceof CustomBossEntity)
             KeepNeutralsAngry.showMeYouWarFace(this);
 
-        if (entityType.equals(EntityType.GOAT)) {
+        if (entityType == EntityType.GOAT) {
             ((Goat) livingEntity).setScreaming(true);
         }
 
@@ -352,12 +352,12 @@ public class EliteEntity {
 
         //This sets whether the entity gets despawned when beyond a certain distance from the player, should only happen
         //for entities which aren't pseudo-persistent
-        this.getLivingEntity().setRemoveWhenFarAway(!isPersistent);
-        this.getLivingEntity().setPersistent(false);
+        this.livingEntity.setRemoveWhenFarAway(!isPersistent);
+        this.livingEntity.setPersistent(false);
 
         setMaxHealth();
 
-        if (getName() == null)
+        if (name == null)
             setName(EliteMobProperties.getPluginData(entityType));
 
         this.name = livingEntity.getCustomName();
@@ -540,18 +540,18 @@ public class EliteEntity {
             localFields.remove(mobPower);
 
         for (int i = 0; i < availablePowerAmount; i++)
-            if (localFields.size() < 1)
+            if (localFields.isEmpty())
                 break;
             else {
                 PowersConfigFields selectedField = localFields.get(ThreadLocalRandom.current().nextInt(localFields.size()));
                 try {
                     ElitePower.addPower(this, selectedField);
                     localFields.remove(selectedField);
-                    if (selectedField.getPowerType().equals(PowersConfigFields.PowerType.MAJOR_ZOMBIE) ||
-                            selectedField.getPowerType().equals(PowersConfigFields.PowerType.MAJOR_BLAZE) ||
-                            selectedField.getPowerType().equals(PowersConfigFields.PowerType.MAJOR_ENDERMAN) ||
-                            selectedField.getPowerType().equals(PowersConfigFields.PowerType.MAJOR_GHAST) ||
-                            selectedField.getPowerType().equals(PowersConfigFields.PowerType.MAJOR_SKELETON))
+                    if (selectedField.getPowerType() == PowersConfigFields.PowerType.MAJOR_ZOMBIE ||
+                        selectedField.getPowerType() == PowersConfigFields.PowerType.MAJOR_BLAZE ||
+                        selectedField.getPowerType() == PowersConfigFields.PowerType.MAJOR_ENDERMAN ||
+                        selectedField.getPowerType() == PowersConfigFields.PowerType.MAJOR_GHAST ||
+                        selectedField.getPowerType() == PowersConfigFields.PowerType.MAJOR_SKELETON)
                         this.majorPowerCount++;
                     else
                         this.minorPowerCount++;
@@ -593,14 +593,14 @@ public class EliteEntity {
     }
 
     public ElitePower getPower(ElitePower elitePower) {
-        for (ElitePower iteratedPower : getElitePowers())
+        for (ElitePower iteratedPower : elitePowers)
             if (iteratedPower.getClass().equals(elitePower.getClass()))
                 return iteratedPower;
         return null;
     }
 
     public ElitePower getPower(String elitePower) {
-        for (ElitePower iteratedPower : getElitePowers())
+        for (ElitePower iteratedPower : elitePowers)
             if (iteratedPower.getFileName().equals(elitePower))
                 return iteratedPower;
         return null;
@@ -775,9 +775,9 @@ public class EliteEntity {
         //Custom bosses have their own tracking removal rules
         if (livingEntity != null && (!(this instanceof CustomBossEntity)))
             EntityTracker.getEliteMobEntities().remove(eliteUUID);
-        if (livingEntity != null && !removalReason.equals(RemovalReason.DEATH))
+        if (livingEntity != null && removalReason != RemovalReason.DEATH)
             livingEntity.remove();
-        if (livingEntity instanceof EnderDragon enderDragon && removalReason.equals(RemovalReason.DEATH)) {
+        if (livingEntity instanceof EnderDragon enderDragon && removalReason == RemovalReason.DEATH) {
             enderDragon.setPhase(EnderDragon.Phase.DYING);
             if (enderDragon.getDragonBattle() != null)
                 enderDragon.getDragonBattle().generateEndPortal(false);
@@ -815,7 +815,7 @@ public class EliteEntity {
     }
 
     public void removeTags(List<String> tags) {
-        customMetadata.removeAll(tags);
+        tags.forEach(customMetadata::remove);
     }
 
     public boolean isSharedCooldownReady(String key) {

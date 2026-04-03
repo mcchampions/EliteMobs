@@ -46,7 +46,7 @@ public class CustomBossDeath implements Listener {
         StringBuilder playersList = new StringBuilder();
         StringBuilder playersNameList = new StringBuilder();
         for (Player player : customBossEntity.getDamagers().keySet()) {
-            if (playersList.length() == 0) {
+            if (playersList.isEmpty()) {
                 playersList.append(player.getDisplayName());
                 playersNameList.append(player.getName());
             } else {
@@ -137,7 +137,7 @@ public class CustomBossDeath implements Listener {
                         string = string.replace("$players", playersList.toString());
                     if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 0)
                         Bukkit.broadcastMessage(ChatColorConverter.convert(string));
-                    if (string.length() > 0)
+                    if (!string.isEmpty())
                         if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 2)
                             new DiscordSRVAnnouncement(ChatColorConverter.convert(string));
                         else if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() < 1)
@@ -172,21 +172,18 @@ public class CustomBossDeath implements Listener {
     //sorts damagers
     private static HashMap<Player, Double> sortByComparator(Map<Player, Double> unsortMap, final boolean order) {
 
-        List<Map.Entry<Player, Double>> list = new LinkedList<Map.Entry<Player, Double>>(unsortMap.entrySet());
+        List<Map.Entry<Player, Double>> list = new LinkedList<>(unsortMap.entrySet());
 
         // Sorting the list based on values
-        Collections.sort(list, new Comparator<Map.Entry<Player, Double>>() {
-            public int compare(Map.Entry<Player, Double> o1,
-                               Map.Entry<Player, Double> o2) {
-                if (order)
-                    return o1.getValue().compareTo(o2.getValue());
-                else
-                    return o2.getValue().compareTo(o1.getValue());
-            }
+        list.sort((o1, o2) -> {
+            if (order)
+                return o1.getValue().compareTo(o2.getValue());
+            else
+                return o2.getValue().compareTo(o1.getValue());
         });
 
         // Maintaining insertion order with the help of LinkedList
-        HashMap<Player, Double> sortedMap = new LinkedHashMap<Player, Double>();
+        HashMap<Player, Double> sortedMap = new LinkedHashMap<>();
         for (Map.Entry<Player, Double> entry : list)
             sortedMap.put(entry.getKey(), entry.getValue());
 

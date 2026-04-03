@@ -38,10 +38,10 @@ public class RegionalBossEntity extends CustomBossEntity implements PersistentOb
     //Format: worldName,x,y,z,pitch,yaw:unixTimeForRespawn
     private String rawString;
     private String rawLocationString;
-    private long ticksBeforeRespawn = 0;
+    private long ticksBeforeRespawn;
     private long unixRespawnTime;
     private int respawnCoolDownInMinutes = -1;
-    private boolean isRespawning = false;
+    private boolean isRespawning;
     private BukkitTask leashTask;
     @Getter
     @Setter
@@ -50,8 +50,8 @@ public class RegionalBossEntity extends CustomBossEntity implements PersistentOb
     @Setter
     private List<TransitiveBlock> onRemoveTransitiveBlocks;
     @Getter
-    private boolean removed = false;
-    private BukkitTask respawnTask = null;
+    private boolean removed;
+    private BukkitTask respawnTask;
 
     public RegionalBossEntity(CustomBossesConfigFields customBossesConfigFields, String rawString) {
         super(customBossesConfigFields);

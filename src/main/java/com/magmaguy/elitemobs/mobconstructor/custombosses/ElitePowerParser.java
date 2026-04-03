@@ -29,8 +29,8 @@ public class ElitePowerParser {
         //Parses "traditional" powers
         for (Object powerObject : powers) {
             if (powerObject instanceof String powerName) {
-                if (powerName.split(":")[0].equalsIgnoreCase("summon")
-                        || powerName.split(":")[0].equalsIgnoreCase("summonable"))
+                if ("summon".equalsIgnoreCase(powerName.split(":")[0])
+                    || "summonable".equalsIgnoreCase(powerName.split(":")[0]))
                     if (customSummonPower == null) {
                         customSummonPower = new CustomSummonPower(powerName, customBossesConfigFields);
                         customSummonPower.setOwnerEntity(customBossEntity);
@@ -41,7 +41,7 @@ public class ElitePowerParser {
                     String[] parsedPowerName = powerName.split(":");
                     ElitePower elitePower = addPower(parsedPowerName[0], elitePowers, customBossesConfigFields, customBossEntity);
                     if (elitePower == null) continue;
-                    if (elitePower.getPowersConfigFields().getFilename().equals("bonus_coins.yml"))
+                    if ("bonus_coins.yml".equals(elitePower.getPowersConfigFields().getFilename()))
                         if (parsedPowerName.length > 1)
                             try {
                                 ((BonusCoins) elitePower).setCoinMultiplier(Double.parseDouble(parsedPowerName[1]));
@@ -54,7 +54,7 @@ public class ElitePowerParser {
 
                 boolean isReinforcementsConfig = false;
                 for (Object key : map.keySet()) {
-                    if (((String) key).equalsIgnoreCase("summontype")) {
+                    if ("summontype".equalsIgnoreCase((String) key)) {
                         isReinforcementsConfig = true;
                         break;
                     }
@@ -63,7 +63,7 @@ public class ElitePowerParser {
                 if (customBossEntity instanceof InstancedBossEntity instancedBossEntity) {
                     List<String> difficulties = new ArrayList<>();
                     for (Map.Entry<?, ?> entry : map.entrySet()) {
-                        if (((String) entry.getKey()).equalsIgnoreCase("difficultyID")) {
+                        if ("difficultyID".equalsIgnoreCase((String) entry.getKey())) {
                             difficulties = MapListInterpreter.parseStringList((String) entry.getKey(), entry.getValue(), customBossesConfigFields.getFilename());
                             break;
                         }

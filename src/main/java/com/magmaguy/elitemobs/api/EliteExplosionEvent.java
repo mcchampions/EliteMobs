@@ -28,7 +28,7 @@ public class EliteExplosionEvent extends Event implements Cancellable {
     private final PowersConfigFields powersConfigFields;
     @Getter
     private Location explosionSourceLocation;
-    private boolean isCancelled = false;
+    private boolean isCancelled;
 
     public EliteExplosionEvent(EliteEntity eliteEntity,
                                PowersConfigFields powersConfigFields,
@@ -68,9 +68,9 @@ public class EliteExplosionEvent extends Event implements Cancellable {
 
         if (powersConfigFields == null)
             visualExplosionEffectType = VisualExplosionEffectType.NORMAL;
-        else if (powersConfigFields.getFilename().equals("ender_dragon_empowered_lightning.yml"))
+        else if ("ender_dragon_empowered_lightning.yml".equals(powersConfigFields.getFilename()))
             visualExplosionEffectType = VisualExplosionEffectType.ASCEND;
-        else if (powersConfigFields.getFilename().equalsIgnoreCase("ender_dragon_tornado.yml")) {
+        else if ("ender_dragon_tornado.yml".equalsIgnoreCase(powersConfigFields.getFilename())) {
             visualExplosionEffectType = VisualExplosionEffectType.HIGH_POWER;
         } else
             visualExplosionEffectType = VisualExplosionEffectType.NORMAL;
@@ -101,7 +101,7 @@ public class EliteExplosionEvent extends Event implements Cancellable {
                     if (fallingBlock.isValid())
                         fallingBlock.remove();
                 }
-            }.runTaskLater(MetadataHandler.PLUGIN, 20 * 4);
+            }.runTaskLater(MetadataHandler.PLUGIN, 20 << 2);
 
             CrashFix.registerVisualFallingBlock(fallingBlock);
         }
@@ -116,7 +116,7 @@ public class EliteExplosionEvent extends Event implements Cancellable {
     public static class EliteExplosionEvents implements Listener {
         @EventHandler(ignoreCancelled = true)
         public void onBlockDrop(EntityChangeBlockEvent event) {
-            if (!event.getEntity().getType().equals(EntityType.FALLING_BLOCK)) return;
+            if (event.getEntity().getType() != EntityType.FALLING_BLOCK) return;
             if (!CrashFix.isVisualFallingBlock(event.getEntity())) return;
             event.setCancelled(true);
             event.getEntity().remove();

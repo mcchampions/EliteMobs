@@ -14,9 +14,9 @@ public class EnchantmentsConfigFields extends CustomConfigFields {
     @Getter
     private double value = 1;
     @Getter
-    private Enchantment enchantment = null;
+    private Enchantment enchantment;
     @Getter
-    private boolean isEnabledForProcedurallyGeneratedItems = false;
+    private boolean isEnabledForProcedurallyGeneratedItems;
     @Getter
     private int maxEnchantmentLevel;
 

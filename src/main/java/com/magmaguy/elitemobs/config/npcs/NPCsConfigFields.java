@@ -49,22 +49,22 @@ public class NPCsConfigFields extends CustomConfigFields {
     private NPCInteractions.NPCInteractionType interactionType = NPCInteractions.NPCInteractionType.NONE;
     @Getter
     @Setter
-    private double timeout = 0;
+    private double timeout;
     @Getter
     @Setter
-    private List<String> questFilenames = null;
+    private List<String> questFilenames;
     /**
      * Integration with LibsDisguises. Only used if that plugin is loaded.
      */
     @Getter
     @Setter
-    private String disguise = null;
+    private String disguise;
     @Getter
     @Setter
-    private String customDisguiseData = null;
+    private String customDisguiseData;
     @Getter
     @Setter
-    private String customModel = null;
+    private String customModel;
     @Getter
     @Setter
     private String arenaFilename;
@@ -76,7 +76,7 @@ public class NPCsConfigFields extends CustomConfigFields {
     private String command;
     @Getter
     @Setter
-    private boolean instanced = false;
+    private boolean instanced;
     @Getter
     @Setter
     private double scale = 1;

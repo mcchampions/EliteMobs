@@ -123,7 +123,7 @@ public class ImpalerSkill extends SkillBonus implements CooldownSkill {
 
         // Impale particle effect
         new BukkitRunnable() {
-            int ticks = 0;
+            int ticks;
 
             @Override
             public void run() {

@@ -28,8 +28,8 @@ public class QuestReward implements Serializable {
     @Getter
     private final UUID playerUUID;
     @Getter
-    private CustomLootTable customLootTable = null;
-    private boolean generateProceduralReward = false;
+    private CustomLootTable customLootTable;
+    private boolean generateProceduralReward;
 
     public QuestReward(int rewardLevel, QuestObjectives questObjectives, Player player) {
         this.rewardLevel = DynamicQuestLevel.clamp(rewardLevel);

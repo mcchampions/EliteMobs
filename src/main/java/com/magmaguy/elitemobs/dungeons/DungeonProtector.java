@@ -98,7 +98,7 @@ public class DungeonProtector implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void preventBlockFadeEvent(BlockFadeEvent event) {
         if (!EliteMobsWorld.isEliteMobsWorld(event.getBlock().getWorld().getUID())) return;
-        if (event.getBlock().getType().equals(Material.FROSTED_ICE)) return;
+        if (event.getBlock().getType() == Material.FROSTED_ICE) return;
         event.setCancelled(true);
     }
 
@@ -146,7 +146,7 @@ public class DungeonProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void preventVanillaMobSpawning(CreatureSpawnEvent event) {
-        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) return;
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
         if (!EliteMobsWorld.isEliteMobsWorld(event.getLocation().getWorld().getUID())) return;
         event.setCancelled(true);
     }

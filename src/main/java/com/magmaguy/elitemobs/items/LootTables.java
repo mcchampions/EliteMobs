@@ -63,10 +63,9 @@ public class LootTables implements Listener {
             }
 
             double itemLevel = setItemTier(rewardLevel);
-            double eliteLevel = rewardLevel;
 
             if (eliteEntity.getPower("bonus_coins.yml") == null)
-                new ItemLootShower(itemLevel, eliteLevel, eliteEntity.getUnsyncedLivingEntity().getLocation(), player);
+                new ItemLootShower(itemLevel, rewardLevel, eliteEntity.getUnsyncedLivingEntity().getLocation(), player);
 
             if (!(eliteEntity.isRandomLoot())) continue;
 
@@ -147,20 +146,14 @@ public class LootTables implements Listener {
             return null;
         }
 
-        switch (selectedLootSystem) {
-            case "procedural":
-                return dropProcedurallyGeneratedItem(itemTier, eliteEntity, player);
-            case "weighed":
-                return dropWeighedFixedItem(eliteEntity, player);
-            case "fixed":
-                return dropFixedItem(eliteEntity, itemTier, player);
-            case "limited":
-                return dropLimitedItem(eliteEntity, itemTier, player);
-            case "scalable":
-                return dropScalableItem(eliteEntity, itemTier, player);
-        }
-
-        return null;
+        return switch (selectedLootSystem) {
+            case "procedural" -> dropProcedurallyGeneratedItem(itemTier, eliteEntity, player);
+            case "weighed" -> dropWeighedFixedItem(eliteEntity, player);
+            case "fixed" -> dropFixedItem(eliteEntity, itemTier, player);
+            case "limited" -> dropLimitedItem(eliteEntity, itemTier, player);
+            case "scalable" -> dropScalableItem(eliteEntity, itemTier, player);
+            default -> null;
+        };
 
     }
 
@@ -194,20 +187,14 @@ public class LootTables implements Listener {
 
         String selectedLootSystem = pickWeighedProbability(weightedProbability);
 
-        switch (selectedLootSystem) {
-            case "procedural":
-                return dropProcedurallyGeneratedItem(itemLevel, location, player);
-            case "weighed":
-                return dropWeighedFixedItem(location, player);
-            case "fixed":
-                return dropFixedItem(location, itemLevel, player);
-            case "limited":
-                return dropLimitedItem(location, itemLevel, player);
-            case "scalable":
-                return dropScalableItem(location, itemLevel, player);
-        }
-
-        return null;
+        return switch (selectedLootSystem) {
+            case "procedural" -> dropProcedurallyGeneratedItem(itemLevel, location, player);
+            case "weighed" -> dropWeighedFixedItem(location, player);
+            case "fixed" -> dropFixedItem(location, itemLevel, player);
+            case "limited" -> dropLimitedItem(location, itemLevel, player);
+            case "scalable" -> dropScalableItem(location, itemLevel, player);
+            default -> null;
+        };
 
     }
 
@@ -225,20 +212,14 @@ public class LootTables implements Listener {
 
         String selectedLootSystem = pickWeighedProbability(weightedProbability);
 
-        switch (selectedLootSystem) {
-            case "procedural":
-                return generateProcedurallyGeneratedItem(itemTier, player, eliteEntity);
-            case "weighed":
-                return generateWeighedFixedItemStack(player);
-            case "fixed":
-                return generateFixedItem(itemTier, player, eliteEntity);
-            case "limited":
-                return generateLimitedItem(itemTier, player, eliteEntity);
-            case "scalable":
-                return generateScalableItem(itemTier, player, eliteEntity);
-        }
-
-        return null;
+        return switch (selectedLootSystem) {
+            case "procedural" -> generateProcedurallyGeneratedItem(itemTier, player, eliteEntity);
+            case "weighed" -> generateWeighedFixedItemStack(player);
+            case "fixed" -> generateFixedItem(itemTier, player, eliteEntity);
+            case "limited" -> generateLimitedItem(itemTier, player, eliteEntity);
+            case "scalable" -> generateScalableItem(itemTier, player, eliteEntity);
+            default -> null;
+        };
 
     }
 

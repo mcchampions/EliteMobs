@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class GeyserDetector {
-    private static boolean floodgateChecked = false;
+    private static boolean floodgateChecked;
     private static Method floodgateGetInstanceMethod;
     private static Method floodgateIsFloodgatePlayerMethod;
-    private static boolean geyserChecked = false;
+    private static boolean geyserChecked;
     private static Method geyserApiMethod;
     private static Method geyserConnectionByUuidMethod;
     private static Method geyserIsBedrockPlayerMethod;
@@ -88,9 +88,9 @@ public class GeyserDetector {
             geyserApiMethod = geyserApiClass.getMethod("api");
             for (Method method : geyserApiClass.getMethods()) {
                 if (method.getParameterCount() != 1 || !UUID.class.equals(method.getParameterTypes()[0])) continue;
-                if (method.getName().equals("connectionByUuid")) {
+                if ("connectionByUuid".equals(method.getName())) {
                     geyserConnectionByUuidMethod = method;
-                } else if (method.getName().equals("isBedrockPlayer")) {
+                } else if ("isBedrockPlayer".equals(method.getName())) {
                     geyserIsBedrockPlayerMethod = method;
                 }
             }

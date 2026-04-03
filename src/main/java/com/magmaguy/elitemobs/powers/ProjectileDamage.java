@@ -31,7 +31,7 @@ public class ProjectileDamage {
      */
     public static void doGoldNuggetDamage(List<FakeProjectile> projectiles, EliteEntity eliteEntity) {
         new BukkitRunnable() {
-            int timer = 0;
+            int timer;
 
             @Override
             public void run() {
@@ -110,8 +110,8 @@ public class ProjectileDamage {
         private final FakeItem fakeItem;
         private Location location;
         private Vector velocity;
-        private boolean removed = false;
-        private boolean hasGravity = false;
+        private boolean removed;
+        private boolean hasGravity;
 
         public FakeProjectile(Location spawnLocation, ItemStack itemStack, Vector velocity) {
             this.location = spawnLocation.clone();

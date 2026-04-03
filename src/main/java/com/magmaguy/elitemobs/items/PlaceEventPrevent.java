@@ -16,7 +16,7 @@ public class PlaceEventPrevent implements Listener {
 
         if (!event.isBlockInHand()) return;
 
-        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         if (event.getItem() == null || event.getItem().getItemMeta() == null) return;
 

@@ -12,8 +12,11 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 public class NPCChatBubble {
+
+    private static final Pattern PATTERN = Pattern.compile("\\\\n");
 
     public NPCChatBubble(String message, NPCEntity npcEntity, Player player) {
 
@@ -26,7 +29,7 @@ public class NPCChatBubble {
 
         int lineCounter = 0;
 
-        for (String substring : message.split("\\\\n")) {
+        for (String substring : PATTERN.split(message)) {
 
             Location newLocation = npcEntity.getVillager().getEyeLocation().clone()
                     .add(player.getLocation().clone().subtract(npcEntity.getVillager().getLocation()).toVector().normalize().multiply(0.5))
@@ -36,7 +39,7 @@ public class NPCChatBubble {
             if (fakeText == null) return;
 
             new BukkitRunnable() {
-                int counter = 0;
+                int counter;
                 Location currentLocation = newLocation.clone();
 
                 @Override

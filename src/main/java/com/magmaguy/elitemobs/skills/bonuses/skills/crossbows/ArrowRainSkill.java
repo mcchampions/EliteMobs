@@ -106,7 +106,7 @@ public class ArrowRainSkill extends SkillBonus implements CooldownSkill {
         int crossbowSkillLevel = Math.max(1, SkillXPCalculator.levelFromTotalXP(crossbowXP));
 
         new BukkitRunnable() {
-            int count = 0;
+            int count;
             @Override
             public void run() {
                 if (count >= 5) {

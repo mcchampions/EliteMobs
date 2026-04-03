@@ -159,13 +159,9 @@ public class SkillsPage {
         int emptyBars = totalBars - filledBars;
 
         StringBuilder bar = new StringBuilder("\u00A7a");
-        for (int i = 0; i < filledBars; i++) {
-            bar.append("|");
-        }
+        bar.append("|".repeat(Math.max(0, filledBars)));
         bar.append("\u00A77");
-        for (int i = 0; i < emptyBars; i++) {
-            bar.append("|");
-        }
+        bar.append("|".repeat(Math.max(0, emptyBars)));
 
         return bar.toString();
     }

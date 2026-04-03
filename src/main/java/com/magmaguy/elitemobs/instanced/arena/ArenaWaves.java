@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public class ArenaWaves {
 
-    private final HashMap<Integer, List<ArenaEntity>> arenaEntities = new HashMap();
+    private final HashMap<Integer, List<ArenaEntity>> arenaEntities = new HashMap<>();
 
     //wave=X:spawnPoint=Y:boss=Z.yml:mythicmob=false
     public ArenaWaves(List<String> rawBosses) {
@@ -42,7 +42,7 @@ public class ArenaWaves {
             }
             int wave;
             try {
-                wave = Integer.valueOf(waveString);
+                wave = Integer.parseInt(waveString);
             } catch (Exception exception) {
                 Logger.warn("Invalid value for wave in arena wave: " + waveString);
                 continue;
@@ -51,14 +51,14 @@ public class ArenaWaves {
             if (mythicMobString.isEmpty()) mythicMob = false;
             else
                 try {
-                    mythicMob = Boolean.valueOf(mythicMobString);
+                    mythicMob = Boolean.parseBoolean(mythicMobString);
                 } catch (Exception exception) {
                     Logger.warn("Invalid value for mythic mob in arena wave: " + waveString);
                     continue;
                 }
             int level = -1;
             if (!levelString.isEmpty()) try {
-                level = Integer.valueOf(levelString);
+                level = Integer.parseInt(levelString);
             } catch (Exception exception) {
                 Logger.warn("Invalid value for level in: " + levelString);
                 continue;

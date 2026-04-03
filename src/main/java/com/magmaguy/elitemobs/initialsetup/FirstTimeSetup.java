@@ -43,32 +43,40 @@ public class FirstTimeSetup implements Listener {
 
     private static String resolveLocaleToLanguage(String locale) {
         // Check specific locales first (more specific match wins)
-        if (locale.equals("pt_br")) return "portugueseBrazilian";
-        if (locale.equals("zh_cn")) return "chineseSimplified";
-        if (locale.equals("zh_tw")) return "chineseTraditional";
+        switch (locale) {
+            case "pt_br" -> {
+                return "portugueseBrazilian";
+            }
+            case "zh_cn" -> {
+                return "chineseSimplified";
+            }
+            case "zh_tw" -> {
+                return "chineseTraditional";
+            }
+        }
 
         // Fall back to prefix matching
         String prefix = locale.contains("_") ? locale.substring(0, locale.indexOf('_')) : locale;
-        switch (prefix) {
-            case "es": return "spanish";
-            case "fr": return "french";
-            case "de": return "german";
-            case "it": return "italian";
-            case "pt": return "portuguese";
-            case "ru": return "russian";
-            case "ja": return "japanese";
-            case "ko": return "korean";
-            case "pl": return "polish";
-            case "nl": return "dutch";
-            case "cs": return "czech";
-            case "hu": return "hungarian";
-            case "ro": return "romanian";
-            case "tr": return "turkish";
-            case "vi": return "vietnamese";
-            case "en": return "english";
-            case "id": return "indonesian";
-            default: return null;
-        }
+        return switch (prefix) {
+            case "es" -> "spanish";
+            case "fr" -> "french";
+            case "de" -> "german";
+            case "it" -> "italian";
+            case "pt" -> "portuguese";
+            case "ru" -> "russian";
+            case "ja" -> "japanese";
+            case "ko" -> "korean";
+            case "pl" -> "polish";
+            case "nl" -> "dutch";
+            case "cs" -> "czech";
+            case "hu" -> "hungarian";
+            case "ro" -> "romanian";
+            case "tr" -> "turkish";
+            case "vi" -> "vietnamese";
+            case "en" -> "english";
+            case "id" -> "indonesian";
+            default -> null;
+        };
     }
 
     @EventHandler

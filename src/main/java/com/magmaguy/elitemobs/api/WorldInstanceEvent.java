@@ -14,7 +14,7 @@ public class WorldInstanceEvent extends Event implements Cancellable {
     private final String blueprintWorldName;
     @Getter
     private final String instancedWorldName;
-    private boolean cancelled = false;
+    private boolean cancelled;
 
 
     public WorldInstanceEvent(String blueprintWorldName,

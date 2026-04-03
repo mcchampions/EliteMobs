@@ -23,7 +23,11 @@ public class TheQuarryDungeon extends ContentPackagesConfigFields {
                 "em_id_the_quarry,230.5,144,102.5,-67,0",
                 "em_id_the_quarry,245.5,138,109.5,-90,30",
                 0,
-                "&aDynamic Dungeon\n" + "$bossCount boss encounters\n" + "&3An ancient dwarven quarry\n" + "&3deep underground.",
+                """
+                        &aDynamic Dungeon
+                        $bossCount boss encounters
+                        &3An ancient dwarven quarry
+                        &3deep underground.""",
                 "&bGo down into the quarry and get that lift working.",
                 "&bYou have left The Quarry!",
                 List.of("filename=em_id_the_quarry_quarry_smith.yml",

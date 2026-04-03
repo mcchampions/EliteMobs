@@ -121,9 +121,9 @@ import java.util.List;
 public class EliteMobs extends JavaPlugin {
 
     public static List<World> validWorldList = new ArrayList<>();
-    public static boolean worldGuardIsEnabled = false;
+    public static boolean worldGuardIsEnabled;
     public static Metrics metrics;
-    public Object placeholders = null;
+    public Object placeholders;
 
     public static void initializeConfigs() {
         new CustomModelsConfig();

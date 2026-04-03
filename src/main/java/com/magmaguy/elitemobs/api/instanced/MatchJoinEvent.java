@@ -11,7 +11,7 @@ public class MatchJoinEvent extends Event implements MatchEvent, MatchPlayerEven
     private static final HandlerList handlers = new HandlerList();
     private final MatchInstance matchInstance;
     private final Player player;
-    private boolean cancelled = false;
+    private boolean cancelled;
 
     public MatchJoinEvent(MatchInstance matchInstance, Player player) {
         this.matchInstance = matchInstance;

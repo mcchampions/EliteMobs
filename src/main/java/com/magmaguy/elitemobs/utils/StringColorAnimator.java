@@ -18,9 +18,9 @@ public class StringColorAnimator {
         new BukkitRunnable() {
             final int titleSize = title.length();
             final int subtitleSize = finalSubtitle.length();
-            int counter = 0;
-            int titleIndex = 0;
-            int subtitleIndex = 0;
+            int counter;
+            int titleIndex;
+            int subtitleIndex;
 
             @Override
             public void run() {

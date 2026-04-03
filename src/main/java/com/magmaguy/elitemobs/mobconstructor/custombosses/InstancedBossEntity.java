@@ -27,7 +27,7 @@ import java.util.Set;
 public class InstancedBossEntity extends RegionalBossEntity implements PersistentObject, PersistentMovingEntity {
     private static final ArrayListMultimap<String, InstancedBossContainer> instancedBossEntities = ArrayListMultimap.create();
     @Getter
-    private  DungeonInstance dungeonInstance = null;
+    private  DungeonInstance dungeonInstance;
     @Getter
     private  MatchInstance matchInstance;
     @Getter @Setter
@@ -102,8 +102,7 @@ public class InstancedBossEntity extends RegionalBossEntity implements Persisten
         super.setNormalizedMaxHealth();
         if (dungeonInstance == null) return;
         if (playerCount < 2) return;
-        double normalizedDungeonMaxHealth = super.getMaxHealth() * .75 * playerCount;
-        super.maxHealth = normalizedDungeonMaxHealth;
+        super.maxHealth = super.getMaxHealth() * .75 * playerCount;
         super.health = maxHealth;
         if (livingEntity != null) {
             AttributeManager.setAttribute(livingEntity, "generic_max_health", maxHealth);
@@ -116,8 +115,7 @@ public class InstancedBossEntity extends RegionalBossEntity implements Persisten
         super.setNormalizedMaxHealth();
         if (dungeonInstance == null) return;
         if (dungeonInstance.getPlayers().size() < 2) return;
-        double normalizedDungeonMaxHealth = super.getMaxHealth() * .75 * dungeonInstance.getPlayers().size();
-        super.maxHealth = normalizedDungeonMaxHealth;
+        super.maxHealth = super.getMaxHealth() * .75 * dungeonInstance.getPlayers().size();
         if (health == null) {
             if (livingEntity != null) livingEntity.setHealth(maxHealth);
             this.health = maxHealth;
@@ -135,7 +133,7 @@ public class InstancedBossEntity extends RegionalBossEntity implements Persisten
     @Override
     public void remove(RemovalReason removalReason) {
         super.remove(removalReason);
-        if (removalReason.equals(RemovalReason.WORLD_UNLOAD))
+        if (removalReason == RemovalReason.WORLD_UNLOAD)
             if (persistentObjectHandler != null) {
                 persistentObjectHandler.remove();
                 persistentObjectHandler = null;
