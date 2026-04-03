@@ -129,7 +129,7 @@ public class TreasureChest implements PersistentObject {
                     " does not have a directional block for the Treasure Chest material " +
                     customTreasureChestConfigFields.getChestMaterial() + " ! Chest materials are directional, is your chest a chest?");
         }
-        location.getBlock().getState().update();
+        location.getBlock().getState(false).update();
     }
 
     public void doInteraction(Player player) {

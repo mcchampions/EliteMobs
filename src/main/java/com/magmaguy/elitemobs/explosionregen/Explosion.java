@@ -91,7 +91,7 @@ public class Explosion {
                     block.isLiquid() ||
                     EntityTracker.isTemporaryBlock(block))
                 continue;
-            nearbyBlockScan(blockStates, block.getState());
+            nearbyBlockScan(blockStates, block.getState(false));
         }
 
         Entity shooter = EntityFinder.filterRangedDamagers(entity);
@@ -124,7 +124,7 @@ public class Explosion {
 
         for (BlockState blockState : blockStates) {
             blockState.getBlock().setType(Material.AIR);
-            blockState.getBlock().getState().update(true);
+            blockState.getBlock().getState(false).update(true);
         }
 
         new Explosion(blockStates);
@@ -143,7 +143,7 @@ public class Explosion {
             for (int y = -1; y < 2; y++)
                 for (int z = -1; z < 2; z++) {
                     Location blockLocation = blockState.getLocation().clone().add(new Vector(x, y, z));
-                    BlockState iteratedBlockState = blockLocation.getBlock().getState();
+                    BlockState iteratedBlockState = blockLocation.getBlock().getState(false);
                     if (blockStates.contains(iteratedBlockState)) continue;
                     if (!isCodependentBlock(iteratedBlockState, y)) continue;
                     nearbyBlockScan(blockStates, iteratedBlockState);
@@ -225,7 +225,7 @@ public class Explosion {
     private static void queueBlock(ArrayList<BlockState> blockStates, BlockState blockState) {
         if (!DefaultConfig.isDoRegenerateContainers() && blockState instanceof Container)
             return;
-        blockStates.add(blockState.getBlock().getState());
+        blockStates.add(blockState.getBlock().getState(false));
         if (blockState instanceof Container)
             if (blockState instanceof Chest)
                 ((Chest) blockState).getBlockInventory().setContents(new ItemStack[0]);
