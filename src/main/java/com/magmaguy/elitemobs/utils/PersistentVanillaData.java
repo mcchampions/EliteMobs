@@ -1,6 +1,7 @@
 package com.magmaguy.elitemobs.utils;
 
 import com.magmaguy.elitemobs.MetadataHandler;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -31,9 +32,10 @@ public class PersistentVanillaData {
 
     public static double getDouble(ItemStack itemStack, String key) {
         if (itemStack == null || itemStack.getItemMeta() == null) return -1;
-        if (!itemStack.getItemMeta().getPersistentDataContainer().has(getKey(key), PersistentDataType.DOUBLE))
+        PersistentDataContainerView pdc =  itemStack.getPersistentDataContainer();
+        if (!pdc.has(getKey(key), PersistentDataType.DOUBLE))
             return -1;
-        Double d = itemStack.getItemMeta().getPersistentDataContainer().get(getKey(key), PersistentDataType.DOUBLE);
+        Double d = pdc.get(getKey(key), PersistentDataType.DOUBLE);
         return d == null ? -1 : d;
     }
 

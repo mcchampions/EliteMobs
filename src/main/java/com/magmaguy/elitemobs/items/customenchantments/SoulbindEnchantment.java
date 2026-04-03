@@ -131,9 +131,11 @@ public class SoulbindEnchantment extends CustomEnchantment {
     public static int getPrestigeLevel(ItemMeta itemMeta) {
         if (!itemMeta.getPersistentDataContainer().has(SOULBIND_KEY, PersistentDataType.STRING))
             return 0;
-        int prestige = 0;
-        if (itemMeta.getPersistentDataContainer().get(PRESTIGE_KEY, PersistentDataType.INTEGER) != null)
-            prestige = itemMeta.getPersistentDataContainer().get(PRESTIGE_KEY, PersistentDataType.INTEGER);
+        Integer prestige = itemMeta.getPersistentDataContainer().get(PRESTIGE_KEY, PersistentDataType.INTEGER);
+
+        if (prestige == null) {
+            return 0;
+        }
         return prestige;
     }
 

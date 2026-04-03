@@ -72,8 +72,8 @@ public class PeaceBannerItem {
      * Checks whether the given ItemStack is a Peace Banner by looking for the PDC tag.
      */
     public static boolean isPeaceBanner(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer()
+        if (item == null) return false;
+        return item.getPersistentDataContainer()
                 .has(PEACE_BANNER_KEY, PersistentDataType.BYTE);
     }
 

@@ -94,9 +94,7 @@ public class ItemTagger {
     public static boolean isEliteItem(ItemStack itemStack) {
         if (itemStack == null) return false;
         if (!itemStack.hasItemMeta()) return false;
-        if (itemStack.getItemMeta().getCustomTagContainer().hasCustomTag(eliteMobsItemNamespacedKey, ItemTagType.BYTE))
-            return true;
-        return itemStack.getItemMeta().getPersistentDataContainer().has(eliteMobsItemNamespacedKey, PersistentDataType.BYTE);
+        return itemStack.getPersistentDataContainer().has(eliteMobsItemNamespacedKey, PersistentDataType.BYTE);
     }
 
     /**
@@ -170,23 +168,18 @@ public class ItemTagger {
     public static boolean hasEnchantment(ItemMeta itemMeta, NamespacedKey enchantmentKey) {
         if (!itemMeta.hasLore()) //early performance tweak
             return false;
-        if (itemMeta.getCustomTagContainer().hasCustomTag(enchantmentKey, ItemTagType.INTEGER))
-            return true;
         return itemMeta.getPersistentDataContainer().has(enchantmentKey, PersistentDataType.INTEGER);
     }
 
     public static boolean hasKey(ItemStack itemStack, String key) {
         if (itemStack == null) return false;
-        if (!itemStack.hasItemMeta()) return false;
-        return Objects.requireNonNull(itemStack.getItemMeta()).getPersistentDataContainer().has(new NamespacedKey(MetadataHandler.PLUGIN, key), PersistentDataType.STRING);
+        return itemStack.getPersistentDataContainer().has(new NamespacedKey(MetadataHandler.PLUGIN, key), PersistentDataType.STRING);
     }
 
     public static boolean hasEnchantment(ItemMeta itemMeta, String keyString) {
         NamespacedKey enchantmentKey = new NamespacedKey(MetadataHandler.PLUGIN, keyString);
         if (!itemMeta.hasLore()) //early performance tweak
             return false;
-        if (itemMeta.getCustomTagContainer().hasCustomTag(enchantmentKey, ItemTagType.INTEGER))
-            return true;
         return itemMeta.getPersistentDataContainer().has(enchantmentKey, PersistentDataType.INTEGER);
     }
 
@@ -232,18 +225,22 @@ public class ItemTagger {
     }
 
     public static double getEliteDamageAttribute(@Nullable ItemStack itemStack) {
-        double value = 0;
-        if (itemStack != null &&
-                itemStack.getItemMeta() != null &&
-                itemStack.getItemMeta().getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE) != null)
-            return itemStack.getItemMeta().getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE);
+        Double value;
+        if (itemStack == null) {
+            return 0;
+        }
+        value = itemStack.getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE);
+        if (value == null) {
+            return 0;
+        }
         return value;
     }
 
     public static double getEliteDamageAttribute(@Nullable Projectile projectile) {
         if (projectile == null) return 0D;
-        if (projectile.getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE) == null) return 0D;
-        return projectile.getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE);
+        Double value = projectile.getPersistentDataContainer().get(ELITE_DAMAGE, PersistentDataType.DOUBLE);
+        if (value == null) return 0D;
+        return value;
     }
 
     public static void setEliteDamageAttribute(ItemStack itemStack, double damageValue) {
@@ -331,11 +328,11 @@ public class ItemTagger {
         if (itemStack == null) return 0D;
         if (itemStack.getItemMeta() == null) return 0D;
         try {
-            Double value = itemStack.getItemMeta().getPersistentDataContainer().get(ELITE_DEFENSE, PersistentDataType.DOUBLE);
+            Double value = itemStack.getPersistentDataContainer().get(ELITE_DEFENSE, PersistentDataType.DOUBLE);
             return value != null ? value : 0D;
         } catch (IllegalArgumentException e) {
             // Legacy items may have stored this as Float
-            Float value = itemStack.getItemMeta().getPersistentDataContainer().get(ELITE_DEFENSE, PersistentDataType.FLOAT);
+            Float value = itemStack.getPersistentDataContainer().get(ELITE_DEFENSE, PersistentDataType.FLOAT);
             return value != null ? value.doubleValue() : 0D;
         }
     }
@@ -350,7 +347,7 @@ public class ItemTagger {
     public static int getStoredItemLevel(@Nullable ItemStack itemStack) {
         if (itemStack == null) return -1;
         if (itemStack.getItemMeta() == null) return -1;
-        Integer level = itemStack.getItemMeta().getPersistentDataContainer().get(ELITE_LEVEL, PersistentDataType.INTEGER);
+        Integer level = itemStack.getPersistentDataContainer().get(ELITE_LEVEL, PersistentDataType.INTEGER);
         return level == null ? -1 : level;
     }
 
@@ -368,7 +365,7 @@ public class ItemTagger {
 
     public static int getEnchantmentCount(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getItemMeta() == null) return 0;
-        Integer value = itemStack.getItemMeta().getPersistentDataContainer().get(enchantmentCount, PersistentDataType.INTEGER);
+        Integer value = itemStack.getPersistentDataContainer().get(enchantmentCount, PersistentDataType.INTEGER);
         return value == null ? 0 : value;
     }
 
