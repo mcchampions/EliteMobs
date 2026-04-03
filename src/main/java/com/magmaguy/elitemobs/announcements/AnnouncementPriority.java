@@ -1,7 +1,6 @@
 package com.magmaguy.elitemobs.announcements;
 
 import com.magmaguy.elitemobs.config.EventsConfig;
-import com.magmaguy.elitemobs.thirdparty.discordsrv.DiscordSRVAnnouncement;
 import com.magmaguy.magmacore.util.ChatColorConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -18,6 +17,5 @@ public class AnnouncementPriority {
             for (Player player : world.getPlayers())
                 player.sendMessage(ChatColorConverter.convert(message));
         if (announcementPriority < 3) return;
-        new DiscordSRVAnnouncement(ChatColorConverter.convert(message));
     }
 }

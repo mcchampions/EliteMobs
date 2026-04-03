@@ -3,7 +3,6 @@ package com.magmaguy.elitemobs.mobconstructor.custombosses;
 import com.magmaguy.elitemobs.api.EliteMobDeathEvent;
 import com.magmaguy.elitemobs.config.MobCombatSettingsConfig;
 import com.magmaguy.elitemobs.ondeathcommands.OnDeathCommands;
-import com.magmaguy.elitemobs.thirdparty.discordsrv.DiscordSRVAnnouncement;
 import com.magmaguy.magmacore.util.ChatColorConverter;
 import com.magmaguy.magmacore.util.Round;
 import org.bukkit.Bukkit;
@@ -138,9 +137,7 @@ public class CustomBossDeath implements Listener {
                     if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 0)
                         Bukkit.broadcastMessage(ChatColorConverter.convert(string));
                     if (!string.isEmpty())
-                        if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 2)
-                            new DiscordSRVAnnouncement(ChatColorConverter.convert(string));
-                        else if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() < 1)
+                        if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() < 1)
                             for (Player player : customBossEntity.getDamagers().keySet())
                                 player.sendMessage(ChatColorConverter.convert(string));
                 }
@@ -163,8 +160,6 @@ public class CustomBossDeath implements Listener {
                             player.sendMessage(ChatColorConverter.convert(deathMsg));
                     if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 0)
                         Bukkit.broadcastMessage(ChatColorConverter.convert(deathMsg));
-                    if (customBossEntity.customBossesConfigFields.getAnnouncementPriority() > 2)
-                        new DiscordSRVAnnouncement(ChatColorConverter.convert(deathMsg));
                 }
             }
     }

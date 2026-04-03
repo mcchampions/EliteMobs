@@ -9,7 +9,6 @@ softdepend:
 - Vault
 - PlaceholderAPI
 - HolographicDisplays
-- DiscordSRV
 - LibsDisguises
 - ModelEngine
 - Geyser-Spigot

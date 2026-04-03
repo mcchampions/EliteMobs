@@ -68,7 +68,6 @@ public class CommandHandler {
         emCommand.registerCommand(new SpawnElite());
         emCommand.registerCommand(new SpawnElitePowers());
         emCommand.registerCommand(new SpawnEliteAtCommand());
-        emCommand.registerCommand(new DiscordMessageCommand());
         emCommand.registerCommand(new DiscordCommand());
         emCommand.registerCommand(new MoneyRemoveCommand());
         emCommand.registerCommand(new ProtectionBypassCommand());

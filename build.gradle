@@ -93,8 +93,6 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude group: 'org.bukkit', module: 'bukkit'
     }
-    //DiscordSRV
-    compileOnly 'com.discordsrv:discordsrv:1.28.0'
     //SQLite
     compileOnly group: 'org.xerial', name: 'sqlite-jdbc', version: '3.32.3'
     //MySQL

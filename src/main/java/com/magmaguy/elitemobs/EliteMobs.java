@@ -150,7 +150,6 @@ public class EliteMobs extends JavaPlugin {
 
         new MobCombatSettingsConfig();
         CommandsConfig.initializeConfigs();
-        new DiscordSRVConfig();
         new PeaceBannerConfig();
         new CustomEventsConfig();
         new QuestsConfig();

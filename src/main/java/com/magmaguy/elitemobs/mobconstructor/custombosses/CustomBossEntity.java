@@ -21,7 +21,6 @@ import com.magmaguy.elitemobs.playerdata.ElitePlayerInventory;
 import com.magmaguy.elitemobs.powers.meta.CustomSummonPower;
 import com.magmaguy.elitemobs.powers.meta.ElitePower;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
-import com.magmaguy.elitemobs.thirdparty.discordsrv.DiscordSRVAnnouncement;
 import com.magmaguy.elitemobs.thirdparty.libsdisguises.DisguiseEntity;
 import com.magmaguy.elitemobs.utils.CommandRunner;
 import com.magmaguy.elitemobs.utils.EventCaller;
@@ -413,7 +412,6 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
             for (Player player : getLocation().getWorld().getPlayers())
                 player.sendMessage(ChatColorConverter.convert(customBossesConfigFields.getSpawnMessage()));
         if (customBossesConfigFields.getAnnouncementPriority() < 3) return;
-        new DiscordSRVAnnouncement(ChatColorConverter.convert(customBossesConfigFields.getSpawnMessage()));
     }
 
     public void getDynamicLevel(Location bossLocation) {
