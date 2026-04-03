@@ -21,7 +21,6 @@ import com.magmaguy.elitemobs.playerdata.ElitePlayerInventory;
 import com.magmaguy.elitemobs.powers.meta.CustomSummonPower;
 import com.magmaguy.elitemobs.powers.meta.ElitePower;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
-import com.magmaguy.elitemobs.thirdparty.libsdisguises.DisguiseEntity;
 import com.magmaguy.elitemobs.utils.CommandRunner;
 import com.magmaguy.elitemobs.utils.EventCaller;
 import com.magmaguy.magmacore.util.AttributeManager;
@@ -380,8 +379,6 @@ public class CustomBossEntity extends EliteEntity implements Listener, Persisten
         //If alwaysShowName is set for this boss, override to always visible
         boolean effectiveVisibility = isVisible || customBossesConfigFields.isAlwaysShowName();
         super.setNameVisible(effectiveVisibility);
-        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
-            DisguiseEntity.setDisguiseNameVisibility(effectiveVisibility, livingEntity, name);
         if (customModel != null && isValid())
             customModel.setNameVisible(effectiveVisibility);
     }

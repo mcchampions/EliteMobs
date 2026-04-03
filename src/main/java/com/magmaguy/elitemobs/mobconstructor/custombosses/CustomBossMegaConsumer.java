@@ -7,13 +7,11 @@ import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.elitemobs.mobconstructor.MobLevelPlaceholderFormatter;
 import com.magmaguy.elitemobs.powers.meta.ElitePower;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
-import com.magmaguy.elitemobs.thirdparty.libsdisguises.DisguiseEntity;
 import com.magmaguy.elitemobs.thirdparty.worldguard.WorldGuardFlagChecker;
 import com.magmaguy.elitemobs.thirdparty.worldguard.WorldGuardSpawnEventBypasser;
 import com.magmaguy.magmacore.util.AttributeManager;
 import com.magmaguy.magmacore.util.ChatColorConverter;
 import com.magmaguy.magmacore.util.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -56,8 +54,6 @@ public class CustomBossMegaConsumer {
         livingEntity.setCustomName(parsedName);
         boolean showName = DefaultConfig.isAlwaysShowNametags() || customBossEntity.customBossesConfigFields.isAlwaysShowName();
         livingEntity.setCustomNameVisible(showName);
-        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
-            DisguiseEntity.setDisguiseNameVisibility(showName, livingEntity, parsedName);
         customBossEntity.setName(parsedName, false);
     }
 
@@ -103,13 +99,7 @@ public class CustomBossMegaConsumer {
                 CustomModel.customModelsEnabled() &&
                         customBossesConfigFields.isCustomModelExists() &&
                         customBossesConfigFields.getCustomModel() != null &&
-                        !customBossesConfigFields.getCustomModel().isEmpty())
-            return;
-        if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) return;
-        try {
-            DisguiseEntity.disguise(customBossesConfigFields.getDisguise(), livingEntity, customBossesConfigFields.getCustomDisguiseData(), customBossesConfigFields.getFilename());
-        } catch (Exception ex) {
-            Logger.warn("Failed to load LibsDisguises disguise correctly!");
+                        !customBossesConfigFields.getCustomModel().isEmpty()) {
         }
     }
 
@@ -157,7 +147,6 @@ public class CustomBossMegaConsumer {
             elitePower.applyPowers(livingEntity);
         setEquipment(livingEntity);
         setBaby(livingEntity);
-        setDisguise(livingEntity);
         setName(livingEntity, customBossEntity, level);
         setFollowRange(livingEntity);
         setMovementSpeed(livingEntity);

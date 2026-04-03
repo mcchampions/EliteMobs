@@ -99,7 +99,6 @@ dependencies {
     compileOnly 'mysql:mysql-connector-java:8.0.33'
     //LibsDisguises
     compileOnly group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.7.0'
-    compileOnly group: 'LibsDisguises', name: 'LibsDisguises', version: '10.0.26'
     //PlaceholderAPI
     compileOnly group: 'me.clip', name: 'placeholderapi', version: '2.10.9'
     //lombok

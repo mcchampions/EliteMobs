@@ -14,16 +14,13 @@ import com.magmaguy.elitemobs.mobconstructor.PersistentObject;
 import com.magmaguy.elitemobs.mobconstructor.PersistentObjectHandler;
 import com.magmaguy.elitemobs.npcs.chatter.NPCChatBubble;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
-import com.magmaguy.elitemobs.thirdparty.libsdisguises.DisguiseEntity;
 import com.magmaguy.elitemobs.thirdparty.worldguard.WorldGuardSpawnEventBypasser;
 import com.magmaguy.elitemobs.utils.ConfigurationLocation;
 import com.magmaguy.elitemobs.utils.NonSolidBlockTypes;
 import com.magmaguy.magmacore.util.AttributeManager;
 import com.magmaguy.magmacore.util.ChatColorConverter;
 import com.magmaguy.magmacore.util.ChunkLocationChecker;
-import com.magmaguy.magmacore.util.Logger;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -186,27 +183,11 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
             !npCsConfigFields.getCustomModel().isEmpty() &&
             CustomModel.modelExists(npCsConfigFields.getCustomModel()))
             setCustomModel(villager);
-        else
-            setDisguise(villager);
         EntityTracker.registerNPCEntity(this);
         initializeRole();
         setTimeout();
         // Create house earnings display if this is the gambling den owner
         com.magmaguy.elitemobs.gambling.GamblingDenOwnerDisplay.createDisplay(this);
-    }
-
-    private void setDisguise(LivingEntity livingEntity) {
-        if (npCsConfigFields.getDisguise() == null) return;
-        if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) return;
-        try {
-            DisguiseEntity.disguise(npCsConfigFields.getDisguise(), livingEntity, npCsConfigFields.getCustomDisguiseData(), npCsConfigFields.getFilename());
-            DisguiseEntity.setDisguiseNameVisibility(true, livingEntity, ChatColorConverter.convert(npCsConfigFields.getName()));
-            livingEntity.setCustomNameVisible(true);
-            isDisguised = true;
-        } catch (Exception ex) {
-            Logger.warn("Failed to load LibsDisguises disguise correctly!");
-            ex.printStackTrace();
-        }
     }
 
     private void setCustomModel(LivingEntity livingEntity) {
