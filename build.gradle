@@ -113,8 +113,6 @@ dependencies {
     implementation (group: 'com.magmaguy', name: 'MagmaCore', version: '2.1.0-SNAPSHOT'){
         changing = true
     }
-    testImplementation "org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT"
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 
 }
 
@@ -141,39 +139,4 @@ shadowJar {
     archiveClassifier.set(null)
     archiveFileName.set(project.name + ".jar")
     destinationDirectory.set(new File("testbed/plugins"))
-}
-
-test {
-    useJUnitPlatform()
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "EliteMobs"
-            url = "https://repo.magmaguy.com/releases"
-            credentials {
-                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
-                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
-            }
-        }
-    }
-
-    publications {
-        mavenJava(MavenPublication) {
-            pom {
-                groupId = 'com.magmaguy'
-                name = 'elitemobs'
-                description = 'EliteMobs repo'
-                url = 'https://magmaguy.com/'
-                from components.java
-                licenses {
-                    license {
-                        name = 'GPLV3'
-                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
-                    }
-                }
-            }
-        }
-    }
 }
