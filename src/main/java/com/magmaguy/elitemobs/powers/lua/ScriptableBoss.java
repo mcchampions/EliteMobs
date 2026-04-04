@@ -95,7 +95,6 @@ public class ScriptableBoss extends ScriptableEntity {
 
     private static final Map<EliteEntity, Map<String, Long>> bossGlobalCooldowns = new ConcurrentHashMap<>();
 
-    @Override
     public Map<String, Long> getGlobalCooldownStore() {
         return bossGlobalCooldowns.computeIfAbsent(eliteEntity, k -> new HashMap<>());
     }

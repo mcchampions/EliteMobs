@@ -5,7 +5,9 @@ plugins {
     id("com.gradleup.shadow") version "9.0.0-beta12"
     id 'signing'
 }
-
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += "-Xlint:-removal"
+}
 //Fixes issues related to special characters being used
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
