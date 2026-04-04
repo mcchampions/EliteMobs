@@ -11,7 +11,7 @@ compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
 //This allows any modules tagged as changing to be updated every time, which is extremely convenient for some of the shaded libs
-configurations.all {
+configurations.configureEach {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
@@ -21,18 +21,6 @@ java {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                group 'com.magmaguy'
-                version '10.1.1'
-                artifactId = 'EliteMobs'
-            }
-        }
-    }
-}
 //Fixes issues with utf-8 in the translations files.
 processResources {
     def props = [version: version]
