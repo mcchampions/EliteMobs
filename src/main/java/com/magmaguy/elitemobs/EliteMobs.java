@@ -91,6 +91,7 @@ import com.magmaguy.elitemobs.skills.bonuses.SkillBonusInitializer;
 import com.magmaguy.elitemobs.skills.bonuses.SkillBonusRegistry;
 import com.magmaguy.elitemobs.thirdparty.bstats.CustomCharts;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
+import com.magmaguy.elitemobs.thirdparty.custommodels.modelengine.ModelEngineReservedAddresses;
 import com.magmaguy.elitemobs.thirdparty.placeholderapi.Placeholders;
 import com.magmaguy.elitemobs.thirdparty.worldguard.WorldGuardCompatibility;
 import com.magmaguy.elitemobs.treasurechest.TreasureChest;
@@ -287,6 +288,8 @@ public class EliteMobs extends JavaPlugin {
         //Initializes custom models
         initializationContext.step("Custom Models");
         CustomModel.initialize();
+        //Reserves ModelEngine addresses if present
+        ModelEngineReservedAddresses.reserve();
 
         if (worldGuardIsEnabled) Logger.info("WorldGuard compatibility is enabled!");
         else Logger.info("WorldGuard compatibility is not enabled!");
