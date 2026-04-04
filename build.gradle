@@ -32,7 +32,7 @@ afterEvaluate {
             }
         }
     }
-
+}
 //Fixes issues with utf-8 in the translations files.
 processResources {
     def props = [version: version]
