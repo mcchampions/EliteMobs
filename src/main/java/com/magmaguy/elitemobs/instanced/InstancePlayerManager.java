@@ -161,7 +161,7 @@ public class InstancePlayerManager {
         player.setGameMode(GameMode.SPECTATOR);
         if (!wasPlayer) {
             MatchInstance.MatchInstanceEvents.teleportBypass = true;
-            player.teleportAsync(matchInstance.startLocation);
+            player.teleport(matchInstance.startLocation);
         }
         PlayerData.setMatchInstance(player, matchInstance);
     }
