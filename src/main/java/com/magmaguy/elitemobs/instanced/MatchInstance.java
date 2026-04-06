@@ -111,7 +111,7 @@ public abstract class MatchInstance {
     }
 
     public void removePlayer(Player player) {
-        new MatchLeaveEvent(this, player);
+        //new MatchLeaveEvent(this, player);
         InstancePlayerManager.removePlayer(player, this);
     }
 
@@ -128,12 +128,12 @@ public abstract class MatchInstance {
     }
 
     public void removeSpectator(Player player) {
-        new MatchLeaveEvent(this, player);
+        //new MatchLeaveEvent(this, player);
         InstancePlayerManager.removeSpectator(this, player);
     }
 
     public void removeAnyKind(Player player) {
-        new MatchLeaveEvent(this, player);
+        //new MatchLeaveEvent(this, player);
         InstancePlayerManager.removeAnyKind(this, player);
     }
 
@@ -148,7 +148,7 @@ public abstract class MatchInstance {
             return;
         }
         state = InstancedRegionState.STARTING;
-        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 20L);
+        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 40L);
     }
 
     private void playerWatchdog() {

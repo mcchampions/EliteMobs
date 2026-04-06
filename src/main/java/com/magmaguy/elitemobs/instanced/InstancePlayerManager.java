@@ -8,6 +8,7 @@ import com.magmaguy.elitemobs.api.instanced.MatchJoinEvent;
 import com.magmaguy.elitemobs.api.instanced.MatchLeaveEvent;
 import com.magmaguy.elitemobs.collateralminecraftchanges.AlternativeDurabilityLoss;
 import com.magmaguy.elitemobs.config.ArenasConfig;
+import com.magmaguy.elitemobs.config.DefaultConfig;
 import com.magmaguy.elitemobs.instanced.arena.ArenaInstance;
 import com.magmaguy.elitemobs.instanced.dungeons.DungeonInstance;
 import com.magmaguy.elitemobs.playerdata.database.PlayerData;
@@ -74,7 +75,7 @@ public class InstancePlayerManager {
     }
 
     public static void removePlayer(Player player, MatchInstance matchInstance) {
-        new MatchLeaveEvent(matchInstance, player);
+        //new MatchLeaveEvent(matchInstance, player);
 
         //Remove match instance where needed
         PlayerData.setMatchInstance(player, null);
@@ -87,26 +88,35 @@ public class InstancePlayerManager {
         if (matchInstance.players.isEmpty() && matchInstance.getDeathLocationByPlayer(player) != null)
             matchInstance.getDeathLocationByPlayer(player).clear(false);
 
-        //Teleport the player out
-        if (player.isOnline()) {
-            MatchInstance.MatchInstanceEvents.teleportBypass = true;
-            if (matchInstance instanceof DungeonInstance) {
-                Location location = matchInstance.previousPlayerLocations.get(player);
-                if (location != null) player.teleportAsync(location);
-                else player.teleportAsync(matchInstance.exitLocation);
-            } else
-                player.teleportAsync(matchInstance.exitLocation);
-        }
-
-        //End the match if there are no players left because they all died
-        if (matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED &&
-                matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_DEFEAT &&
-                matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_VICTORY &&
-                matchInstance.players.isEmpty()) {
-            matchInstance.defeat();
+        MatchInstance.MatchInstanceEvents.teleportBypass = true;
+        if (matchInstance instanceof DungeonInstance) {
+            Location location = matchInstance.previousPlayerLocations.get(player);
+            if (location == null) {
+                location = DefaultConfig.getDefaultSpawnLocation();
+            }
+            player.teleportAsync(location).thenRun(() -> {
+                //End the match if there are no players left because they all died
+                if (matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED &&
+                    matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_DEFEAT &&
+                    matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_VICTORY &&
+                    matchInstance.players.isEmpty()) {
+                    matchInstance.defeat();
+                } else
+                    //Remove lives
+                    matchInstance.playerLives.remove(player);
+            });
         } else
-            //Remove lives
-            matchInstance.playerLives.remove(player);
+            player.teleportAsync(matchInstance.exitLocation).thenRun(() -> {
+                //End the match if there are no players left because they all died
+                if (matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED &&
+                    matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_DEFEAT &&
+                    matchInstance.state != MatchInstance.InstancedRegionState.COMPLETED_VICTORY &&
+                    matchInstance.players.isEmpty()) {
+                    matchInstance.defeat();
+                } else
+                    //Remove lives
+                    matchInstance.playerLives.remove(player);
+            });
     }
 
     public static void playerDeath(MatchInstance matchInstance, Player player) {
@@ -166,14 +176,25 @@ public class InstancePlayerManager {
         MatchInstance.MatchInstanceEvents.teleportBypass = true;
         if (matchInstance instanceof DungeonInstance) {
             Location location = matchInstance.previousPlayerLocations.get(player);
-            if (location != null) player.teleportAsync(location);
-            else player.teleportAsync(matchInstance.exitLocation);
+            if (location == null) {
+                location = DefaultConfig.getDefaultSpawnLocation();
+            }
+            player.teleportAsync(location).thenRun(() -> {
+                //End the match if there are no players left because they all died
+                PlayerData.setMatchInstance(player, null);
+                matchInstance.playerLives.remove(player);
+                if (matchInstance.getDeathLocationByPlayer(player) != null)
+                    matchInstance.getDeathLocationByPlayer(player).clear(false);
+            });
         } else
-            player.teleportAsync(matchInstance.exitLocation);
-        PlayerData.setMatchInstance(player, null);
-        matchInstance.playerLives.remove(player);
-        if (matchInstance.getDeathLocationByPlayer(player) != null)
-            matchInstance.getDeathLocationByPlayer(player).clear(false);
+            player.teleportAsync(matchInstance.exitLocation).thenRun(() -> {
+                //End the match if there are no players left because they all died
+
+                PlayerData.setMatchInstance(player, null);
+                matchInstance.playerLives.remove(player);
+                if (matchInstance.getDeathLocationByPlayer(player) != null)
+                    matchInstance.getDeathLocationByPlayer(player).clear(false);
+            });
     }
 
     public static void removeAnyKind(MatchInstance matchInstance, Player player) {
