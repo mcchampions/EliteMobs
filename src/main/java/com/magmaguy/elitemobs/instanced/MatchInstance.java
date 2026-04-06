@@ -148,7 +148,7 @@ public abstract class MatchInstance {
             return;
         }
         state = InstancedRegionState.STARTING;
-        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 40L);
+        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 20L);
     }
 
     private void playerWatchdog() {
@@ -241,7 +241,7 @@ public abstract class MatchInstance {
         state = InstancedRegionState.ONGOING;
         players.forEach(player -> {
             MatchInstanceEvents.teleportBypass = true;
-            player.teleportAsync(startLocation);
+            player.teleport(startLocation);
         });
         participants = (HashSet<Player>) players.clone();
     }

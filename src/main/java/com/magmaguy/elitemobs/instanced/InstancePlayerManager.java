@@ -146,7 +146,7 @@ public class InstancePlayerManager {
         matchInstance.spectators.remove(player);
         player.setHealth(player.getMaxHealth());
         MatchInstance.MatchInstanceEvents.teleportBypass = true;
-        player.teleportAsync(deathLocation.getRespawnLocation());
+        player.teleport(deathLocation.getRespawnLocation());
         PlayerData.setMatchInstance(player, matchInstance);
     }
 

@@ -30,7 +30,7 @@ public class WorldPackage extends EMPackage {
     public void doInstall(Player player) {
         DungeonUtils.loadWorld(this);
         contentPackagesConfigFields.installWorld();
-        player.teleportAsync(contentPackagesConfigFields.getTeleportLocation());
+        player.teleport(contentPackagesConfigFields.getTeleportLocation());
         world = contentPackagesConfigFields.getTeleportLocation().getWorld();
         if (contentPackagesConfigFields.getSong() != null)
             new CustomMusic(contentPackagesConfigFields.getSong(), contentPackagesConfigFields, world);
