@@ -367,6 +367,9 @@ public abstract class MatchInstance {
             }
 
             if (matchInstance.state == InstancedRegionState.WAITING) {
+                if (event.getTo().getWorld().equals(matchInstance.world)) {
+                    return;
+                }
                 matchInstance.removeAnyKind(event.getPlayer());
                 return;
             }
