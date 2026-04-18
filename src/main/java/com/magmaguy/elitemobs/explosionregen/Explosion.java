@@ -262,13 +262,12 @@ public class Explosion {
     }
 
     private void fullBlockRestore(BlockState blockState, boolean isShutdown) {
-
         //Things like instanced dungeons can unload in the meanwhile
         if (Bukkit.getWorld(worldUUID) == null) return;
 
         for (Entity entity : blockState.getWorld().getNearbyEntities(new BoundingBox(blockState.getX(), blockState.getY(), blockState.getZ(),
                 blockState.getX() + 1, blockState.getY() + 1, blockState.getZ() + 1)))
-            entity.teleport(entity.getLocation().clone().add(new Vector(0, 1, 0)));
+            entity.teleportAsync(entity.getLocation().clone().add(new Vector(0, 1, 0)));
 
         blockState.setBlockData(blockState.getBlockData());
 

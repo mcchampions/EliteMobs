@@ -423,7 +423,7 @@ final class LuaPowerEntityTables {
             if (direction != null && direction.lengthSquared() > 0) {
                 Location location = livingEntity.getLocation();
                 location.setDirection(direction);
-                livingEntity.teleport(location);
+                livingEntity.teleportAsync(location);
             }
             return LuaValue.NIL;
         }));

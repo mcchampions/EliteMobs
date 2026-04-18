@@ -316,7 +316,7 @@ public class BossHealthDisplay implements Listener {
                         return;
                     }
                     try {
-                        armorStand.teleport(getResistLocation(player, eliteEntity));
+                        armorStand.teleportAsync(getResistLocation(player, eliteEntity));
                     } catch (Exception e) {
                         // Sometimes x is not finite, doesn't matter
                     }
