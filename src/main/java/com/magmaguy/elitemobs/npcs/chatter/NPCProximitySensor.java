@@ -48,7 +48,7 @@ public class NPCProximitySensor implements Listener {
                         Player player = (Player) entity;
                         UUID playerUUID = player.getUniqueId();
                         Location rotatedLocation = npcEntity.getVillager().getLocation().setDirection(entity.getLocation().subtract(npcEntity.getVillager().getLocation()).toVector());
-                        npcEntity.getVillager().teleportAsync(rotatedLocation);
+                        npcEntity.getVillager().teleport(rotatedLocation);
                         if (unseenPlayerList.contains(playerUUID)) {
                             if (npcEntity.getNPCsConfigFields().getInteractionType() != NPCInteractions.NPCInteractionType.CHAT)
                                 npcEntity.sayDialog(player);

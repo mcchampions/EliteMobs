@@ -182,7 +182,7 @@ final class LuaPowerEntityTables {
         table.set("teleport_to_location", method(table, args -> {
             Location destination = support.toLocation(args.arg1());
             if (destination != null) {
-                entity.teleportAsync(destination);
+                entity.teleport(destination);
             }
             return LuaValue.NIL;
         }));
@@ -348,7 +348,7 @@ final class LuaPowerEntityTables {
         entity.set("teleport_to_location", method(entity, args -> {
             Location destination = support.toLocation(args.arg1());
             if (destination != null) {
-                livingEntity.teleportAsync(destination);
+                livingEntity.teleport(destination);
             }
             return LuaValue.NIL;
         }));
@@ -423,7 +423,7 @@ final class LuaPowerEntityTables {
             if (direction != null && direction.lengthSquared() > 0) {
                 Location location = livingEntity.getLocation();
                 location.setDirection(direction);
-                livingEntity.teleportAsync(location);
+                livingEntity.teleport(location);
             }
             return LuaValue.NIL;
         }));

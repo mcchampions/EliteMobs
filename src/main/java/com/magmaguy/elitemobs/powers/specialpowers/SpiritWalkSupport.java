@@ -79,14 +79,14 @@ public class SpiritWalkSupport {
                 }
 
                 if (eliteEntity.getLivingEntity().getLocation().clone().distance(finalLocation) < 2 || counter > 20 * 10) {
-                    eliteEntity.getLivingEntity().teleportAsync(finalLocation);
+                    eliteEntity.getLivingEntity().teleport(finalLocation);
                     eliteEntity.getLivingEntity().setAI(true);
                     eliteEntity.getLivingEntity().setInvulnerable(false);
                     eliteEntity.getLivingEntity().removePotionEffect(PotionEffectType.GLOWING);
                     cancel();
                 }
 
-                eliteEntity.getLivingEntity().teleportAsync(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
+                eliteEntity.getLivingEntity().teleport(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
                 counter++;
             }
         }.runTaskTimer(MetadataHandler.PLUGIN, 0, 1);
@@ -131,9 +131,9 @@ public class SpiritWalkSupport {
                         eliteEntity.getLivingEntity().setInvulnerable(false);
 
                         if (finalVehicle != null && !finalVehicle.isDead()) {
-                            finalVehicle.teleportAsync(finalLocation);
+                            finalVehicle.teleport(finalLocation);
                         }
-                        eliteEntity.getLivingEntity().teleportAsync(finalLocation);
+                        eliteEntity.getLivingEntity().teleport(finalLocation);
 
                         if (finalVehicle != null && !finalVehicle.isDead()) {
                             if (finalVehicle instanceof LivingEntity livingVehicle) {
@@ -164,9 +164,9 @@ public class SpiritWalkSupport {
                     }
 
                     if (finalVehicle != null && !finalVehicle.isDead()) {
-                        finalVehicle.teleportAsync(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
+                        finalVehicle.teleport(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
                     }
-                    eliteEntity.getLivingEntity().teleportAsync(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
+                    eliteEntity.getLivingEntity().teleport(eliteEntity.getLivingEntity().getLocation().clone().add(toDestination.clone()));
                     counter++;
                 }
             }.runTaskTimer(MetadataHandler.PLUGIN, 0, 1);

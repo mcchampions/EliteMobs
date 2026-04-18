@@ -90,7 +90,7 @@ public class Navigation implements Listener {
                         !customBossEntity.getLivingEntity().getWorld().equals(destination.getWorld()) ||
                         customBossEntity.getLivingEntity() != null && customBossEntity.getLivingEntity().getLocation().distanceSquared(destination) < Math.pow(1, 2)) {
                     if (customBossEntity.exists() && counter >= finalDuration && force) {
-                        customBossEntity.getLivingEntity().teleportAsync(destination);
+                        customBossEntity.getLivingEntity().teleport(destination);
                     }
                     cancel();
                     currentlyNavigating.remove(customBossEntity);
