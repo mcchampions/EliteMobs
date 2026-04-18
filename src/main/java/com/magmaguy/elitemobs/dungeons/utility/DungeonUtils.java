@@ -1,6 +1,5 @@
 package com.magmaguy.elitemobs.dungeons.utility;
 
-import com.magmaguy.elitemobs.config.DefaultConfig;
 import com.magmaguy.elitemobs.config.contentpackages.ContentPackagesConfigFields;
 import com.magmaguy.elitemobs.dungeons.EliteMobsWorld;
 import com.magmaguy.elitemobs.dungeons.WorldDungeonPackage;
@@ -47,19 +46,23 @@ public class DungeonUtils {
     }
 
     public static boolean unloadWorld(WorldPackage worldPackage) {
+        World defaultWorld = Bukkit.getWorlds().getFirst();
         World wormholeWorld = null;
         if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
             wormholeWorld = ((WorldDungeonPackage) worldPackage).getWormholeWorld();
         for (Player player : Bukkit.getOnlinePlayers())
             if (player.getWorld() == worldPackage.getWorld() || player.getWorld() == wormholeWorld)
-                player.teleportAsync(DefaultConfig.getDefaultSpawnLocation()).thenRun(() -> {
-                    Bukkit.unloadWorld(worldPackage.getWorld(), false);
-                    if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
-                        Bukkit.unloadWorld(((WorldDungeonPackage) worldPackage).getWormholeWorld(), false);
+                if (defaultWorld == null)
+                    return false;
+                else
+                    player.teleportAsync(defaultWorld.getSpawnLocation()).thenRun(()->{
+                        Bukkit.unloadWorld(worldPackage.getWorld(), false);
+                        if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
+                            Bukkit.unloadWorld(((WorldDungeonPackage) worldPackage).getWormholeWorld(), false);
 
-                    EliteMobsWorld.destroy(worldPackage.getWorld().getUID());
+                        EliteMobsWorld.destroy(worldPackage.getWorld().getUID());
 
-                });
+                    });
         return true;
     }
 
