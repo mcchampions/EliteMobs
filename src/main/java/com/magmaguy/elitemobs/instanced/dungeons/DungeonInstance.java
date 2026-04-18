@@ -6,6 +6,7 @@ import com.magmaguy.elitemobs.api.DungeonStartEvent;
 import com.magmaguy.elitemobs.api.InstancedDungeonRemoveEvent;
 import com.magmaguy.elitemobs.api.WorldInstanceEvent;
 import com.magmaguy.elitemobs.api.internal.RemovalReason;
+import com.magmaguy.elitemobs.config.DefaultConfig;
 import com.magmaguy.elitemobs.config.DungeonsConfig;
 import com.magmaguy.elitemobs.config.contentpackages.ContentPackagesConfig;
 import com.magmaguy.elitemobs.config.contentpackages.ContentPackagesConfigFields;
@@ -387,20 +388,18 @@ public class DungeonInstance extends MatchInstance {
             world = null; // Clear reference before deletion to prevent race conditions
 
             // Log diagnostic info before attempting deletion
-            int entityCount = worldToDelete.getEntities().size();
             int playerCount = worldToDelete.getPlayers().size();
-            int loadedChunks = worldToDelete.getLoadedChunks().length;
 
             if (playerCount > 0) {
                 Logger.warn("Attempting to delete world " + worldName + " with " + playerCount + " players still in it! This will likely fail.");
                 for (org.bukkit.entity.Player p : worldToDelete.getPlayers()) {
                     Logger.warn(" - Player still in world: " + p.getName());
+                    p.teleport(DefaultConfig.getDefaultSpawnLocation());
                 }
             }
 
             try {
                 // Disable auto-save to prevent new async save tasks from being queued during unload
-                worldToDelete.setAutoSave(false);
                 TemporaryWorldManager.permanentlyDeleteWorld(worldToDelete);
             } catch (Exception e) {
                 Logger.warn("Exception while deleting world " + worldName + ": " + e.getMessage());
