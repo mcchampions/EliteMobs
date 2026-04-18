@@ -22,6 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class InstancePlayerManager {
 
     public static boolean addNewPlayer(Player player, MatchInstance matchInstance) {
+        MatchJoinEvent event = new MatchJoinEvent(matchInstance, player);
+        if (event.isCancelled()) return false;
+
+        //Right now new players can't join ongoing instances
         if (matchInstance.state != MatchInstance.InstancedRegionState.WAITING) {
             player.sendMessage(ArenasConfig.getArenasOngoingMessage());
             return false;

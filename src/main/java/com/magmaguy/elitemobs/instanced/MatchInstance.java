@@ -106,6 +106,7 @@ public abstract class MatchInstance {
     }
 
     public boolean addNewPlayer(Player player) {
+        new MatchJoinEvent(this, player);
         return InstancePlayerManager.addNewPlayer(player, this);
     }
 
@@ -147,7 +148,7 @@ public abstract class MatchInstance {
             return;
         }
         state = InstancedRegionState.STARTING;
-        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 30L);
+        new CountdownTask().runTaskTimer(MetadataHandler.PLUGIN, 0L, 20L);
     }
 
     private void playerWatchdog() {
@@ -212,19 +213,13 @@ public abstract class MatchInstance {
     private class CountdownTask extends BukkitRunnable {
         int counter;
 
-        int onOneCount;
-
         @Override
         public void run() {
             if (players.size() < minPlayers) {
-                onOneCount++;
-                if (onOneCount>=5) {
-                    endMatch();
-                    cancel();
-                }
+                cancel();
+                endMatch();
                 return;
             }
-            onOneCount = 0;
             counter++;
             players.forEach(player -> startMessage(counter, player));
             spectators.forEach(player -> startMessage(counter, player));
