@@ -9,7 +9,6 @@ import com.magmaguy.elitemobs.mobconstructor.custombosses.CustomBossEntity;
 import com.magmaguy.magmacore.util.TemporaryWorldManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -37,10 +36,7 @@ public class DungeonUtils {
         World world = loadWorld(worldName, environment, worldPackage.getContentPackagesConfigFields());
         if (worldPackage.getContentPackagesConfigFields().getWormholeWorldName() != null)
             loadWorld(worldPackage.getContentPackagesConfigFields().getWormholeWorldName(), environment, worldPackage.getContentPackagesConfigFields());
-        if (world != null) {
-            worldPackage.setInstalled(true);
-            world.setGameRule(GameRule.KEEP_INVENTORY,true);
-        }
+        if (world != null) worldPackage.setInstalled(true);
         return world;
     }
 
