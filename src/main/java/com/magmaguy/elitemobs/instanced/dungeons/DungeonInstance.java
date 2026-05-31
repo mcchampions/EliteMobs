@@ -444,14 +444,9 @@ public class DungeonInstance extends MatchInstance {
             Location fallbackLocation = getFallbackLocation(worldToDelete);
             for (Player player : new HashSet<>(worldToDelete.getPlayers())) {
                 Logger.warn(" - Player still in world: " + player.getName());
-                Location destination = getSafeExitLocation(player, worldToDelete, fallbackLocation);
-                if (destination == null) {
-                    Logger.warn("Could not find a safe destination for " + player.getName() + " while deleting " + worldToDelete.getName() + ".");
-                    continue;
-                }
                 player.setSpectatorTarget(null);
                 MatchInstance.MatchInstanceEvents.teleportBypass = true;
-                player.teleport(destination);
+                p.teleport(DefaultConfig.getDefaultSpawnLocation());
             }
         }
 
