@@ -446,7 +446,7 @@ public class DungeonInstance extends MatchInstance {
                 Logger.warn(" - Player still in world: " + player.getName());
                 player.setSpectatorTarget(null);
                 MatchInstance.MatchInstanceEvents.teleportBypass = true;
-                p.teleport(DefaultConfig.getDefaultSpawnLocation());
+                player.teleport(DefaultConfig.getDefaultSpawnLocation());
             }
         }
 
