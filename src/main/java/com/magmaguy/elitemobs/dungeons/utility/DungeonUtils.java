@@ -8,6 +8,7 @@ import com.magmaguy.elitemobs.dungeons.WorldPackage;
 import com.magmaguy.elitemobs.mobconstructor.custombosses.CustomBossEntity;
 import com.magmaguy.magmacore.util.TemporaryWorldManager;
 import lombok.Getter;
+import org.bukkit.GameRule;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
