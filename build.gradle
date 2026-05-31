@@ -121,8 +121,6 @@ dependencies {
     implementation (group: 'com.magmaguy', name: 'MagmaCore', version: '2.2.0-SNAPSHOT'){
         changing = true
     }
-    testImplementation "org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT"
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 
 }
 
@@ -149,10 +147,6 @@ shadowJar {
     archiveClassifier.set(null)
     archiveFileName.set(project.name + ".jar")
     destinationDirectory.set(new File("testbed/plugins"))
-}
-
-test {
-    useJUnitPlatform()
 }
 
 publishing {
