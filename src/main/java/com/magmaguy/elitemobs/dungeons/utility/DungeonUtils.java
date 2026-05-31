@@ -1,5 +1,6 @@
 package com.magmaguy.elitemobs.dungeons.utility;
 
+import com.magmaguy.elitemobs.config.DefaultConfig;
 import com.magmaguy.elitemobs.config.contentpackages.ContentPackagesConfigFields;
 import com.magmaguy.elitemobs.dungeons.EliteMobsWorld;
 import com.magmaguy.elitemobs.dungeons.WorldDungeonPackage;
@@ -35,7 +36,11 @@ public class DungeonUtils {
         World world = loadWorld(worldName, environment, worldPackage.getContentPackagesConfigFields());
         if (worldPackage.getContentPackagesConfigFields().getWormholeWorldName() != null)
             loadWorld(worldPackage.getContentPackagesConfigFields().getWormholeWorldName(), environment, worldPackage.getContentPackagesConfigFields());
-        if (world != null) worldPackage.setInstalled(true);
+
+        if (world != null) {
+            worldPackage.setInstalled(true);
+            world.setGameRule(GameRule.KEEP_INVENTORY, true);
+        }
         return world;
     }
 
@@ -55,7 +60,7 @@ public class DungeonUtils {
                 if (defaultWorld == null)
                     return false;
                 else
-                    player.teleport(defaultWorld.getSpawnLocation());
+                    player.teleport(DefaultConfig.getDefaultSpawnLocation());
         Bukkit.unloadWorld(worldPackage.getWorld(), false);
         if (worldPackage instanceof WorldDungeonPackage && ((WorldDungeonPackage) worldPackage).getWormholeWorld() != null)
             Bukkit.unloadWorld(((WorldDungeonPackage) worldPackage).getWormholeWorld(), false);
