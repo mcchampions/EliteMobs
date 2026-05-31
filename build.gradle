@@ -35,6 +35,7 @@ group 'com.magmaguy'
 version '10.4.0'
 
 repositories {
+    mavenLocal()
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 
@@ -47,7 +48,6 @@ repositories {
     }
 
     mavenCentral()
-    mavenLocal()
 
     //Spigot API & CloudCommands
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
