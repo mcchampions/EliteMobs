@@ -10,6 +10,7 @@ import com.magmaguy.elitemobs.api.EliteMobsInitializedEvent;
 import com.magmaguy.elitemobs.collateralminecraftchanges.KeepNeutralsAngry;
 import com.magmaguy.elitemobs.collateralminecraftchanges.PlayerDeathMessageByEliteMob;
 import com.magmaguy.elitemobs.commands.CommandHandler;
+import com.magmaguy.elitemobs.combatsystem.LevelScaling;
 import com.magmaguy.elitemobs.config.*;
 import com.magmaguy.elitemobs.config.commands.CommandsConfig;
 import com.magmaguy.elitemobs.config.contentpackages.ContentPackagesConfig;
@@ -64,6 +65,7 @@ import com.magmaguy.elitemobs.mobconstructor.mobdata.aggressivemobs.EliteMobProp
 import com.magmaguy.elitemobs.npcs.NPCEntity;
 import com.magmaguy.elitemobs.npcs.NPCInteractions;
 import com.magmaguy.elitemobs.npcs.chatter.NPCProximitySensor;
+import com.magmaguy.elitemobs.npcs.scripts.NPCScriptManager;
 import com.magmaguy.elitemobs.pathfinding.Navigation;
 import com.magmaguy.elitemobs.peacebanner.PeaceBannerItem;
 import com.magmaguy.elitemobs.peacebanner.PeaceBannerManager;
@@ -82,9 +84,11 @@ import com.magmaguy.elitemobs.powerstances.MinorPowerStanceMath;
 import com.magmaguy.elitemobs.quests.DynamicQuest;
 import com.magmaguy.elitemobs.quests.Quest;
 import com.magmaguy.elitemobs.quests.QuestTracking;
+import com.magmaguy.elitemobs.quests.dialogue.QuestDialogueBossBarManager;
 import com.magmaguy.elitemobs.quests.menus.QuestInventoryMenu;
 import com.magmaguy.elitemobs.quests.playercooldowns.PlayerQuestCooldowns;
 import com.magmaguy.elitemobs.skills.CombatLevelDisplay;
+import com.magmaguy.elitemobs.skills.ArmorSkillHealthBonus;
 import com.magmaguy.elitemobs.skills.SkillSystemMigration;
 import com.magmaguy.elitemobs.skills.SkillXPBar;
 import com.magmaguy.elitemobs.skills.bonuses.SkillBonusInitializer;
@@ -204,14 +208,15 @@ public class EliteMobs extends JavaPlugin {
 
         NMSManager.initializeAdapter(this);
 
-        if (Bukkit.getServer().spigot().getConfig().getDouble("settings.attribute.maxHealth.max") < Double.MAX_VALUE) {
-            Bukkit.getServer().spigot().getConfig().set("settings.attribute.maxHealth.max", Double.MAX_VALUE);
+        double configuredMinecraftMaxHealth = Bukkit.getServer().spigot().getConfig().getDouble("settings.attribute.maxHealth.max");
+        if (!Double.isFinite(configuredMinecraftMaxHealth) || configuredMinecraftMaxHealth < LevelScaling.DEFAULT_MINECRAFT_MAX_HEALTH) {
+            Bukkit.getServer().spigot().getConfig().set("settings.attribute.maxHealth.max", LevelScaling.DEFAULT_MINECRAFT_MAX_HEALTH);
             try {
                 File spigotConfigContainer = new File(Paths.get(MetadataHandler.PLUGIN.getDataFolder().getParentFile().getCanonicalFile().getParentFile().toString() + "/spigot.yml").toString());
                 Bukkit.getServer().spigot().getConfig().save(spigotConfigContainer);
                 Logger.info("New default max health set correctly!");
             } catch (IOException e) {
-                Logger.warn("Failed to save max health value! For the plugin to work correctly, you should increase your max health on the spigot.yml config file to " + Double.MAX_VALUE);
+                Logger.warn("Failed to save max health value! For the plugin to work correctly, you should increase your max health on the spigot.yml config file to " + LevelScaling.DEFAULT_MINECRAFT_MAX_HEALTH);
             }
         }
 
@@ -272,6 +277,8 @@ public class EliteMobs extends JavaPlugin {
         new ContentPackagesConfig();
         initializationContext.step("Custom Bosses Config");
         new CustomBossesConfig();
+        initializationContext.step("NPC Scripts");
+        NPCScriptManager.initialize();
         initializationContext.step("NPCs Config");
         new NPCsConfig();
         initializationContext.step("Wormholes Config");
@@ -323,7 +330,10 @@ public class EliteMobs extends JavaPlugin {
         SkillSystemMigration.initialize();
         SkillBonusInitializer.initialize();
         // Re-apply skill bonuses for any players already online (e.g. after plugin reload)
-        for (Player p : Bukkit.getOnlinePlayers()) SkillBonusRegistry.applyAllBonuses(p);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            SkillBonusRegistry.applyAllBonuses(p);
+            ArmorSkillHealthBonus.applyHealthBonus(p);
+        }
         CombatLevelDisplay.initialize();
 
         //Initialize gambling system
@@ -609,6 +619,7 @@ public class EliteMobs extends JavaPlugin {
         EarthquakeEnchantment.EarthquakeEnchantmentEvents.shutdown();
         BuyOrSellMenu.BuyOrSellMenuEvents.shutdown();
         Quest.shutdown();
+        QuestDialogueBossBarManager.shutdown();
         QuestInventoryMenu.shutdown();
         StatsPage.StatsPageEvents.shutdown();
         GearPage.GearPageEvents.shutdown();
@@ -639,6 +650,7 @@ public class EliteMobs extends JavaPlugin {
         DungeonInstance.shutdown();
         ArenaInstance.shutdown();
         LuaPowerManager.shutdown();
+        NPCScriptManager.shutdown();
         // Final pass memory leak fixes
         ElitePower.shutdown();
         EliteScriptBlueprint.shutdown();

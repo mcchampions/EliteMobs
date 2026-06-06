@@ -1,5 +1,7 @@
 package com.magmaguy.elitemobs.combatsystem;
 
+import org.bukkit.Bukkit;
+
 /**
  * Handles level-based combat scaling calculations.
  * <p>
@@ -135,12 +137,24 @@ public class LevelScaling {
     public static final double MIN_MODIFIER = 0.125;
 
     /**
-     * Maximum mob health allowed.
+     * Fallback maximum mob health allowed.
      * <p>
-     * Set to Double.MAX_VALUE to allow theoretically unlimited health.
-     * The actual limit is configured in spigot.yml via settings.attribute.maxHealth.max
+     * EliteMobs writes this value to spigot.yml at startup under settings.attribute.maxHealth.max.
+     * Runtime health clamping should use {@link #getMinecraftMaxHealth()} so it follows the server's active value.
      */
-    public static final double MINECRAFT_MAX_HEALTH = Double.MAX_VALUE;
+    public static final double DEFAULT_MINECRAFT_MAX_HEALTH = Double.MAX_VALUE;
+
+    public static double getMinecraftMaxHealth() {
+        try {
+            double configuredMaxHealth = Bukkit.getServer().spigot().getConfig().getDouble(
+                    "settings.attribute.maxHealth.max",
+                    DEFAULT_MINECRAFT_MAX_HEALTH);
+            if (Double.isFinite(configuredMaxHealth) && configuredMaxHealth > 0D) return configuredMaxHealth;
+        } catch (Exception ignored) {
+            // Bukkit is not initialized in pure unit tests.
+        }
+        return DEFAULT_MINECRAFT_MAX_HEALTH;
+    }
 
     // ========================================
     // CALCULATION METHODS
@@ -223,16 +237,17 @@ public class LevelScaling {
      * This is the core offensive balance constant. A mob with healthMultiplier=2.0
      * will take exactly 2× this many hits, at ALL levels.
      * <p>
-     * Note: This is defined in sword hits (1.6 attacks/sec). Faster weapons deal
-     * proportionally less per hit but the same DPS.
+     * Note: This is defined in sword hits (1.6 attacks/sec). Other melee weapons
+     * use a tuned pacing factor in {@link WeaponOffenseCalculator#getAttackSpeedFactor}
+     * instead of full theoretical DPS normalization.
      */
     public static final double TARGET_HITS_TO_KILL_MOB = 3.0;
 
     /**
      * Reference weapon attack speed used to define {@link #TARGET_HITS_TO_KILL_MOB}.
      * <p>
-     * Sword speed is 1.6 attacks/sec. All other weapon speeds are normalized
-     * against this reference so that DPS remains consistent across weapon types.
+     * Sword speed is 1.6 attacks/sec. Other melee weapon speeds are compared against
+     * this reference by {@link WeaponOffenseCalculator#getAttackSpeedFactor}.
      */
     public static final double REFERENCE_ATTACK_SPEED = 1.6;
 
@@ -485,7 +500,7 @@ public class LevelScaling {
         // Pure exponential scaling: guarantees +5 levels = exactly 2x HP at all levels
         double health = BASE_MOB_HP * Math.pow(SCALING_BASE, level / LEVELS_PER_POWER_DOUBLE);
         // Cap at Minecraft's maximum allowed health value
-        return Math.min(health, MINECRAFT_MAX_HEALTH);
+        return Math.min(health, getMinecraftMaxHealth());
     }
 
 

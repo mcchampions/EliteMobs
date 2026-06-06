@@ -3,6 +3,7 @@ package com.magmaguy.elitemobs.npcs;
 import com.google.common.collect.ArrayListMultimap;
 import com.magmaguy.elitemobs.EliteMobs;
 import com.magmaguy.elitemobs.MetadataHandler;
+import com.magmaguy.elitemobs.api.NPCEntityRemoveEvent;
 import com.magmaguy.elitemobs.api.internal.RemovalReason;
 import com.magmaguy.elitemobs.config.ItemSettingsConfig;
 import com.magmaguy.elitemobs.config.npcs.NPCsConfig;
@@ -13,10 +14,16 @@ import com.magmaguy.elitemobs.mobconstructor.PersistentMovingEntity;
 import com.magmaguy.elitemobs.mobconstructor.PersistentObject;
 import com.magmaguy.elitemobs.mobconstructor.PersistentObjectHandler;
 import com.magmaguy.elitemobs.npcs.chatter.NPCChatBubble;
+import com.magmaguy.elitemobs.npcs.scripts.NPCScriptManager;
+import com.magmaguy.elitemobs.npcs.scripts.ScriptableNPC;
+import com.magmaguy.magmacore.scripting.ScriptDefinition;
+import com.magmaguy.magmacore.scripting.ScriptHook;
+import com.magmaguy.magmacore.scripting.ScriptInstance;
 import com.magmaguy.elitemobs.thirdparty.custommodels.CustomModel;
 import com.magmaguy.elitemobs.thirdparty.libsdisguises.DisguiseEntity;
 import com.magmaguy.elitemobs.thirdparty.worldguard.WorldGuardSpawnEventBypasser;
 import com.magmaguy.elitemobs.utils.ConfigurationLocation;
+import com.magmaguy.elitemobs.utils.EventCaller;
 import com.magmaguy.elitemobs.utils.NonSolidBlockTypes;
 import com.magmaguy.magmacore.util.AttributeManager;
 import com.magmaguy.magmacore.util.ChatColorConverter;
@@ -28,11 +35,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -53,6 +62,8 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
     private String locationString;
     @Getter
     private CustomModel customModel = null;
+    private final List<ScriptInstance> scriptInstances = new ArrayList<>();
+    private ScriptableNPC scriptableNPC;
 
     /**
      * Spawns NPC based off of the values in the NPCsConfig config file. Runs at startup and on reload.
@@ -113,7 +124,9 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
     public static void initializeInstancedNPCs(String blueprintWorldName, World newWorld, int playerCount, DungeonInstance dungeonInstance) {
         List<InstancedNPCContainer> rawNPCs = instancedNPCEntities.get(blueprintWorldName);
         for (InstancedNPCContainer instancedNPCContainer : rawNPCs) {
-            Location newLocation = instancedNPCContainer.getLocation();
+            //Clone (like the instanced boss path) so the shared blueprint container Location is not mutated to
+            //reference the live instanced world, which would pin that world's ServerLevel after the dungeon closes.
+            Location newLocation = instancedNPCContainer.getLocation().clone();
             newLocation.setWorld(newWorld);
             new NPCEntity(instancedNPCContainer.getNpcEntity().getNPCsConfigFields(), newLocation);
         }
@@ -140,6 +153,11 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
 
     public void remove(RemovalReason removalReason) {
         String removedLocationString = locationString;
+        NPCEntityRemoveEvent npcEntityRemoveEvent = new NPCEntityRemoveEvent(villager, this, removalReason);
+        if (villager != null)
+            new EventCaller(npcEntityRemoveEvent);
+        runScripts(ScriptableNPC.ON_REMOVE, npcEntityRemoveEvent, null);
+        shutdownScriptInstances();
         if (roleDisplay != null) {
             roleDisplay.remove();
             roleDisplay = null;
@@ -187,6 +205,11 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
     }
 
     private void removeDuplicateInstance() {
+        NPCEntityRemoveEvent npcEntityRemoveEvent = new NPCEntityRemoveEvent(villager, this, RemovalReason.REMOVE_COMMAND);
+        if (villager != null)
+            new EventCaller(npcEntityRemoveEvent);
+        runScripts(ScriptableNPC.ON_REMOVE, npcEntityRemoveEvent, null);
+        shutdownScriptInstances();
         if (roleDisplay != null) {
             roleDisplay.remove();
             roleDisplay = null;
@@ -232,10 +255,58 @@ public class NPCEntity implements PersistentObject, PersistentMovingEntity {
         else
             setDisguise(villager);
         EntityTracker.registerNPCEntity(this);
+        if (villager == null || !villager.isValid()) return;
+        initializeScripts();
+        runScripts(ScriptHook.ON_SPAWN, null, null);
         initializeRole();
         setTimeout();
         // Create house earnings display if this is the gambling den owner
         com.magmaguy.elitemobs.gambling.GamblingDenOwnerDisplay.createDisplay(this);
+    }
+
+    private void initializeScripts() {
+        shutdownScriptInstances();
+        if (npCsConfigFields.getScripts() == null || npCsConfigFields.getScripts().isEmpty()) return;
+        List<ScriptDefinition> definitions = new ArrayList<>();
+        for (String scriptFileName : npCsConfigFields.getScripts()) {
+            if (scriptFileName == null || scriptFileName.isBlank()) continue;
+            String fileName = scriptFileName.toLowerCase(java.util.Locale.ROOT).endsWith(".lua")
+                    ? scriptFileName : scriptFileName + ".lua";
+            ScriptDefinition definition = NPCScriptManager.getDefinition(fileName);
+            if (definition == null) {
+                Logger.warn("NPC " + npCsConfigFields.getFilename() + " references missing NPC Lua script " + scriptFileName + ".");
+                continue;
+            }
+            definitions.add(definition);
+        }
+        definitions.sort(Comparator.comparingInt(ScriptDefinition::getPriority));
+        scriptableNPC = new ScriptableNPC(this);
+        for (ScriptDefinition definition : definitions) {
+            try {
+                scriptInstances.add(new ScriptInstance(definition, scriptableNPC));
+            } catch (Exception exception) {
+                Logger.warn("Failed to initialize NPC Lua script " + definition.getFileName() + " for NPC " + npCsConfigFields.getFilename() + ".");
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private void shutdownScriptInstances() {
+        for (ScriptInstance scriptInstance : new ArrayList<>(scriptInstances)) {
+            scriptInstance.shutdown();
+        }
+        scriptInstances.clear();
+        scriptableNPC = null;
+    }
+
+    public void runScripts(ScriptHook hook, Event event, LivingEntity actor) {
+        for (ScriptInstance scriptInstance : new ArrayList<>(scriptInstances)) {
+            if (scriptInstance.isClosed()) {
+                scriptInstances.remove(scriptInstance);
+                continue;
+            }
+            scriptInstance.handleEvent(hook, event, null, actor);
+        }
     }
 
     private void setDisguise(LivingEntity livingEntity) {

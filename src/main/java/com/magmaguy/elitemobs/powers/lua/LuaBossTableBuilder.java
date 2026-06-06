@@ -3,6 +3,7 @@ package com.magmaguy.elitemobs.powers.lua;
 import com.magmaguy.elitemobs.api.internal.RemovalReason;
 import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.elitemobs.mobconstructor.EliteEntity;
+import com.magmaguy.magmacore.scripting.ScriptDefinition;
 import com.magmaguy.elitemobs.mobconstructor.custombosses.CustomBossEntity;
 import com.magmaguy.elitemobs.pathfinding.Navigation;
 import com.magmaguy.elitemobs.powers.meta.CustomSummonPower;
@@ -35,14 +36,14 @@ import java.util.Locale;
  */
 final class LuaBossTableBuilder {
 
-    private final LuaPowerDefinition definition;
+    private final ScriptDefinition definition;
     private final EliteEntity eliteEntity;
     private final LuaPowerSupport support;
     private final LuaPowerEntityTables entityTables;
     private final LuaPowerScriptApi.OwnedTaskController taskController;
     private final LuaPowerScriptApi.CallbackInvoker callbackInvoker;
 
-    LuaBossTableBuilder(LuaPowerDefinition definition,
+    LuaBossTableBuilder(ScriptDefinition definition,
                         EliteEntity eliteEntity,
                         LuaPowerSupport support,
                         LuaPowerEntityTables entityTables,
@@ -144,6 +145,25 @@ final class LuaBossTableBuilder {
             }
             return LuaValue.NIL;
         }));
+        boss.set("has_mount", method(boss, args -> LuaValue.valueOf(resolveBossMountEntity() != null)));
+        boss.set("get_mount", method(boss, args -> {
+            Entity mountEntity = resolveBossMountEntity();
+            LuaValue mountTable = mountEntity == null ? LuaValue.NIL : entityTables.createEntityReferenceTable(mountEntity);
+            if (mountTable.istable()) {
+                mountTable.checktable().set("is_mount", LuaValue.TRUE);
+            }
+            return mountTable;
+        }));
+        boss.set("set_mount", method(boss, args -> {
+            Entity mountEntity = support.resolveEntityReference(args.arg1());
+            return LuaValue.valueOf(entityTables.mountPassenger(mountEntity, eliteEntity.getLivingEntity()));
+        }));
+        VarArgFunction clearMount = method(boss, args -> {
+            LivingEntity livingEntity = eliteEntity.getLivingEntity();
+            return LuaValue.valueOf(livingEntity != null && livingEntity.leaveVehicle());
+        });
+        boss.set("clear_mount", clearMount);
+        boss.set("dismount", clearMount);
 
         // ── Boss-only methods ──
         boss.set("start_tracking_fireball_system", method(boss, args -> {
@@ -296,6 +316,23 @@ final class LuaBossTableBuilder {
     }
 
     // ── Boss-only helpers ──────────────────────────────────────────────
+
+    private Entity resolveBossMountEntity() {
+        if (eliteEntity instanceof CustomBossEntity customBossEntity) {
+            Entity mountEntity = customBossEntity.getMountEntity();
+            if (mountEntity != null && mountEntity.isValid()) {
+                return mountEntity;
+            }
+        }
+        LivingEntity livingEntity = eliteEntity.getLivingEntity();
+        if (livingEntity != null && livingEntity.isInsideVehicle()) {
+            Entity vehicle = livingEntity.getVehicle();
+            if (vehicle != null && vehicle.isValid()) {
+                return vehicle;
+            }
+        }
+        return null;
+    }
 
     private LuaValue getNearbyPlayers(double range) {
         LuaTable results = new LuaTable();

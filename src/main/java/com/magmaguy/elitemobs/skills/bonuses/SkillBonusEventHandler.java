@@ -5,6 +5,8 @@ import com.magmaguy.elitemobs.api.EliteMobDamagedByPlayerEvent;
 import com.magmaguy.elitemobs.api.PlayerDamagedByEliteMobEvent;
 import com.magmaguy.elitemobs.config.SkillsConfig;
 import com.magmaguy.elitemobs.skills.ArmorSkillHealthBonus;
+import com.magmaguy.elitemobs.skills.CombatLevelDisplay;
+import com.magmaguy.elitemobs.skills.SkillXPBar;
 import com.magmaguy.elitemobs.skills.SkillType;
 import com.magmaguy.elitemobs.skills.bonuses.skills.armor.IronStanceSkill;
 import com.magmaguy.elitemobs.skills.bonuses.skills.bows.OverdrawSkill;
@@ -72,6 +74,7 @@ public class SkillBonusEventHandler implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerDamagedByEliteMob(PlayerDamagedByEliteMobEvent event) {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
+        if (SkillsConfig.isWorldExcludedFromSkills(event.getPlayer())) return;
         event.applySkillBonuses();
     }
 
@@ -90,9 +93,7 @@ public class SkillBonusEventHandler implements Listener {
             public void run() {
                 if (player.isOnline()) {
                     PlayerSkillSelection.onPlayerJoin(player);
-                    SkillBonusRegistry.applyAllBonuses(player);
-                    // Apply armor skill health bonus (+1 heart per armor level)
-                    ArmorSkillHealthBonus.applyHealthBonus(player);
+                    refreshSkillState(player);
                 }
             }
         }.runTaskLater(MetadataHandler.PLUGIN, 40); // 2 seconds after PlayerData loads
@@ -112,6 +113,7 @@ public class SkillBonusEventHandler implements Listener {
         // Keep the armor health modifier on quit so Bukkit doesn't clamp current HP
         // to the lowered max and persist it. applyHealthBonus on join is idempotent
         // and will refresh the modifier from the current armor level.
+        ArmorSkillHealthBonus.resetPlayerHealthDisplay(player);
 
         // Clear player-specific data
         playerStacks.remove(uuid);
@@ -120,6 +122,27 @@ public class SkillBonusEventHandler implements Listener {
         for (Set<UUID> cooldownSet : skillCooldowns.values()) {
             cooldownSet.remove(uuid);
         }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        if (!SkillsConfig.isSkillSystemEnabled()) return;
+        refreshSkillState(event.getPlayer());
+    }
+
+    private static void refreshSkillState(Player player) {
+        if (SkillsConfig.isWorldExcludedFromSkills(player)) {
+            SkillBonusRegistry.removeAllBonuses(player);
+            ArmorSkillHealthBonus.applyHealthBonus(player);
+            SkillXPBar.removeAllBars(player);
+            CombatLevelDisplay.removeDisplay(player);
+            return;
+        }
+
+        SkillBonusRegistry.applyAllBonuses(player);
+        // Apply armor skill health bonus (+1 heart per armor level)
+        ArmorSkillHealthBonus.applyHealthBonus(player);
+        CombatLevelDisplay.createDisplay(player);
     }
 
     // ==================== COOLDOWN MANAGEMENT ====================
@@ -199,6 +222,7 @@ public class SkillBonusEventHandler implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onEliteMobDamagedByPlayer(EliteMobDamagedByPlayerEvent event) {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
+        if (SkillsConfig.isWorldExcludedFromSkills(event.getPlayer())) return;
         // Skip skill processing for bypass/custom damage events (DOT ticks, AOE secondary hits, etc.)
         // These are intentionally flagged to prevent recursive skill activation
         if (event.isCustomDamage()) return;
@@ -213,6 +237,11 @@ public class SkillBonusEventHandler implements Listener {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        if (SkillsConfig.isWorldExcludedFromSkills(player)) {
+            SkillBonusRegistry.removeAllBonuses(player);
+            ArmorSkillHealthBonus.applyHealthBonus(player);
+            return;
+        }
 
         // Determine old and new weapon types
         ItemStack oldItem = player.getInventory().getItem(event.getPreviousSlot());
@@ -281,6 +310,7 @@ public class SkillBonusEventHandler implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
+        if (SkillsConfig.isWorldExcludedFromSkills(event.getPlayer())) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getItem() == null) return;
         if (event.getItem().getType() != Material.BOW) return;
@@ -300,6 +330,7 @@ public class SkillBonusEventHandler implements Listener {
     public void onBowShoot(EntityShootBowEvent event) {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
         if (event.getEntity() instanceof Player player) {
+            if (SkillsConfig.isWorldExcludedFromSkills(player)) return;
             OverdrawSkill.snapshotDrawDuration(player.getUniqueId());
         }
     }
@@ -312,6 +343,7 @@ public class SkillBonusEventHandler implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (!SkillsConfig.isSkillSystemEnabled()) return;
         if (event.getTo() == null) return;
+        if (SkillsConfig.isWorldExcludedFromSkills(event.getPlayer())) return;
         UUID uuid = event.getPlayer().getUniqueId();
 
         // Check if player actually moved (not just head rotation)

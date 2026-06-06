@@ -2,8 +2,11 @@ package com.magmaguy.elitemobs.config;
 
 import com.magmaguy.magmacore.config.ConfigurationFile;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Configuration for the skill leveling system.
@@ -21,7 +24,11 @@ public class SkillsConfig extends ConfigurationFile {
     @Getter
     private static boolean armorSkillHealthBonusEnabled;
     @Getter
+    private static boolean scalePlayerHealthDisplayToVanilla;
+    @Getter
     private static boolean forceDefaultHealthWhenArmorSkillHealthBonusDisabled;
+    @Getter
+    private static List<String> skillWorldExclusions;
     @Getter
     private static String skillBarTitleFormat;
     @Getter
@@ -40,6 +47,25 @@ public class SkillsConfig extends ConfigurationFile {
         ConfigurationEngine.fileSaverCustomValues(instance.fileConfiguration, instance.file);
     }
 
+    public static boolean isWorldExcludedFromSkills(Player player) {
+        if (player == null || player.getWorld() == null) return false;
+        return isWorldExcludedFromSkills(player.getWorld().getName());
+    }
+
+    public static boolean isWorldExcludedFromSkills(String worldName) {
+        return worldIsExcludedFromSkills(worldName, skillWorldExclusions);
+    }
+
+    static boolean worldIsExcludedFromSkills(String worldName, List<String> excludedWorlds) {
+        if (excludedWorlds == null || excludedWorlds.isEmpty()) return false;
+        if (worldName == null || worldName.isBlank()) return false;
+        String normalizedWorldName = worldName.trim();
+        return excludedWorlds.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .anyMatch(excludedWorld -> !excludedWorld.isEmpty() && excludedWorld.equalsIgnoreCase(normalizedWorldName));
+    }
+
     @Override
     public void initializeValues() {
         instance = this;
@@ -53,11 +79,25 @@ public class SkillsConfig extends ConfigurationFile {
                         "Set to false to disable this mechanic."),
                 fileConfiguration, "armorSkillHealthBonusEnabled", true);
 
+        scalePlayerHealthDisplayToVanilla = ConfigurationEngine.setBoolean(
+                List.of("Whether EliteMobs should scale the player's client-side health display back to the vanilla 10 hearts while keeping the real Armor skill max health.",
+                        "This is purely visual: players keep their full EliteMobs HP and combat calculations are unchanged."),
+                fileConfiguration, "scalePlayerHealthDisplayToVanilla", false);
+
         forceDefaultHealthWhenArmorSkillHealthBonusDisabled = ConfigurationEngine.setBoolean(
                 List.of("Only applies when armorSkillHealthBonusEnabled is false.",
                         "If true, players are forced to vanilla 20 max health on join/updates.",
                         "If false, existing max health values are left untouched."),
                 fileConfiguration, "forceDefaultHealthWhenArmorSkillHealthBonusDisabled", false);
+
+        skillWorldExclusions = ConfigurationEngine.setList(
+                List.of("Sets worlds where the EliteMobs skill system is inactive for players.",
+                        "Players in these worlds do not receive EliteMobs skill bonuses, armor skill bonus health, skill XP, skill XP bars or combat level displays.",
+                        "Use this for event worlds where every player should have the same attributes.",
+                        "World names are exact and case-insensitive. Leave this empty to allow skills in every world.",
+                        "Example:",
+                        "- event_world"),
+                file, fileConfiguration, "skillWorldExclusions", Collections.emptyList(), false);
 
         skillsMenuTitle = ConfigurationEngine.setString(
                 List.of("Title of the skills menu."),

@@ -6,6 +6,7 @@ import com.magmaguy.elitemobs.api.utils.EliteItemManager;
 import com.magmaguy.elitemobs.combatsystem.*;
 import com.magmaguy.elitemobs.config.ItemSettingsConfig;
 import com.magmaguy.elitemobs.config.MobCombatSettingsConfig;
+import com.magmaguy.elitemobs.config.SkillsConfig;
 import com.magmaguy.elitemobs.dungeons.EliteMobsWorld;
 import com.magmaguy.elitemobs.entitytracker.CustomProjectileData;
 import com.magmaguy.elitemobs.entitytracker.EntityTracker;
@@ -44,11 +45,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -80,8 +84,9 @@ import java.util.concurrent.ThreadLocalRandom;
  *   <li><b>Symmetric with defensive formula</b> — weapon adjustment curve mirrors
  *       {@link ArmorDefenseCalculator}'s gear reduction; offensive skill scaling mirrors
  *       defensive skill scaling.</li>
- *   <li><b>Equal DPS across weapon types</b> — attack speed normalization ensures swords,
- *       axes, hoes, etc. all have the same time-to-kill at matched combat.</li>
+ *   <li><b>Weapon pacing by feel</b> — melee attack-speed scaling preserves weapon identity
+ *       without fully equalizing theoretical DPS, because dungeon combat rewards burst
+ *       windows more than stationary target math predicts.</li>
  * </ol>
  *
  * <h2>Full Damage Formula</h2>
@@ -99,8 +104,8 @@ import java.util.concurrent.ThreadLocalRandom;
  *   <tr><th>Component</th><th>Formula</th><th>Range</th><th>Source</th></tr>
  *   <tr><td>baseDamage</td><td>normalizedMobHP / 3.0</td><td>scales with level</td>
  *       <td>{@link LevelScaling#calculateBaseDamageToElite}</td></tr>
- *   <tr><td>attackSpeedFactor</td><td>1.6 / actualAttackSpeed</td><td>melee only; 1.0 for ranged</td>
- *       <td>{@link LevelScaling#REFERENCE_ATTACK_SPEED}</td></tr>
+ *   <tr><td>attackSpeedFactor</td><td>tuned pacing factor from weapon family and speed</td><td>melee only; 1.0 for ranged</td>
+ *       <td>{@link WeaponOffenseCalculator#getAttackSpeedFactor}</td></tr>
  *   <tr><td>skillAdjustment</td><td>2^((skillLv - mobLv) / 7.5)</td><td>(0, ∞) centered at 1.0</td>
  *       <td>{@link LevelScaling#calculateOffensiveSkillAdjustment}</td></tr>
  *   <tr><td>weaponAdjustment</td><td>two-part linear curve</td><td>[0.5, 1.25]</td>
@@ -156,14 +161,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * Hits to kill  = 70.0 / 23.33 = 3.0 ✓
  * </pre>
  *
- * <h3>Example 2: Equal DPS across weapon types (Lv25 axe vs Lv25 elite)</h3>
+ * <h3>Example 2: Tuned axe pacing (Lv25 axe vs Lv25 elite)</h3>
  * <pre>
  * baseDamage       = 23.33
- * attackSpeedFactor = 1.6 / 1.0 = 1.6  (axe is slower)
- * formulaDamage    = 23.33 × 1.6 = 37.33 per hit
- * Hits to kill     = 70.0 / 37.33 = 1.875
- * Time to kill     = 1.875 / 1.0 = 1.875 sec
- *   vs sword:       3.0 / 1.6 = 1.875 sec ✓ (identical DPS)
+ * attackSpeedFactor ≈ 1.26  (axe is slower, but no longer receives full inverse-speed burst)
+ * formulaDamage    = 23.33 × 1.26 = 29.5 per hit
+ * Hits to kill     = 70.0 / 29.5 = 2.37
  * </pre>
  *
  * <h3>Example 3: Under-leveled ranged (Lv20 bow vs Lv25 elite, healthMultiplier=2.0)</h3>
@@ -341,6 +344,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
      */
     public void applySkillBonuses() {
         if (player == null || player.hasMetadata("NPC")) return;
+        if (SkillsConfig.isWorldExcludedFromSkills(player)) return;
         if (!ElitePlayerInventory.playerInventories.containsKey(player.getUniqueId())) return;
 
         // For ranged attacks, use skill type/level from launch time (stored in PDC).
@@ -721,6 +725,29 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             return 1.0;
         }
 
+        /**
+         * Resolves the attack speed used for cooldown timing.
+         * <p>
+         * The item speed is still used for per-hit damage pacing. This method
+         * is only for the recharge window, where vanilla uses the player's live
+         * ATTACK_SPEED attribute after equipment and modifier updates. If Bukkit ever
+         * reports the unmodified player base speed (4.0) while the held weapon is
+         * slower, fall back to the item-derived speed to avoid making slow weapons
+         * recharge as fast as fists.
+         */
+        private static double getCooldownAttackSpeed(Player player, double itemAttackSpeed, boolean isRangedWeaponMelee) {
+            if (isRangedWeaponMelee) return 4.0;
+
+            AttributeInstance attackSpeedAttribute = player.getAttribute(Attribute.ATTACK_SPEED);
+            if (attackSpeedAttribute == null) return itemAttackSpeed;
+
+            double attributeAttackSpeed = attackSpeedAttribute.getValue();
+            if (!Double.isFinite(attributeAttackSpeed) || attributeAttackSpeed <= 0D) return itemAttackSpeed;
+
+            if (itemAttackSpeed < 4.0D && attributeAttackSpeed == 4.0D) return itemAttackSpeed;
+            return attributeAttackSpeed;
+        }
+
         private static double getCustomDamageModifier(EliteEntity eliteEntity, Material itemStackType) {
             if (!(eliteEntity instanceof CustomBossEntity)) return 1;
             return ((CustomBossEntity) eliteEntity).getDamageModifier(itemStackType);
@@ -738,6 +765,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
          * @return The player's weapon skill level (minimum 1)
          */
         private static int getPlayerWeaponSkillLevel(Player player) {
+            if (SkillsConfig.isWorldExcludedFromSkills(player)) return 1;
             SkillType weaponSkillType = getWeaponSkillType(player);
             if (weaponSkillType == null) return 1;
             long skillXP = PlayerData.getSkillXP(player.getUniqueId(), weaponSkillType);
@@ -753,8 +781,8 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
          * <ol>
          *   <li><b>Base damage</b> = normalizedMobHP / {@link LevelScaling#TARGET_HITS_TO_KILL_MOB}
          *       — ensures constant hit count at all levels</li>
-         *   <li><b>Attack speed factor</b> = {@link LevelScaling#REFERENCE_ATTACK_SPEED} / actualSpeed
-         *       — normalizes DPS across weapon types (melee only; 1.0 for ranged)</li>
+         *   <li><b>Attack speed factor</b> = {@link WeaponOffenseCalculator#getAttackSpeedFactor}
+         *       — tuned melee pacing factor from weapon family and speed (melee only; 1.0 for ranged)</li>
          *   <li><b>Skill adjustment</b> = 2^((skillLv - mobLv) / {@link LevelScaling#OFFENSIVE_SKILL_SCALING_RATE})
          *       — exponential scaling from player skill vs mob level</li>
          *   <li><b>Weapon adjustment</b> = {@link WeaponOffenseCalculator#getWeaponAdjustment}
@@ -772,7 +800,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
          * <table border="1">
          *   <tr><th>Weapon</th><th>Speed</th><th>Dmg/Hit</th><th>Hits</th><th>TTK (sec)</th></tr>
          *   <tr><td>Sword</td><td>1.6</td><td>23.33</td><td>3.0</td><td>1.875</td></tr>
-         *   <tr><td>Axe</td><td>1.0</td><td>37.33</td><td>1.875</td><td>1.875</td></tr>
+         *   <tr><td>Axe</td><td>1.0</td><td>29.5</td><td>2.37</td><td>2.37</td></tr>
          *   <tr><td>Hoe</td><td>4.0</td><td>9.33</td><td>7.5</td><td>1.875</td></tr>
          *   <tr><td>Bow</td><td>N/A</td><td>23.33</td><td>3.0</td><td>N/A</td></tr>
          * </table>
@@ -792,6 +820,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             ItemStack weapon = player.getInventory().getItemInMainHand();
             boolean isRanged = event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE;
             boolean isSweep = event.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK;
+            boolean skillsExcluded = SkillsConfig.isWorldExcludedFromSkills(player);
 
             // Ranged-only weapons (bows, crossbows) used in melee count as unarmed strikes
             boolean isRangedWeaponMelee = false;
@@ -805,16 +834,17 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             // 1. Base damage — fraction of normalized mob HP
             double baseDamage = NaturalEliteCombatTweak.getTweakedBaseDamageToElite(eliteEntity, mobLevel);
 
-            // 2. Attack speed normalization (melee only)
-            // Hoisted out of the !isRanged block so the self-tracked attack-charge
-            // computation below can reuse the same weapon attack speed to derive the
-            // weapon's full-recharge window. Ranged weapons used in melee use default
-            // fist attack speed (4.0). For true ranged attacks this value is computed
-            // but unused (charge comes from arrow velocity instead).
+            // 2. Attack speed pacing (melee only).
+            // The damage factor uses the item's weapon family and speed so slow weapons
+            // still hit harder per swing without full inverse-speed burst. The cooldown
+            // window below separately uses the player's live
+            // ATTACK_SPEED attribute when available, because that is what vanilla uses
+            // for actual recharge timing after equipment and skill modifiers.
             double attackSpeed = isRangedWeaponMelee ? 4.0 : EliteItemManager.getAttackSpeed(weapon);
+            double cooldownAttackSpeed = getCooldownAttackSpeed(player, attackSpeed, isRangedWeaponMelee);
             double attackSpeedFactor = 1.0;
             if (!isRanged) {
-                attackSpeedFactor = LevelScaling.REFERENCE_ATTACK_SPEED / attackSpeed;
+                attackSpeedFactor = WeaponOffenseCalculator.getAttackSpeedFactor(weapon, attackSpeed);
             }
 
             // 3 & 4. Resolve weapon level and skill level.
@@ -844,6 +874,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                 weaponLevel = WeaponOffenseCalculator.getEffectiveWeaponLevel(weapon);
                 weaponSkillLevel = getPlayerWeaponSkillLevel(player);
             }
+            if (skillsExcluded) weaponSkillLevel = 1;
 
             double skillAdjustment = LevelScaling.calculateOffensiveSkillAdjustment(weaponSkillLevel, mobLevel);
             double weaponAdjustment = WeaponOffenseCalculator.getWeaponAdjustment(weaponLevel, mobLevel);
@@ -883,7 +914,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                 // shape as the vanilla attack-strength curve. Spam-clicking still yields a low
                 // charge (short gap); a properly paced full swing yields 1.0.
                 ticksSinceLastHit = PlayerAttackCooldownTracker.recordHit(player);
-                double rechargeTicks = attackSpeed > 0 ? 20.0 / attackSpeed : 20.0;
+                double rechargeTicks = cooldownAttackSpeed > 0 ? 20.0 / cooldownAttackSpeed : 20.0;
                 cooldownOrVelocity = ticksSinceLastHit == PlayerAttackCooldownTracker.NO_PREVIOUS_HIT
                         ? 1.0 // first tracked swing (or first after a 5-min idle eviction): assume fully charged
                         : Math.min(ticksSinceLastHit / rechargeTicks, 1.0);
@@ -964,8 +995,12 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
                         + String.format("%.1f", LevelScaling.TARGET_HITS_TO_KILL_MOB) + ")");
                 DebugMessage.send(player, "§7   = §f" + String.format("%.2f", baseDamage)
                         + " §8(damage needed per hit to kill in TARGET_HITS hits; uses legacy or recommended HP curve)");
-                DebugMessage.send(player, "§7× Attack speed factor = REFERENCE_SPEED / weaponSpeed = §f"
-                        + String.format("%.3f", attackSpeedFactor) + " §8(1.0 for ranged; normalises DPS across weapons)");
+                DebugMessage.send(player, "§7× Attack speed factor = tuned melee pacing curve = §f"
+                        + String.format("%.3f", attackSpeedFactor) + " §8(1.0 for ranged; family+speed adjusted)");
+                if (!isRanged && cooldownAttackSpeed != attackSpeed) {
+                    DebugMessage.send(player, "§7  ↳ cooldown speed = §f" + String.format("%.3f", cooldownAttackSpeed)
+                            + " §8(player ATTACK_SPEED attribute used for recharge timing)");
+                }
                 DebugMessage.send(player, "§7× Skill adjustment = 2^((skillLv − mobLv)/"
                         + String.format("%.1f", LevelScaling.OFFENSIVE_SKILL_SCALING_RATE) + ") = §f"
                         + String.format("%.3f", skillAdjustment) + " §8(>1 if you out-skill the mob)");
@@ -1024,7 +1059,9 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             if (simulatedMobLevel <= 0) simulatedMobLevel = 1;
 
             // For ranged attacks, read skill level from projectile PDC (stored at launch time)
-            if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE && event.getDamager() instanceof Projectile proj) {
+            if (!SkillsConfig.isWorldExcludedFromSkills(player) &&
+                    event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE &&
+                    event.getDamager() instanceof Projectile proj) {
                 int storedSkillLevel = ItemTagger.getArrowSkillLevel(proj);
                 if (storedSkillLevel > 0) simulatedMobLevel = storedSkillLevel;
             }
@@ -1120,10 +1157,18 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
             SkillType skillType = getWeaponSkillType(player);
             if (skillType != null) {
                 ItemTagger.setArrowSkillType(projectile, skillType.name());
-                long skillXP = PlayerData.getSkillXP(player.getUniqueId(), skillType);
-                int skillLevel = Math.max(1, SkillXPCalculator.levelFromTotalXP(skillXP));
+                long skillXP = SkillsConfig.isWorldExcludedFromSkills(player) ? 0 : PlayerData.getSkillXP(player.getUniqueId(), skillType);
+                int skillLevel = SkillsConfig.isWorldExcludedFromSkills(player) ? 1 : Math.max(1, SkillXPCalculator.levelFromTotalXP(skillXP));
                 ItemTagger.setArrowSkillLevel(projectile, skillLevel);
             }
+        }
+
+        @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+        public void trackNonEliteMeleeAttack(EntityDamageByEntityEvent event) {
+            if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
+            if (!(event.getDamager() instanceof Player player)) return;
+            if (EntityTracker.getEliteMobEntity(event.getEntity()) != null) return;
+            PlayerAttackCooldownTracker.recordHit(player);
         }
 
         @EventHandler(ignoreCancelled = true)
@@ -1423,6 +1468,7 @@ public class EliteMobDamagedByPlayerEvent extends EliteDamageEvent {
 
         private void runAntiexploit(EliteEntity eliteEntity, EntityDamageByEntityEvent event, EliteMobDamagedByPlayerEvent eliteMobDamagedByPlayerEvent) {
             if (EliteMobsWorld.isEliteMobsWorld(event.getDamager().getWorld().getUID())) return;
+            if (eliteEntity.isEnderDragon()) return;
             if (EliteMobs.worldGuardIsEnabled) {
                 Boolean regionQuery = WorldGuardFlagChecker.checkNullableFlag(eliteEntity.getLocation(), WorldGuardCompatibility.getELITEMOBS_ANTIEXPLOIT());
                 if (regionQuery != null && !regionQuery) return;
