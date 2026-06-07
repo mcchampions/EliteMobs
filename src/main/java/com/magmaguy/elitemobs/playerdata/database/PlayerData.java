@@ -896,10 +896,20 @@ public class PlayerData {
             String currencySql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
                     " SET CurrencyCents = CAST(ROUND(CurrencyV2 * 100) AS INTEGER)" +
                     " WHERE (CurrencyCents IS NULL OR CurrencyCents = 0) AND CurrencyV2 > 0;";
+            if (DatabaseConfig.isUseMySQL()) {
+                currencySql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
+                                     " SET CurrencyCents = ROUND(CurrencyV2 * 100)" +
+                                     " WHERE (CurrencyCents IS NULL OR CurrencyCents = 0) AND CurrencyV2 > 0;";
+            }
             int currencyMigrated = statement.executeUpdate(currencySql);
             String debtSql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
                     " SET GamblingDebtCents = CAST(ROUND(GamblingDebt * 100) AS INTEGER)" +
                     " WHERE (GamblingDebtCents IS NULL OR GamblingDebtCents = 0) AND GamblingDebt > 0;";
+            if (DatabaseConfig.isUseMySQL()) {
+                debtSql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
+                          " SET GamblingDebtCents = CAST(ROUND(GamblingDebt * 100) AS SIGNED)" +
+                          " WHERE (GamblingDebtCents IS NULL OR GamblingDebtCents = 0) AND GamblingDebt > 0;";
+            }
             int debtMigrated = statement.executeUpdate(debtSql);
             statement.close();
             if (currencyMigrated > 0)
