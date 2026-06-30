@@ -8,7 +8,9 @@ import com.magmaguy.elitemobs.quests.DynamicQuest;
 import com.magmaguy.elitemobs.quests.Quest;
 import com.magmaguy.elitemobs.quests.QuestTracking;
 import com.magmaguy.elitemobs.quests.menus.QuestMenu;
+import com.magmaguy.elitemobs.thirdparty.geyser.GeyserDetector;
 import com.magmaguy.elitemobs.utils.BossBarUtil;
+import com.magmaguy.elitemobs.utils.SimpleScoreboard;
 import com.magmaguy.magmacore.util.ChatColorConverter;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -26,7 +28,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +47,6 @@ public class QuestDialogueBossBarManager {
     private static final int TOTAL_BARS = PROMPT_BAR_INDEX + 1;
     private static final int DIALOGUE_SLOWNESS_AMPLIFIER = 2;
     private static final int DIALOGUE_SLOWNESS_DURATION_TICKS = 20 * 30;
-    private static final String PROMPT_TEXT = "&7&oSneak to continue";
     private static final Map<UUID, DialogueSession> activeSessions = new ConcurrentHashMap<>();
     private static final Map<String, Long> recentlyShownTurnInDialogs = new ConcurrentHashMap<>();
 
@@ -62,7 +62,7 @@ public class QuestDialogueBossBarManager {
     }
 
     public static boolean showQuestMenuIntro(List<? extends Quest> quests, Player player, NPCEntity npcEntity, Runnable onComplete) {
-        if (!QuestsConfig.isUseQuestDialogueBossBars()) return false;
+        if (!canShowQuestDialogueBossBars(player)) return false;
         if (quests == null || quests.isEmpty()) return false;
         List<String> dialogueLines = new ArrayList<>();
         for (Quest quest : quests) {
@@ -74,10 +74,16 @@ public class QuestDialogueBossBarManager {
     }
 
     public static boolean showRawDialogue(Player player, String speakerName, List<String> dialogueLines, Runnable onComplete) {
-        if (!QuestsConfig.isUseQuestDialogueBossBars()) return false;
+        if (!canShowQuestDialogueBossBars(player)) return false;
         if (dialogueLines == null || dialogueLines.isEmpty()) return false;
         startDialogue(player, speakerName, dialogueLines, onComplete);
         return true;
+    }
+
+    private static boolean canShowQuestDialogueBossBars(Player player) {
+        return QuestsConfig.isUseQuestDialogueBossBars()
+                && player != null
+                && !GeyserDetector.bedrockPlayer(player);
     }
 
     public static boolean consumeRecentlyShownQuestCompleteDialog(Player player, Quest quest) {
@@ -168,7 +174,6 @@ public class QuestDialogueBossBarManager {
         private final List<BossBar> hiddenEliteBossBars = new ArrayList<>();
         private final BossBar[] bars = new BossBar[TOTAL_BARS];
         private final PotionEffect previousSlowness;
-        private final Scoreboard previousScoreboard;
         private BukkitTask task;
         private int pageIndex = 0;
         private int visibleCharacters = 0;
@@ -180,7 +185,6 @@ public class QuestDialogueBossBarManager {
             this.pages = paginate(wrapLines(dialogueLines));
             this.onComplete = onComplete;
             this.previousSlowness = player.getPotionEffect(PotionEffectType.SLOWNESS);
-            this.previousScoreboard = player.getScoreboard();
         }
 
         private void start() {
@@ -197,7 +201,7 @@ public class QuestDialogueBossBarManager {
             // dialogue box. The compass bar re-adds the player every tick, so QuestTracking gates on
             // hasActiveSession(); here we just blank the sidebar and restore it on close.
             if (!QuestsConfig.isHideQuestScoreboardDuringQuestDialogue()) return;
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            SimpleScoreboard.blankScoreboard(player);
         }
 
         private void restoreScoreboard() {
@@ -207,7 +211,7 @@ public class QuestDialogueBossBarManager {
             // progressed during the dialogue); otherwise restore whatever board they had before.
             QuestTracking tracking = QuestTracking.getPlayerTrackingQuests().get(player.getUniqueId());
             if (tracking != null) tracking.refreshScoreboard();
-            else if (previousScoreboard != null) player.setScoreboard(previousScoreboard);
+            else SimpleScoreboard.clearScoreboard(player);
         }
 
         private void applyMovementLock() {
@@ -425,7 +429,7 @@ public class QuestDialogueBossBarManager {
     private static String formatPrompt() {
         return OffsetFontUtil.shift(
                 ChatColorConverter.convert(QuestsConfig.getQuestDialogueLinePrefix()
-                        + PROMPT_TEXT
+                        + QuestsConfig.getQuestDialoguePromptText()
                         + QuestsConfig.getQuestDialogueLineSuffix()),
                 QuestsConfig.getQuestDialoguePromptOffsetX());
     }

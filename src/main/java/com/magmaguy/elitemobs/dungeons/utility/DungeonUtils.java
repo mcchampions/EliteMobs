@@ -42,6 +42,7 @@ public class DungeonUtils {
             worldPackage.setInstalled(true);
             world.setGameRule(GameRule.KEEP_INVENTORY, true);
         }
+
         return world;
     }
 

@@ -1,22 +1,23 @@
 name: EliteMobs
-version: 10.5.0
+version: 10.7.2
 author: MagmaGuy
 main: com.magmaguy.elitemobs.EliteMobs
 api-version: '1.21.4'
 softdepend:
-- Multiverse-Core
-- WorldGuard
-- Vault
-- PlaceholderAPI
-- HolographicDisplays
-- DiscordSRV
-- LibsDisguises
-- ModelEngine
-- Geyser-Spigot
-- MythicMobs
-- LevelledMobs
-- InfernalMobs
-- FreeMinecraftModels
+  - Multiverse-Core
+  - WorldGuard
+  - WorldEdit
+  - Vault
+  - PlaceholderAPI
+  - HolographicDisplays
+  - DiscordSRV
+  - LibsDisguises
+  - ModelEngine
+  - Geyser-Spigot
+  - MythicMobs
+  - LevelledMobs
+  - InfernalMobs
+  - FreeMinecraftModels
 
 commands:
   elitemobs:
@@ -55,6 +56,9 @@ permissions:
   elitemobs.dungeon.tp:
     description: Allows players to teleport to a dungeon
     default: true
+  elitemobs.dungeon.resetlockout:
+    description: Allows admins to clear a player's dungeon boss lockouts
+    default: op
   elitemobs.command:
     description: Allows players to use the main command of the plugin
     default: true
@@ -147,6 +151,12 @@ permissions:
     default: op
   elitemobs.reload:
     description: Allows admins to reload EliteMobs
+    default: op
+  elitemobs.downloadall:
+    description: Allows admins to download EliteMobs content and plugin updates
+    default: op
+  elitemobs.updatecontent:
+    description: Allows admins to update installed EliteMobs content
     default: op
   elitemobs.remove:
     description: Allows admins to use the remove command
@@ -296,4 +306,7 @@ permissions:
     default: true
   elitemobs.scroll.get:
     description: Gives the player a specified number of elite scrolls at a given level
+    default: op
+  elitemobs.scroll.give:
+    description: Gives a target player an elite scroll scaled to their combat level
     default: op

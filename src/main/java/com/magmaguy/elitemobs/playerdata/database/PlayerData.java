@@ -278,8 +278,15 @@ public class PlayerData {
     }
 
     public static void resetQuests(UUID uuid) {
-        getQuests(uuid).clear();
-        updateQuestStatus(uuid);
+        ArrayList<Quest> resetQuests = new ArrayList<>();
+        try {
+            setDatabaseValue(uuid, "QuestStatus", ObjectSerializer.toString(resetQuests));
+            if (playerDataHashMap.containsKey(uuid))
+                playerDataHashMap.get(uuid).quests = resetQuests;
+        } catch (Exception ex) {
+            Logger.warn("Failed to reset player quest data!");
+            ex.printStackTrace();
+        }
     }
 
     public static void removeQuest(UUID uuid, Quest quest) {
@@ -316,6 +323,8 @@ public class PlayerData {
     public static void updatePlayerQuestCooldowns(UUID uuid, PlayerQuestCooldowns playerQuestCooldowns) {
         try {
             setDatabaseValue(uuid, "PlayerQuestCooldowns", ObjectSerializer.toString(playerQuestCooldowns));
+            if (playerDataHashMap.containsKey(uuid))
+                playerDataHashMap.get(uuid).playerQuestCooldowns = playerQuestCooldowns;
         } catch (Exception ex) {
             Logger.warn("Failed to register player quest cooldowns!");
             ex.printStackTrace();
@@ -357,6 +366,10 @@ public class PlayerData {
         } catch (Exception ex) {
             return new com.magmaguy.elitemobs.quests.QuestLockout();
         }
+    }
+
+    public static void resetQuestLockouts(UUID uuid) {
+        updateQuestLockout(uuid, new com.magmaguy.elitemobs.quests.QuestLockout());
     }
 
     public static void updateQuestLockout(UUID uuid, com.magmaguy.elitemobs.quests.QuestLockout questLockout) {
@@ -896,20 +909,10 @@ public class PlayerData {
             String currencySql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
                     " SET CurrencyCents = CAST(ROUND(CurrencyV2 * 100) AS INTEGER)" +
                     " WHERE (CurrencyCents IS NULL OR CurrencyCents = 0) AND CurrencyV2 > 0;";
-            if (DatabaseConfig.isUseMySQL()) {
-                currencySql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
-                                     " SET CurrencyCents = ROUND(CurrencyV2 * 100)" +
-                                     " WHERE (CurrencyCents IS NULL OR CurrencyCents = 0) AND CurrencyV2 > 0;";
-            }
             int currencyMigrated = statement.executeUpdate(currencySql);
             String debtSql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
                     " SET GamblingDebtCents = CAST(ROUND(GamblingDebt * 100) AS INTEGER)" +
                     " WHERE (GamblingDebtCents IS NULL OR GamblingDebtCents = 0) AND GamblingDebt > 0;";
-            if (DatabaseConfig.isUseMySQL()) {
-                debtSql = "UPDATE " + PLAYER_DATA_TABLE_NAME +
-                          " SET GamblingDebtCents = CAST(ROUND(GamblingDebt * 100) AS SIGNED)" +
-                          " WHERE (GamblingDebtCents IS NULL OR GamblingDebtCents = 0) AND GamblingDebt > 0;";
-            }
             int debtMigrated = statement.executeUpdate(debtSql);
             statement.close();
             if (currencyMigrated > 0)
