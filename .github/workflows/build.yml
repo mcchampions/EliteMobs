@@ -22,7 +22,6 @@ jobs:
           java-version: '21'
           java-package: jdk
           architecture: x64
-          cache: gradle
       - name: Build
         run: gradle clean build --no-daemon --refresh-dependencies
       - uses: actions/upload-artifact@v7
