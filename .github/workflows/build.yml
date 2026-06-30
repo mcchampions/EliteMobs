@@ -23,7 +23,7 @@ jobs:
           java-package: jdk
           architecture: x64
       - name: Build
-        run: gradle clean shadowJar --no-daemon --refresh-dependencies
+        run: gradle clean shadowJar --no-daemon --refresh-dependencies --no-build-cache
       - uses: actions/upload-artifact@v7
         name: Upload Beta artifact
         with:
