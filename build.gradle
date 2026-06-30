@@ -55,11 +55,11 @@ repositories {
 
     //MagmaCore
     maven {
-        url = 'https://repo.magmaguy.com/releases'
+        url = 'https://repo.magmaguy.com/snapshots'
     }
     //MagmaCore
     maven {
-        url = 'https://repo.magmaguy.com/snapshots'
+        url = 'https://repo.magmaguy.com/releases'
     }
 
     //Bstats API
